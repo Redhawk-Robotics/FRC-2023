@@ -232,15 +232,17 @@ public class SwerveSubsystem extends SubsystemBase {
     return new SequentialCommandGroup(
         new InstantCommand(
             () -> {
-              // blank, to work on
+              if (isFirstPath) {
+                this.resetOdometry(traj.getInitialHolonomicPose());
+              }
             }),
         new PPSwerveControllerCommand(
             traj,
             this::getPose,
             Setting.mKinematics,
-            new PIDController(.05, 0, 0),//x
-            new PIDController(.5, 0, 0),//y
-            new PIDController(.5, 0, 0),//rotation
+            new PIDController(Setting.AutoConstants.kPXController, 0, 0),//x
+            new PIDController(Setting.AutoConstants.kPYController, 0, 0),//y
+            new PIDController(Setting.AutoConstants.kPThetaController, 0, 0),//rotation
             this::setModuleStates,
             true,
             this));

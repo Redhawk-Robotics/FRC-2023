@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Setting {
     /* Swerve Voltage Compensation */
-    public static final double voltageComp = 9.5;    
+    public static final double voltageComp = 8.5;    
 
     //RobotCharacterizations
     public static final double drivetrainTrackWidthMeters = Units.inchesToMeters(28.5);

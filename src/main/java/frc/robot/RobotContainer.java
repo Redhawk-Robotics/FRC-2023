@@ -11,6 +11,7 @@ import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.wrist.WristManual;
 import frc.robot.commands.wrist.WristSetPoint;
 import frc.robot.constants.Ports;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
@@ -54,6 +55,8 @@ public class RobotContainer {
   private final WristSubsystem wristSubsystem = new WristSubsystem();
 
   private final CompressorModule compressor = CompressorModule.getCompressorModule();
+  public final ClawSubsystem claw = new ClawSubsystem();
+  
   // private PneumaticHub compressor = new PneumaticHub(1);
 
   /* Commands */
@@ -168,7 +171,7 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
-    compressor.enableAnalog(100, 120);
+    compressor.enableAnalog(100, 115);
   }
 
   /***************/
@@ -204,8 +207,10 @@ public class RobotContainer {
     Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
 
     // solenoids
-    Xbutton2.onTrue(new InstantCommand(() -> testers.openClaw()));
-    Ybutton2.onTrue(new InstantCommand(() -> testers.closeClaw()));
+    Xbutton2.onTrue(new InstantCommand(() -> testers.coneIntake()));
+    Xbutton2.onFalse(new InstantCommand(() -> testers.outTake()));
+    Ybutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
+    Ybutton2.onFalse(new InstantCommand(() -> testers.outTake()));
 
     leftBumper2.onTrue(new InstantCommand(() -> testers.upGoWrist()));
     leftBumper2.onFalse(new InstantCommand(() -> testers.stopWrist()));
@@ -238,10 +243,10 @@ public class RobotContainer {
     Autons.setDefaultOption("Do Nothing", new DoNothingAuton());
     Autons.addOption("SPPLI2 Simple Auton", SwerveDrive.followTraj(
         PathPlanner.loadPath(
-            "autoBalance",
+            "New New Path",
             new PathConstraints(
-                8,
-                4)),
+                5,
+                5)),
         true));
     // Autons.addOption("mobility", new mobilitytest());
     // Autons.addOption("AutoBalance", new TestPathPlannerAuton());

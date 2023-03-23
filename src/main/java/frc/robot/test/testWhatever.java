@@ -152,6 +152,22 @@ extenderEncoder = extender.getEncoder();
     rightClaw.set(stop);
   }
 
+  public void coneIntake(){
+    clawOpen.set(Value.kForward);
+    leftClaw.set(.5);
+    rightClaw.set(.5);
+  }
+  public void outTake(){
+    leftClaw.set(-.2);
+    rightClaw.set(-.2);
+  }
+  
+  public void cubeIntake(){
+    clawOpen.set(Value.kReverse);
+    leftClaw.set(.5);
+    rightClaw.set(.5);
+  }
+
 //Pneumatics with claw
   public void closeClaw(){
     clawOpen.set(Value.kReverse);
