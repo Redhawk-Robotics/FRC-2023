@@ -77,7 +77,6 @@ public class ArmSubsystem extends SubsystemBase {
 
     leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 
     (float)SmartDashboard.getNumber("Forward Soft Limit", 15));
-
     leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
     (float)SmartDashboard.getNumber("Reverse Soft Limit", 0));
   }

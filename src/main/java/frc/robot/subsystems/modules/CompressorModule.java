@@ -1,16 +1,17 @@
 package frc.robot.subsystems.modules;
 
 import edu.wpi.first.wpilibj.Compressor;
+import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.constants.Setting;
 
 public class CompressorModule {
     
-    private final Compressor compressor;
+    private final PneumaticHub phCompressor;
     private static CompressorModule singleton;
 
-    public CompressorModule() {
-        this.compressor = new Compressor(1,PneumaticsModuleType.REVPH);
+    private CompressorModule() {
+        this.phCompressor = new PneumaticHub(1);
     }
 
     public static CompressorModule getCompressorModule() {
@@ -21,22 +22,23 @@ public class CompressorModule {
     }
 
     public void enableAnalog(double min, double max) {
-        compressor.enableAnalog(min, max);
+        phCompressor.enableCompressorAnalog(min, max);
     }
 
     public boolean isEnabled() {
-        return compressor.isEnabled();
+        return phCompressor.getCompressor();
     }
 
     public double getPressure() {
-        return compressor.getPressure();
+        // phCompressor.makeCompressor().getPressure()
+        return phCompressor.getPressure(1);
     }
-    public void enableDigital(){
-        compressor.enableDigital();
-    }
+    // public void enableDigital(){
+    //     phCompressor.enableDigital();
+    // }
 
     public void disableCompressor(){
-        compressor.disable();
+        phCompressor.disableCompressor();
     }
 
     // public void setPressureAnalog(double pressure) {

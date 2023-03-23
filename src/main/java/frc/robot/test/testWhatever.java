@@ -58,7 +58,7 @@ armMotorRight = new CANSparkMax(10, MotorType.kBrushless);
 leftClaw = new CANSparkMax(12, MotorType.kBrushless);
 rightClaw = new CANSparkMax(13, MotorType.kBrushless);
 
-wrist = new CANSparkMax(14, MotorType.kBrushless);
+wrist = new CANSparkMax(16, MotorType.kBrushless);
 
 
 extender = new CANSparkMax(11, MotorType.kBrushless);
