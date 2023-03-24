@@ -21,15 +21,13 @@ import frc.robot.test.testWhatever;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
-import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -52,10 +50,10 @@ public class RobotContainer {
   private final PDH powerDistributionHub = new PDH();
   private final testWhatever testers = new testWhatever();
 
-  private final WristSubsystem wristSubsystem = new WristSubsystem();
+  // private final WristSubsystem wristSubsystem = new WristSubsystem();
 
   private final CompressorModule compressor = CompressorModule.getCompressorModule();
-  public final ClawSubsystem claw = new ClawSubsystem();
+  // public final ClawSubsystem claw = new ClawSubsystem();
   
   // private PneumaticHub compressor = new PneumaticHub(1);
 
@@ -171,7 +169,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
-    compressor.enableAnalog(100, 115);
+    compressor.enableAnalog(100, 120);
+    CameraServer.startAutomaticCapture();
   }
 
   /***************/
@@ -230,12 +229,13 @@ public class RobotContainer {
     // LeftStickButton2.whileFalse((new InstantCommand(()-> compressor.disable())));
     // startButton1.onTrue(new InstantCommand(()-> new WristSetPoint(wristSubsystem,
     // 0.5)));//try out cmd
-
   }
 
   /**************/
   /*** AUTONS ***/
   /**************/
+
+  // testing this
 
   public void configureAutons() {
     SmartDashboard.putData("Autonomous: ", Autons);

@@ -3,6 +3,7 @@ package frc.robot.subsystems.modules;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.constants.Setting;
 
 public class CompressorModule {
@@ -23,6 +24,7 @@ public class CompressorModule {
 
     public void enableAnalog(double min, double max) {
         phCompressor.enableCompressorAnalog(min, max);
+        SmartDashboard.putNumber("Pressure", phCompressor.getPressure(0));
     }
 
     public boolean isEnabled() {

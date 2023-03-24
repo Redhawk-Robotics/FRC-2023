@@ -74,7 +74,7 @@ public interface Setting {
 
     public static final class SoftLimits {
         public static final double armRatio = 5 * 4 * 3; // 5, 4, 4 OR 60
-        public static final double armSprocketRatio = 64 / 22; // top sprocket ove  r lower sprocket (physically on robot)
+        public static final double armSprocketRatio = 64./ 22; // top sprocket over lower sprocket (physically on robot)
         public static final double armMotorRotationsPerEveryFullRotation = armRatio * armSprocketRatio; // 174.545
 
         public static final double extenderRatio = Math.pow(3, 3); // 3, 3, 3 OR 27
@@ -82,7 +82,7 @@ public interface Setting {
         public static final double extenderMotorRotationsPerEveryFullRotation = extenderRatio * extenderSprocketRatio; // 27
 
         public static final double pivotRatio = Math.pow(5, 3); // 5, 5, 5 OR 125
-        public static final double pivotpSrocketRatio = 16 / 22; // top sprocket over lower sprocket (physically on robot)
+        public static final double pivotpSrocketRatio = 16. / 22; // top sprocket over lower sprocket (physically on robot)
         public static final double pivotMotorRotationsPerEveryFullRotation = pivotRatio * pivotpSrocketRatio; // 90.909
     }
 

@@ -7,18 +7,10 @@ package frc.robot.commands.Swerve;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -61,7 +53,7 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  double speedMultiplier = slowSpeedSup.getAsBoolean() ? 0.5 : 1.0;//try 0.71 : 1.0
+  double speedMultiplier = slowSpeedSup.getAsBoolean() ? 0.5 : 1.0;//try 1.0 : 0.5
 
   /* Get Values, Deadband*/
   double translationVal =
