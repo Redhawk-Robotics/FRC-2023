@@ -141,9 +141,9 @@ public class RobotContainer {
 
     // Configure the trigger bindings, defaults, Autons
 
-    wristSubsystem.setDefaultCommand(
-        new WristManual(wristSubsystem,
-            () -> OPERATOR.getRawAxis(leftYAxis2)));
+    // wristSubsystem.setDefaultCommand(
+    //     new WristManual(wristSubsystem,
+    //         () -> OPERATOR.getRawAxis(leftYAxis2)));
 
     configureDefaultCommands();
     configureButtonBindings();
