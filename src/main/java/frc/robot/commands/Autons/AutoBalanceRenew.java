@@ -24,7 +24,7 @@ public class AutoBalanceRenew extends ProfiledPIDCommand {
         // The ProfiledPIDController used by the command
         new ProfiledPIDController(
             // The PID gains
-            0,//try 0.006
+            .05,//try 0.006
             0,
             0, //try 0.0005
             // The motion profile constraints

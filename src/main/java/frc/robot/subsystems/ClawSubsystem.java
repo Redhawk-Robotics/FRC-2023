@@ -83,6 +83,39 @@ public class ClawSubsystem extends SubsystemBase {
     clawSolenoid.set(kReverse);
   }
 
+  public void coneIntake(){
+    clawSolenoid.set(kForward);
+    leftNeo550.set(.5);
+    rightNeo550.set(.5);
+  }
+  public void outtTake(){
+    leftNeo550.set(-.2);
+    rightNeo550.set(-.2);
+  }
+  public void cubeIntake(){
+    clawSolenoid.set(kReverse);
+    leftNeo550.set(.5);
+    rightNeo550.set(.5);
+  }
+
+  // public void controlClaw(boolean cone, boolean cube) {
+  //   if (cone) {
+  //     clawSolenoid.set(kForward);
+  //   } else if (cube) {
+  //     clawSolenoid.set(kReverse);
+  //   }
+
+  //   if (!cone || !cube) {
+  //     leftNeo550.set(.5);
+  //     rightNeo550.set(.5);
+  //   }
+
+  //   if (!(cone && cube)) {
+  //     leftNeo550.set(-.2);
+  //     rightNeo550.set(-.2);
+  //   }
+  // }
+
   public void configClawMotor(CANSparkMax clawMotor, RelativeEncoder clawEncoder, SparkMaxPIDController clawController, boolean invert) {
     clawMotor.restoreFactoryDefaults();
     CANSparkMaxUtil.setCANSparkMaxBusUsage(clawMotor, Usage.kAll);
