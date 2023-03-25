@@ -23,24 +23,20 @@ public class armTest extends SubsystemBase {
   private final RelativeEncoder leftArmEncoder, rightArmEncoder;
 
   private final SparkMaxPIDController armAngleController;
-  private double leftArmEncoderValue;
-  private double rightArmEncoderValue;
-
+  private double leftArmEncoderValue, rightArmEncoderValue;
 
   public armTest() {
     leftArmMotor = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless);
-    leftArmEncoder = leftArmMotor.getEncoder();  
+    leftArmEncoder = leftArmMotor.getEncoder();
 
     rightArmMotor = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless);
-    rightArmEncoder = rightArmMotor.getEncoder();  
+    rightArmEncoder = rightArmMotor.getEncoder();
 
-    //armAngleController = leftArmMotor.getPIDController();
+    // armAngleController = leftArmMotor.getPIDController();
     armAngleController = rightArmMotor.getPIDController();
 
-    configArmMotor(leftArmMotor,leftArmEncoder,armAngleController,Ports.Arm.leftArmMotorInvert);
-
-    configArmMotor(rightArmMotor,rightArmEncoder,armAngleController,Ports.Arm.rightArmMotorInvert);
-
+    configArmMotor(leftArmMotor, leftArmEncoder, armAngleController, Ports.Arm.leftArmMotorInvert);
+    configArmMotor(rightArmMotor, rightArmEncoder, armAngleController, Ports.Arm.rightArmMotorInvert);
   }
 
   @Override
@@ -49,7 +45,9 @@ public class armTest extends SubsystemBase {
     SmartDashboard.putNumber("RightArm Encoder Value", getEncoderMetersLeft(leftArmEncoderValue));
     SmartDashboard.putNumber("LeftArm Encoder Value", getEncoderMetersRight(rightArmEncoderValue));
   }
-  private void configArmMotor(CANSparkMax ArmMotor, RelativeEncoder ArmEncoder, SparkMaxPIDController armAngleController, boolean Invert) {
+
+  private void configArmMotor(CANSparkMax ArmMotor, RelativeEncoder ArmEncoder,
+      SparkMaxPIDController armAngleController, boolean Invert) {
     ArmMotor.restoreFactoryDefaults();
     CANSparkMaxUtil.setCANSparkMaxBusUsage(ArmMotor, Usage.kPositionOnly);
     ArmMotor.setSmartCurrentLimit(Setting.armSetting.armContinousCurrentLimit);
@@ -63,24 +61,27 @@ public class armTest extends SubsystemBase {
     ArmMotor.enableVoltageCompensation(Setting.armSetting.maxVoltage);
     ArmMotor.burnFlash();
     Timer.delay(1);
-    //resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
-    }
-    public void setMotor(double speed) {
-      leftArmMotor.set(speed);
-      rightArmMotor.set(speed);
+    // resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
+  }
+
+  public void setMotor(double speed) {
+    leftArmMotor.set(speed);
+    rightArmMotor.set(speed);
   }
 
   public double getEncoderMetersLeft(double positionLeft) {
     positionLeft = leftArmEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
     return positionLeft;
   }
-  public double getEncoderMetersRight(double positionRight){
+
+  public double getEncoderMetersRight(double positionRight) {
     positionRight = rightArmEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
     return positionRight;
   }
-  public void resetEncoder(){
+
+  public void resetEncoder() {
     leftArmEncoder.setPosition(0);
     rightArmEncoder.setPosition(0);
   }
-  
+
 }

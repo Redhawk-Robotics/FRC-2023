@@ -17,6 +17,7 @@ import frc.robot.lib.util.CANSparkMaxUtil.Usage;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
@@ -65,23 +66,30 @@ public class ClawSubsystem extends SubsystemBase {
     rightNeo550.setIdleMode(mode);
   }
   
-  public void runMotors(double speed) {
-    leftNeo550.set(speed);
-    rightNeo550.set(speed);
+  public void coneIntake() {
+    clawSolenoid.set(Value.kForward);
+    leftNeo550.set(.5);
+    rightNeo550.set(.5);
   }
 
-  public void stopMotors() {
-    leftNeo550.set(0);
-    rightNeo550.set(0);
+  public void outTake() {
+    clawSolenoid.set(Value.kReverse);
+    // leftClaw.set(-.25);
+    // rightClaw.set(-.25);
   }
 
-  public void closeClaw() {
-    clawSolenoid.set(kForward);
+  public void cubeIntake() {
+    clawSolenoid.set(Value.kReverse);
+    // leftClaw.set(.75);
+    // rightClaw.set(.75);
   }
 
-  public void openClaw() {
-    clawSolenoid.set(kReverse);
+  public void stopClaw() {
+    clawSolenoid.set(Value.kOff);
+    // leftClaw.set(0);
+    // rightClaw.set(0);
   }
+
 
   public void configClawMotor(CANSparkMax clawMotor, RelativeEncoder clawEncoder, SparkMaxPIDController clawController, boolean invert) {
     clawMotor.restoreFactoryDefaults();

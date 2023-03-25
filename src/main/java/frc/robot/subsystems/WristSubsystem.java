@@ -54,7 +54,8 @@ private double wristEncoderValue;
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("wrist Encoder Value", getEncoderMeters());
+    // SmartDashboard.putNumber("wrist Encoder Value", getEncoderMeters());
+    SmartDashboard.putNumber("Wrist Encoder Value", wristEncoder.getPosition());
 
     //only if we need for debugging
     wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 

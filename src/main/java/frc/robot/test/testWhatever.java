@@ -11,21 +11,17 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 
 public class testWhatever extends SubsystemBase {
   /** Creates a new testWhatever. */
-  private final CANSparkMax armMotorLeft;
-  private final CANSparkMax armMotorRight;
+  private final CANSparkMax armMotorLeft, armMotorRight;
 
-  private final RelativeEncoder armEncoderLeft;
-  private final RelativeEncoder armEncoderRight;
-
-  //compressor
-  private final CANSparkMax leftClaw;
-  private final CANSparkMax rightClaw;
-
+  private final RelativeEncoder armEncoderLeft, armEncoderRight;
+  private final CANSparkMax leftClaw, rightClaw;
 
   private final CANSparkMax wrist;
   private final RelativeEncoder wristEncoder;
@@ -40,87 +36,112 @@ public class testWhatever extends SubsystemBase {
   private double extenderSpeed = 1;
   private double extenderSpeedReverse = -1;
 
-  private double wristSpeed = 0.25;
-  private double wristSpeedReverse = -0.25;
+  private double wristSpeed = 0.1;
+  private double wristSpeedReverse = -0.1;
 
-  private double armSpeed = 0.1;
+  private double armSpeed = 0.3;
   private double armSpeedReverse = -0.1;
 
-  private double clawSpeed = 0.5;
-  private double clawSpeedReverse = -0.5;
+  public testWhatever() {
+    // ------------------------------------- ARM LEFT
+    armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
+    armEncoderLeft = armMotorLeft.getEncoder();
+    armMotorLeft.setInverted(false);
+    armMotorLeft.restoreFactoryDefaults();
 
-  private double EncoderValue;
+    // ------------------------------------- ARM RIGHT
 
-public testWhatever() {
-armMotorLeft = new CANSparkMax(9, MotorType.kBrushless);
-armMotorRight = new CANSparkMax(10, MotorType.kBrushless);
+    armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
+    armEncoderRight = armMotorRight.getEncoder();
+    armMotorRight.setInverted(true);
+    armMotorRight.restoreFactoryDefaults();
+    armMotorRight.follow(armMotorLeft, false); // <= follow
 
-leftClaw = new CANSparkMax(12, MotorType.kBrushless);
-rightClaw = new CANSparkMax(13, MotorType.kBrushless);
+    // ------------------------------------- EXTENDER
 
-wrist = new CANSparkMax(14, MotorType.kBrushless);
+    extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
+    extenderEncoder = extender.getEncoder();
+    extender.setInverted(true);
+    extender.restoreFactoryDefaults();
 
+    // ------------------------------------- LEFT CLAW
+ 
+    leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
+    leftClaw.setInverted(false);
 
-extender = new CANSparkMax(11, MotorType.kBrushless);
+    // RIGHT CLAW
+    rightClaw = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless); // 13
+    rightClaw.setInverted(true);
 
+    // ------------------------------------- WRIST
 
-clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
+    wrist = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless); // 14
+    wristEncoder = wrist.getEncoder();
+    wrist.setInverted(false);
+    wrist.restoreFactoryDefaults();
 
-extender.setInverted(true);
+    // -------------------------------------
 
-wrist.setInverted(false);
+    clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawForwardChan,
+        Setting.clawPneumatic.clawReverseChan);
 
-leftClaw.setInverted(false);
-rightClaw.setInverted(true);;
+    // ----------------------------------------------------------------------------------
 
+    /************/
+    /*** ARM ***/
+    /***********/
 
-armMotorLeft.setInverted(false);
-armMotorRight.setInverted(true);
+    armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
+    armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -10);
 
-armEncoderLeft = armMotorLeft.getEncoder();
-armEncoderRight = armMotorRight.getEncoder();
+    // -------------------------------------
 
-wristEncoder = wrist.getEncoder();
-extenderEncoder = extender.getEncoder();
+    /****************/
+    /*** EXTENDER ***/
+    /***************/
 
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 310);
+    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+
+    /*************/
+    /*** WRIST ***/
+    /*************/
+
+    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, -10);
+    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
+    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+
+    // -------------------------------------
+
+    // FIXME
+    // check if both right and left are going the correct directions FIXME
+    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
+    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //SmartDashboard.putNumber("testMotor Encoder Value", getEncoderMeters(EncoderValue));
-  }
-  //arm
-  public void setMotor(double speed) {
-    armMotorLeft.set(speed);
-    armMotorRight.set(speed);
- } 
- //claw motors
- public void setMotorClaw(double speed) {
-  rightClaw.set(speed);
-  leftClaw.set(speed);
-} 
-  public double getEncoderMetersLeftArm(double positionLeft) {
-    positionLeft = armEncoderLeft.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positionLeft;
-  }
-  public double getEncoderMetersRightArm(double positionRight) {
-    positionRight = armEncoderRight.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positionRight;
+    // SmartDashboard.putNumber("testMotor Encoder Value",
+    // getEncoderMeters(EncoderValue));
+
+    SmartDashboard.putNumber("TEST arm pivot left", armEncoderLeft.getPosition());
+    SmartDashboard.putNumber("TEST arm pivot right", armEncoderRight.getPosition());
+    SmartDashboard.putNumber("TEST arm extender", extenderEncoder.getPosition());
+    SmartDashboard.putNumber("TEST wrist pivot", wristEncoder.getPosition());
   }
 
-  public double getEncoderMetersExtender(double positonExtender){
-    positonExtender = extenderEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positonExtender;
-  }
+  /*************/
+  /*** ARM ***/
+  /*************/
 
-  public double getEncoderMetersWrist(double positonWrist){
-    positonWrist = wristEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positonWrist;
-  }
-
-
-  //arm
   public void upGoArm() {
     armMotorLeft.set(armSpeed);
     armMotorRight.set(armSpeed);
@@ -135,32 +156,43 @@ extenderEncoder = extender.getEncoder();
     armMotorLeft.set(stop);
     armMotorRight.set(stop);
   }
-  
 
-  //Claw
-  public void upGoClaw() {
-    leftClaw.set(clawSpeed);
-    rightClaw.set(clawSpeed);
-  }  
-  public void downGoClaw() {
-    leftClaw.set(clawSpeedReverse);
-    rightClaw.set(clawSpeedReverse);
+  // -------------------------------------
+
+  /*************/
+  /*** CLAW ***/
+  /*************/
+
+  public void coneIntake() {
+    clawOpen.set(Value.kForward);
+    leftClaw.set(.5);
+    rightClaw.set(.5);
+  }
+
+  public void outTake() {
+    clawOpen.set(Value.kReverse);
+    // leftClaw.set(-.25);
+    // rightClaw.set(-.25);
+  }
+
+  public void cubeIntake() {
+    clawOpen.set(Value.kReverse);
+    // leftClaw.set(.75);
+    // rightClaw.set(.75);
   }
 
   public void stopClaw() {
-    leftClaw.set(stop);
-    rightClaw.set(stop);
+    clawOpen.set(Value.kOff);
+    // leftClaw.set(0);
+    // rightClaw.set(0);
   }
 
-//Pneumatics with claw
-  public void closeClaw(){
-    clawOpen.set(Value.kReverse);
-  }
-  public void openClaw(){
-    clawOpen.set(Value.kForward);
-  }
-  
-  //Wrist
+  // -------------------------------------
+
+  /*************/
+  /*** WRIST ***/
+  /*************/
+
   public void upGoWrist() {
     wrist.set(wristSpeed);
   }
@@ -168,11 +200,17 @@ extenderEncoder = extender.getEncoder();
   public void stopWrist() {
     wrist.set(stop);
   }
+
   public void downGoWrist() {
     wrist.set(wristSpeedReverse);
   }
+  
+  // -------------------------------------
 
-  //Extender
+  /*************/
+  /*** EXTENDER ***/
+  /*************/
+  
   public void upExtender() {
     extender.set(extenderSpeed);
   }
@@ -180,6 +218,7 @@ extenderEncoder = extender.getEncoder();
   public void stopExtender() {
     extender.set(stop);
   }
+
   public void downExtender() {
     extender.set(extenderSpeedReverse);
   }

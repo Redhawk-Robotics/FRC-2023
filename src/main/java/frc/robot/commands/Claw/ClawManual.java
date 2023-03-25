@@ -4,35 +4,54 @@
 
 package frc.robot.commands.Claw;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Setting;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
 import frc.robot.test.clawTest;
 
 public class ClawManual extends CommandBase {
   /** Creates a new Claw. */
-  private clawTest claw;
-  private CompressorModule compressor;
+  private ClawSubsystem claw;
+  private BooleanSupplier coneIntake, cubeIntake, leftOutTake, rightOutTake;
   
   // FINISH the stuff here
 
-  public ClawManual(clawTest claw) {
+  public ClawManual(ClawSubsystem claw, BooleanSupplier coneIntake, BooleanSupplier cubeIntake, BooleanSupplier leftOutTake, BooleanSupplier rightOutTake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.claw = claw;
-    addRequirements(claw);
-    this.compressor = CompressorModule.getCompressorModule();
+    addRequirements(this.claw);
+    
+    this.coneIntake = coneIntake;
+    this.cubeIntake = cubeIntake;
+    this.leftOutTake = leftOutTake;
+    this.rightOutTake = rightOutTake;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    System.out.println("ClawManual Activated:))");
+
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    this.compressor.enableAnalog(Setting.compressor.absoluteMinPressure, Setting.compressor.absoluteMaxPressure);
-    this.claw.stopMotors();
-    this.claw.closeClaw();
+    if (coneIntake.getAsBoolean()) {
+      claw.coneIntake();
+    } else if (cubeIntake.getAsBoolean()) {
+      claw.cubeIntake();
+    } else {
+      claw.stopClaw();
+    }
+
+    if (leftOutTake.getAsBoolean() || rightOutTake.getAsBoolean()) {
+      claw.outTake();
+    }
   }
 
   // ADD TRIGGERS FOR BUTTON
@@ -40,7 +59,8 @@ public class ClawManual extends CommandBase {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

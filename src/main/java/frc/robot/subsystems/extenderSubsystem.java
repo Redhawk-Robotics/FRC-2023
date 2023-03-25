@@ -53,7 +53,8 @@ public extenderSubsystem() {
   public void periodic() {
     // This method will be called once per scheduler run
   // This method will be called once per scheduler run
-  SmartDashboard.putNumber("extender Encoder Value", getEncoderMeters());
+  // SmartDashboard.putNumber("extender Encoder Value", getEncoderMeters());
+  SmartDashboard.putNumber("Extender Encoder Value", extenderEncoder.getPosition());
 
   //only if we need for debugging
   extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 

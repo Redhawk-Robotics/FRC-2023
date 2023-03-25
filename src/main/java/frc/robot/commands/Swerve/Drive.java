@@ -53,7 +53,7 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-  double speedMultiplier = slowSpeedSup.getAsBoolean() ? 0.5 : 1.0;//try 0.71 : 1.0
+  double speedMultiplier = slowSpeedSup.getAsBoolean() ? 0.5 : 1.0;//try 1.0 : 0.5
 
   /* Get Values, Deadband*/
   double translationVal =
@@ -87,4 +87,6 @@ public class Drive extends CommandBase {
   public boolean isFinished() {
     return false;
   }
+
+  
 }

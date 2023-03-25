@@ -4,25 +4,39 @@
 
 package frc.robot;
 
+import frc.robot.commands.WristManual;
+import frc.robot.commands.Arm.ArmManual;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Autons.mobility;
 import frc.robot.commands.Autons.mobilitytest;
+import frc.robot.commands.Claw.ClawManual;
 import frc.robot.commands.Swerve.Drive;
-import frc.robot.commands.wrist.WristManual;
-import frc.robot.commands.wrist.WristSetPoint;
+import frc.robot.commands.Swerve.DriveForward;
+import frc.robot.commands.Wrist.WristSetPoint;
+import frc.robot.commands.extender.ExtenderManual;
 import frc.robot.constants.Ports;
+import frc.robot.constants.Setting.wristSetting;
+import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.extenderSubsystem;
+import frc.robot.subsystems.modules.CompressorModule;
 import frc.robot.subsystems.modules.PDH;
-
+import frc.robot.test.testClawMotors;
 import frc.robot.test.testWhatever;
 
-import edu.wpi.first.wpilibj.PneumaticHub;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -44,11 +58,18 @@ public class RobotContainer {
   private final SwerveSubsystem SwerveDrive = new SwerveSubsystem();
   private final PDH powerDistributionHub = new PDH();
   private final testWhatever testers = new testWhatever();
+  // private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  // private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  // private final extenderSubsystem extenderSubsystem = new extenderSubsystem();
+  // private final WristSubsystem wristSubsystem = new WristSubsystem();
 
   // private final WristSubsystem wristSubsystem = new WristSubsystem();
 
-  //private final CompressorModule compressor = CompressorModule.getCompressorModule();
-  private PneumaticHub compressor = new PneumaticHub(62);
+  private final CompressorModule compressor = CompressorModule.getCompressorModule(); // this needs to be put into a
+                                                                                      // PneumaticsSubsystem
+  // private final ClawSubsystem claw = new ClawSubsystem();
+
+  // private PneumaticHub compressor = new PneumaticHub(1);
 
   /* Commands */
 
@@ -72,13 +93,16 @@ public class RobotContainer {
   private final Trigger zeroGyro = new JoystickButton(DRIVER, XboxController.Button.kA.value);
   private final Trigger robotCentric = new JoystickButton(DRIVER, XboxController.Button.kY.value);
 
-  private final Trigger slowSpeed = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);//slowspeed for right side of the controller
+  private final Trigger slowSpeed = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);// slowspeed
+                                                                                                         // for right
+                                                                                                         // side of the
+                                                                                                         // controller
 
   // Additional buttons
   private final Trigger lock = new JoystickButton(DRIVER, XboxController.Button.kLeftBumper.value);
 
   private final Trigger bButton1 = new JoystickButton(DRIVER, XboxController.Button.kB.value);
-  
+
   private final Trigger xButton1 = new JoystickButton(DRIVER, XboxController.Button.kX.value);
 
   private final Trigger startButton1 = new JoystickButton(DRIVER, XboxController.Button.kStart.value);
@@ -87,7 +111,7 @@ public class RobotContainer {
   private final Trigger LeftStickButton1 = new JoystickButton(DRIVER, XboxController.Button.kLeftStick.value);
   private final Trigger RightStickButton1 = new JoystickButton(DRIVER, XboxController.Button.kRightStick.value);
 
-  //Controller two - Operator
+  // Controller two - Operator
   private final int leftYAxis2 = XboxController.Axis.kLeftY.value;
   private final int leftXAxis2 = XboxController.Axis.kLeftX.value;
 
@@ -110,15 +134,23 @@ public class RobotContainer {
 
   private final Trigger LeftStickButton2 = new JoystickButton(OPERATOR, XboxController.Button.kLeftStick.value);
   private final Trigger RightStickButton2 = new JoystickButton(OPERATOR, XboxController.Button.kRightStick.value);
-  
 
   // Create SmartDashboard chooser for autonomous routines
   private static SendableChooser<Command> Autons = new SendableChooser<>();
 
+  // THIS BUTTON IS ALREADY ASSIGNED
+  // private final Trigger test = new JoystickButton(DRIVER,
+  // XboxController.Button.kX.value);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
+    /*************/
+    /*** DRIVE ***/
+    /*************/
+
     SwerveDrive.setDefaultCommand(
         new Drive(
             SwerveDrive,
@@ -128,11 +160,65 @@ public class RobotContainer {
             () -> robotCentric.getAsBoolean(),
             () -> slowSpeed.getAsBoolean()));
 
+    // -------------------------------------
+
+    /*************/
+    /*** ARM ***/
+    /*************/
+
+    // up, down
+    // armSubsystem.setDefaultCommand(
+    // new ArmManual(
+    // armSubsystem,
+    // () -> Abutton2.getAsBoolean(),
+    // () -> Ybutton2.getAsBoolean()));
+
+    // -------------------------------------
+
+    /*************/
+    /*** CLAW ***/
+    /*************/
+
+    // coneIntake, cubeIntake, leftOutTake, rightOutTake
+    // clawSubsystem.setDefaultCommand(
+    // new ClawManual(
+    // clawSubsystem,
+    // () -> Xbutton2.getAsBoolean(),
+    // () -> Bbutton2.getAsBoolean(),
+    // () -> leftBumper2.getAsBoolean(),
+    // () -> RightBumper2.getAsBoolean()));
+
+    // -------------------------------------
+
+    /*************/
+    /*** EXTENDER ***/
+    /*************/
+    // extend, retract
+    // extenderSubsystem.setDefaultCommand(
+    // new ExtenderManual(
+    // extenderSubsystem,
+    // () -> startButton2.getAsBoolean(),
+    // () -> BackButton2.getAsBoolean()));
+
+    // -------------------------------------
+
+    /*************/
+    /*** WRIST ***/
+    /*************/
+
+    // wristSubsystem.setDefaultCommand(
+    // new WristManual(
+    // wristSubsystem,
+    // () -> xButton1.getAsBoolean(),
+    // () -> bButton1.getAsBoolean()));
+
+    // -------------------------------------
+
     // Configure the trigger bindings, defaults, Autons
 
     // wristSubsystem.setDefaultCommand(
-    //     new WristManual(wristSubsystem,
-    //         () -> OPERATOR.getRawAxis(rightYAxis2)));
+    // new WristManual(wristSubsystem,
+    // () -> OPERATOR.getRawAxis(leftYAxis2)));
 
     configureDefaultCommands();
     configureButtonBindings();
@@ -159,10 +245,13 @@ public class RobotContainer {
   /****************/
 
   private void configureDefaultCommands() {
-    compressor.enableCompressorAnalog(0, 120); //TODO try minpressure  100
+    // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
+    // compressor.enableAnalog(100, 120);
+    compressor.disableCompressor();
+    // CameraServer.startAutomaticCapture();
   }
 
-  /***************/ 
+  /***************/
   /*** BUTTONS ***/
   /***************/
 
@@ -178,58 +267,105 @@ public class RobotContainer {
     // DRVIER.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
     zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));// A value for the Xbox Controller
 
-    //lock.onTrue(new InstantCommand(() -> SwerveDrive.Lock()));//try this line if not add whiletrue
-    //lock.onTrue(new RepeatCommand(new InstantCommand(() -> SwerveDrive.Lock())));
+    // lock.onTrue(new InstantCommand(() -> SwerveDrive.Lock()));//try this line if
+    // not add whiletrue
+    // lock.onTrue(new RepeatCommand(new InstantCommand(() -> SwerveDrive.Lock())));
 
-    
-    bButton1.whileTrue(new InstantCommand(() -> testers.upGoArm()));
-    bButton1.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    Abutton2.whileTrue(new InstantCommand(() -> testers.upGoArm()));
+    Abutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    xButton1.whileTrue(new InstantCommand(() -> testers.downGoArm()));
-    xButton1.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    Ybutton2.whileTrue(new InstantCommand(() -> testers.downGoArm()));
+    Ybutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    Abutton2.onTrue(new InstantCommand(()-> testers.upGoClaw()));
-    Abutton2.onFalse(new InstantCommand(()-> testers.stopClaw()));
+    // Abutton2.onTrue(new InstantCommand(() -> testers.upGoClaw()));
+    // Abutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
 
-    Bbutton2.onTrue(new InstantCommand(()-> testers.downGoClaw()));
-    Bbutton2.onFalse(new InstantCommand(()-> testers.stopClaw()));
+    // Bbutton2.onTrue(new InstantCommand(() -> testers.downGoClaw()));
+    // Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
 
-    //solenoids
-    Xbutton2.onTrue(new InstantCommand(()-> testers.openClaw()));
-    Ybutton2.onTrue(new InstantCommand(()-> testers.closeClaw()));
+    // solenoids
 
-    leftBumper2.onTrue(new InstantCommand(()-> testers.upGoWrist()));
-    leftBumper2.onFalse(new InstantCommand(()-> testers.stopWrist()));
+    // test.toggleOnTrue(new InstantCommand(() -> testers.coneIntake()));
 
-    RightBumper2.onTrue(new InstantCommand(()-> testers.downGoWrist()));
-    RightBumper2.onFalse(new InstantCommand(()-> testers.stopWrist()));
+    Xbutton2.onTrue(new InstantCommand(() -> testers.coneIntake()));
+    Xbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    RightBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
 
+    Bbutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
+    Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    leftBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
 
-    //extender and wrist needs another button to go back
-    startButton2.onTrue(new InstantCommand(()-> testers.upExtender()));
-    startButton2.onFalse(new InstantCommand(()-> testers.stopExtender()));
+    xButton1.onTrue(new InstantCommand(() -> testers.upGoWrist()));
+    xButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));
 
-    BackButton2.onTrue(new InstantCommand(()-> testers.downExtender()));
-    BackButton2.onFalse(new InstantCommand(()-> testers.stopExtender()));
+    bButton1.onTrue(new InstantCommand(() -> testers.downGoWrist()));
+    bButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));
+
+    // // extender and wrist needs another button to go back
+    startButton2.onTrue(new InstantCommand(() -> testers.upExtender()));
+    startButton2.onFalse(new InstantCommand(() -> testers.stopExtender()));
+
+    BackButton2.onTrue(new InstantCommand(() -> testers.downExtender()));
+    BackButton2.onFalse(new InstantCommand(() -> testers.stopExtender()));
 
     // BackButton1.onTrue(new InstantCommand(()-> compressor.disableCompressor()));
 
-    //LeftStickButton2.whileFalse((new InstantCommand(()-> compressor.disable())));
-    // startButton1.onTrue(new InstantCommand(()-> new WristSetPoint(wristSubsystem, 0.5)));//try out cmd
+    // LeftStickButton2.whileFalse((new InstantCommand(()-> compressor.disable())));
+    // startButton1.onTrue(new InstantCommand(()-> new WristSetPoint(wristSubsystem,
+    // 0.5)));//try out cmd
+  }
 
+  public void DefaultClawMotorCommand() {
 
+    // testClawMotors.setDefaultCommand(new DefaultArmCommand(testClawMotors,
+    // OPERATOR));
   }
 
   /**************/
   /*** AUTONS ***/
   /**************/
 
+  // testing this
+
   public void configureAutons() {
     SmartDashboard.putData("Autonomous: ", Autons);
 
     Autons.setDefaultOption("Do Nothing", new DoNothingAuton());
+    Autons.addOption("SPPLI2 Simple Auton", SwerveDrive.followTraj(
+        PathPlanner.loadPath(
+            "New New Path",
+            new PathConstraints(
+                5,
+                5)),
+        true));
+    Autons.addOption("Drop Cube, Leave Community FAR", new SequentialCommandGroup(
+        new DriveForward(SwerveDrive, .5, -30, 1),
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 4, 15, 7)));
+
+    Autons.addOption("[UNSTABLE] drop cube, charge pad", new SequentialCommandGroup(
+        new DriveForward(SwerveDrive, .5, -30, 1),
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+        new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 0, -35, 4) // reverse back onto the pad
+    ));
+
+    // HAS NO REVERSE TO HIT THE GRID
+    Autons.addOption("[UNSTABLE] charge pad PRACTICE", new SequentialCommandGroup(
+        new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+        new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 0, -35, 4) // reverse back onto the pad
+    ));
+
+    // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
+    // new DriveForward(SwerveDrive, .5, -30, 1),
+    // new WaitCommand(1),
+    // new DriveForward(SwerveDrive, 4, 20, 4)));
     // Autons.addOption("mobility", new mobilitytest());
-    //Autons.addOption("AutoBalance", new TestPathPlannerAuton());
+    // Autons.addOption("AutoBalance", new TestPathPlannerAuton());
   }
 
   /**
