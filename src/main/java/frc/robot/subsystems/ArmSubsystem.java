@@ -77,8 +77,10 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("RightArm Encoder Value", getEncoderMetersLeft());
-    SmartDashboard.putNumber("LeftArm Encoder Value", getEncoderMetersRight());
+    // SmartDashboard.putNumber("RightArm Encoder Value", getEncoderMetersLeft());
+    SmartDashboard.putNumber("RightArm Encoder Value", leftArmEncoder.getPosition());
+    // SmartDashboard.putNumber("LeftArm Encoder Value", getEncoderMetersRight());
+    SmartDashboard.putNumber("LeftArm Encoder Value", rightArmEncoder.getPosition());
 
     // only if we need for debugging
     leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,

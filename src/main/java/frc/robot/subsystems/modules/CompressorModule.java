@@ -8,11 +8,11 @@ import frc.robot.constants.Setting;
 
 public class CompressorModule {
     
-    private final PneumaticHub phCompressor;
+    private final Compressor phCompressor;
     private static CompressorModule singleton;
 
     private CompressorModule() {
-        this.phCompressor = new PneumaticHub(1);
+        this.phCompressor =  new Compressor(PneumaticsModuleType.REVPH);
     }
 
     public static CompressorModule getCompressorModule() {
@@ -23,24 +23,24 @@ public class CompressorModule {
     }
 
     public void enableAnalog(double min, double max) {
-        phCompressor.enableCompressorAnalog(min, max);
-        SmartDashboard.putNumber("Pressure", phCompressor.getPressure(0));
+        phCompressor.enableAnalog(min, max);
+        SmartDashboard.putNumber("Pressure", phCompressor.getPressure());
     }
 
     public boolean isEnabled() {
-        return phCompressor.getCompressor();
+        return phCompressor.isEnabled();
     }
 
     public double getPressure() {
         // phCompressor.makeCompressor().getPressure()
-        return phCompressor.getPressure(1);
+        return phCompressor.getPressure();
     }
     // public void enableDigital(){
     //     phCompressor.enableDigital();
     // }
 
     public void disableCompressor(){
-        phCompressor.disableCompressor();
+        phCompressor.disable();
     }
 
     // public void setPressureAnalog(double pressure) {

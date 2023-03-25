@@ -49,6 +49,8 @@ public class PDH extends SubsystemBase {
     // The PDP returns the current in increments of 0.125A.
     // At low currents the current readings tend to be less accurate.
     double current7 = powerDistributionHub.getCurrent(7);
+    double current8 = powerDistributionHub.getCurrent(8);
+    double current9 = powerDistributionHub.getCurrent(9);
     //SmartDashboard.putNumber("Current Channel 7", current7);
   }
 }

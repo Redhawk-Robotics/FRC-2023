@@ -4,10 +4,12 @@
 
 package frc.robot;
 
+import frc.robot.commands.DefaultArmCommand;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Autons.mobility;
 import frc.robot.commands.Autons.mobilitytest;
 import frc.robot.commands.Swerve.Drive;
+import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.commands.wrist.WristManual;
 import frc.robot.commands.wrist.WristSetPoint;
 import frc.robot.constants.Ports;
@@ -16,7 +18,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
 import frc.robot.subsystems.modules.PDH;
-
+import frc.robot.test.testClawMotors;
 import frc.robot.test.testWhatever;
 
 import com.pathplanner.lib.PathConstraints;
@@ -28,6 +30,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -52,9 +56,10 @@ public class RobotContainer {
 
   // private final WristSubsystem wristSubsystem = new WristSubsystem();
 
-  private final CompressorModule compressor = CompressorModule.getCompressorModule();
-  // public final ClawSubsystem claw = new ClawSubsystem();
-  
+  private final CompressorModule compressor = CompressorModule.getCompressorModule(); // this needs to be put into a
+                                                                                      // PneumaticsSubsystem
+  // private final ClawSubsystem claw = new ClawSubsystem();
+
   // private PneumaticHub compressor = new PneumaticHub(1);
 
   /* Commands */
@@ -124,9 +129,14 @@ public class RobotContainer {
   // Create SmartDashboard chooser for autonomous routines
   private static SendableChooser<Command> Autons = new SendableChooser<>();
 
+  // THIS BUTTON IS ALREADY ASSIGNED
+  // private final Trigger test = new JoystickButton(DRIVER,
+  // XboxController.Button.kX.value);
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
+
   public RobotContainer() {
     SwerveDrive.setDefaultCommand(
         new Drive(
@@ -140,8 +150,8 @@ public class RobotContainer {
     // Configure the trigger bindings, defaults, Autons
 
     // wristSubsystem.setDefaultCommand(
-    //     new WristManual(wristSubsystem,
-    //         () -> OPERATOR.getRawAxis(leftYAxis2)));
+    // new WristManual(wristSubsystem,
+    // () -> OPERATOR.getRawAxis(leftYAxis2)));
 
     configureDefaultCommands();
     configureButtonBindings();
@@ -170,7 +180,7 @@ public class RobotContainer {
   private void configureDefaultCommands() {
     // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
     compressor.enableAnalog(100, 120);
-    CameraServer.startAutomaticCapture();
+    // CameraServer.startAutomaticCapture();
   }
 
   /***************/
@@ -193,31 +203,38 @@ public class RobotContainer {
     // not add whiletrue
     // lock.onTrue(new RepeatCommand(new InstantCommand(() -> SwerveDrive.Lock())));
 
-    bButton1.whileTrue(new InstantCommand(() -> testers.upGoArm()));
-    bButton1.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    Abutton2.whileTrue(new InstantCommand(() -> testers.upGoArm()));
+    Abutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    xButton1.whileTrue(new InstantCommand(() -> testers.downGoArm()));
-    xButton1.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    Ybutton2.whileTrue(new InstantCommand(() -> testers.downGoArm()));
+    Ybutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    Abutton2.onTrue(new InstantCommand(() -> testers.upGoClaw()));
-    Abutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    // Abutton2.onTrue(new InstantCommand(() -> testers.upGoClaw()));
+    // Abutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
 
-    Bbutton2.onTrue(new InstantCommand(() -> testers.downGoClaw()));
-    Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    // Bbutton2.onTrue(new InstantCommand(() -> testers.downGoClaw()));
+    // Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
 
     // solenoids
+
+    // test.toggleOnTrue(new InstantCommand(() -> testers.coneIntake()));
+
     Xbutton2.onTrue(new InstantCommand(() -> testers.coneIntake()));
-    Xbutton2.onFalse(new InstantCommand(() -> testers.outTake()));
-    Ybutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
-    Ybutton2.onFalse(new InstantCommand(() -> testers.outTake()));
+    Xbutton2.onFalse(new InstantCommand(()-> testers.stopClaw()));
+    RightBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
 
-    leftBumper2.onTrue(new InstantCommand(() -> testers.upGoWrist()));
-    leftBumper2.onFalse(new InstantCommand(() -> testers.stopWrist()));
+    Bbutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
+    Bbutton2.onFalse(new InstantCommand(()-> testers.stopClaw()));
 
-    RightBumper2.onTrue(new InstantCommand(() -> testers.downGoWrist()));
-    RightBumper2.onFalse(new InstantCommand(() -> testers.stopWrist()));
+    leftBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
 
-    // extender and wrist needs another button to go back
+    xButton1.onTrue(new InstantCommand(() -> testers.upGoWrist()));
+    xButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));
+
+    bButton1.onTrue(new InstantCommand(() -> testers.downGoWrist()));
+    bButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));
+
+    // // extender and wrist needs another button to go back
     startButton2.onTrue(new InstantCommand(() -> testers.upExtender()));
     startButton2.onFalse(new InstantCommand(() -> testers.stopExtender()));
 
@@ -229,6 +246,12 @@ public class RobotContainer {
     // LeftStickButton2.whileFalse((new InstantCommand(()-> compressor.disable())));
     // startButton1.onTrue(new InstantCommand(()-> new WristSetPoint(wristSubsystem,
     // 0.5)));//try out cmd
+  }
+
+  public void DefaultClawMotorCommand() {
+
+    // testClawMotors.setDefaultCommand(new DefaultArmCommand(testClawMotors,
+    // OPERATOR));
   }
 
   /**************/
@@ -248,6 +271,13 @@ public class RobotContainer {
                 5,
                 5)),
         true));
+    Autons.addOption("HARDCODED PATH", new SequentialCommandGroup(
+        new DriveForward(SwerveDrive, .5, -30, 1),
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 4, 15, 3.5)
+    // new WaitCommand(1),
+    // new DriveForward(SwerveDrive, 2, -15, 2)
+    ));
     // Autons.addOption("mobility", new mobilitytest());
     // Autons.addOption("AutoBalance", new TestPathPlannerAuton());
   }
