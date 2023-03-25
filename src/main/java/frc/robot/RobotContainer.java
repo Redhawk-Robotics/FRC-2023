@@ -13,11 +13,14 @@ import frc.robot.commands.Claw.ClawManual;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.commands.Wrist.WristSetPoint;
+import frc.robot.commands.extender.ExtenderManual;
 import frc.robot.constants.Ports;
+import frc.robot.constants.Setting.wristSetting;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.extenderSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
 import frc.robot.subsystems.modules.PDH;
 import frc.robot.test.testClawMotors;
@@ -55,8 +58,10 @@ public class RobotContainer {
   private final SwerveSubsystem SwerveDrive = new SwerveSubsystem();
   private final PDH powerDistributionHub = new PDH();
   private final testWhatever testers = new testWhatever();
-  private final ArmSubsystem armSubsystem = new ArmSubsystem();
-  private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  // private final ArmSubsystem armSubsystem = new ArmSubsystem();
+  // private final ClawSubsystem clawSubsystem = new ClawSubsystem();
+  // private final extenderSubsystem extenderSubsystem = new extenderSubsystem();
+  // private final WristSubsystem wristSubsystem = new WristSubsystem();
 
   // private final WristSubsystem wristSubsystem = new WristSubsystem();
 
@@ -142,6 +147,10 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
+    /*************/
+    /*** DRIVE ***/
+    /*************/
+
     SwerveDrive.setDefaultCommand(
         new Drive(
             SwerveDrive,
@@ -151,19 +160,59 @@ public class RobotContainer {
             () -> robotCentric.getAsBoolean(),
             () -> slowSpeed.getAsBoolean()));
 
+    // -------------------------------------
+
+    /*************/
+    /*** ARM ***/
+    /*************/
+
     // up, down
-    armSubsystem.setDefaultCommand(
-        new ArmManual(armSubsystem,
-            () -> Abutton2.getAsBoolean(),
-            () -> Ybutton2.getAsBoolean()));
+    // armSubsystem.setDefaultCommand(
+    //     new ArmManual(
+    //       armSubsystem,
+    //         () -> Abutton2.getAsBoolean(),
+    //         () -> Ybutton2.getAsBoolean()));
+
+    // -------------------------------------
+
+    /*************/
+    /*** CLAW ***/
+    /*************/
 
     // coneIntake, cubeIntake, leftOutTake, rightOutTake
-    clawSubsystem.setDefaultCommand(
-        new ClawManual(clawSubsystem,
-            () -> Xbutton2.getAsBoolean(),
-            () -> Bbutton2.getAsBoolean(),
-            () -> leftBumper2.getAsBoolean(),
-            () -> RightBumper2.getAsBoolean()));
+    // clawSubsystem.setDefaultCommand(
+    //     new ClawManual(
+    //       clawSubsystem,
+    //         () -> Xbutton2.getAsBoolean(),
+    //         () -> Bbutton2.getAsBoolean(),
+    //         () -> leftBumper2.getAsBoolean(),
+    //         () -> RightBumper2.getAsBoolean()));
+
+    // -------------------------------------
+
+    /*************/
+    /*** EXTENDER ***/
+    /*************/
+    // extend, retract
+    // extenderSubsystem.setDefaultCommand(
+    //     new ExtenderManual(
+    //       extenderSubsystem,
+    //         () -> startButton2.getAsBoolean(),
+    //         () -> BackButton2.getAsBoolean()));
+
+    // -------------------------------------
+
+    /*************/
+    /*** WRIST ***/
+    /*************/
+
+    // wristSubsystem.setDefaultCommand(
+    //     new WristManual(
+    //       wristSubsystem, 
+    //       () -> xButton1.getAsBoolean(), 
+    //       () -> bButton1.getAsBoolean()));
+
+    // -------------------------------------
 
     // Configure the trigger bindings, defaults, Autons
 
@@ -221,11 +270,11 @@ public class RobotContainer {
     // not add whiletrue
     // lock.onTrue(new RepeatCommand(new InstantCommand(() -> SwerveDrive.Lock())));
 
-    // Abutton2.whileTrue(new InstantCommand(() -> testers.upGoArm()));
-    // Abutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    Abutton2.whileTrue(new InstantCommand(() -> testers.upGoArm()));
+    Abutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    // Ybutton2.whileTrue(new InstantCommand(() -> testers.downGoArm()));
-    // Ybutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    Ybutton2.whileTrue(new InstantCommand(() -> testers.downGoArm()));
+    Ybutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
     // Abutton2.onTrue(new InstantCommand(() -> testers.upGoClaw()));
     // Abutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
@@ -237,13 +286,13 @@ public class RobotContainer {
 
     // test.toggleOnTrue(new InstantCommand(() -> testers.coneIntake()));
 
-    // Xbutton2.onTrue(new InstantCommand(() -> testers.coneIntake()));
-    // Xbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
-    // RightBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
+    Xbutton2.onTrue(new InstantCommand(() -> testers.coneIntake()));
+    Xbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    RightBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
 
-    // Bbutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
-    // Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
-    // leftBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
+    Bbutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
+    Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    leftBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
 
     xButton1.onTrue(new InstantCommand(() -> testers.upGoWrist()));
     xButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));

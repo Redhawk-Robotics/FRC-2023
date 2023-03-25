@@ -4,60 +4,53 @@
 
 package frc.robot.commands;
 
+import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.commands.test.testMotorCommand;
 //import frc.robot.Constants;
 import frc.robot.constants.Ports;
+import frc.robot.constants.Setting;
 import frc.robot.subsystems.ArmSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import frc.robot.test.testClawMotors;
 
 public class WristManual extends CommandBase {
 
-  private testClawMotors armSubsystem;
-
-  private XboxController controller = new XboxController(Ports.Gamepad.OPERATOR);
-
-  private double leftArmPower, rightArmPower;
+  private WristSubsystem armSubsystem;
+  private BooleanSupplier up, down;
 
   SlewRateLimiter leftRateLimiter = new SlewRateLimiter(1);
   SlewRateLimiter rightRateLimiter = new SlewRateLimiter(1);
 
   /** Creates a new DefaultDemandCommand. */
-  public WristManual(testClawMotors arm, XboxController con) {
+  public WristManual(WristSubsystem arm, BooleanSupplier up, BooleanSupplier down) {
     // Use addRequirements() here to declare subsystem dependencies.
-
     this.armSubsystem = arm;
-    this.controller = con;
-
     addRequirements(armSubsystem);
+
+    this.up = up;
+    this.down = down;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
-    leftArmPower = 0;
-    rightArmPower = 0;
-
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    leftArmPower = XboxController.Axis.kLeftTrigger.value;
-    rightArmPower = XboxController.Axis.kRightTrigger.value;
-
-    armSubsystem.setSpeed(leftRateLimiter.calculate(leftArmPower), rightRateLimiter.calculate(rightArmPower));
+    double power = up.getAsBoolean() ? Setting.wristSetting.wristSpeed: (down.getAsBoolean() ? Setting.wristSetting.wristSpeedReverse: 0);
+    armSubsystem.setMotor(power);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-
-    armSubsystem.stop();
   }
 
   // Returns true when the command should end.

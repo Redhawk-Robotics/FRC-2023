@@ -7,6 +7,7 @@ package frc.robot.commands.Arm;
 import java.util.function.BooleanSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.constants.Setting;
 import frc.robot.subsystems.ArmSubsystem;
 
 public class ArmManual extends CommandBase {
@@ -30,7 +31,7 @@ public class ArmManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double power = goUp.getAsBoolean() ? .3: (goDown.getAsBoolean() ? -.1: 0);
+    double power = goUp.getAsBoolean() ? Setting.armSetting.armSpeed: (goDown.getAsBoolean() ? Setting.armSetting.armSpeedReverse: 0);
     armSubsystem.setMotor(power);
   }
 

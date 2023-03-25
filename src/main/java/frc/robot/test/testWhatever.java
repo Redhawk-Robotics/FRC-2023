@@ -43,7 +43,7 @@ public class testWhatever extends SubsystemBase {
   private double armSpeedReverse = -0.1;
 
   public testWhatever() {
-    // ARM LEFT
+    // ------------------------------------- ARM LEFT
     armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
     armEncoderLeft = armMotorLeft.getEncoder();
     armMotorLeft.setInverted(false);
@@ -94,7 +94,7 @@ public class testWhatever extends SubsystemBase {
     armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
     armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
+    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -10);
 
     // -------------------------------------
 

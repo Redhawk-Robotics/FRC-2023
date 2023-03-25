@@ -56,7 +56,6 @@ public extenderSubsystem() {
   // SmartDashboard.putNumber("extender Encoder Value", getEncoderMeters());
   SmartDashboard.putNumber("Extender Encoder Value", extenderEncoder.getPosition());
 
-
   //only if we need for debugging
   extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 
   SmartDashboard.getBoolean("extender Forward Soft Limit Enabled", true));
