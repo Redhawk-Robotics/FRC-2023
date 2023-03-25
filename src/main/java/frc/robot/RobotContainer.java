@@ -168,10 +168,10 @@ public class RobotContainer {
 
     // up, down
     // armSubsystem.setDefaultCommand(
-    //     new ArmManual(
-    //       armSubsystem,
-    //         () -> Abutton2.getAsBoolean(),
-    //         () -> Ybutton2.getAsBoolean()));
+    // new ArmManual(
+    // armSubsystem,
+    // () -> Abutton2.getAsBoolean(),
+    // () -> Ybutton2.getAsBoolean()));
 
     // -------------------------------------
 
@@ -181,12 +181,12 @@ public class RobotContainer {
 
     // coneIntake, cubeIntake, leftOutTake, rightOutTake
     // clawSubsystem.setDefaultCommand(
-    //     new ClawManual(
-    //       clawSubsystem,
-    //         () -> Xbutton2.getAsBoolean(),
-    //         () -> Bbutton2.getAsBoolean(),
-    //         () -> leftBumper2.getAsBoolean(),
-    //         () -> RightBumper2.getAsBoolean()));
+    // new ClawManual(
+    // clawSubsystem,
+    // () -> Xbutton2.getAsBoolean(),
+    // () -> Bbutton2.getAsBoolean(),
+    // () -> leftBumper2.getAsBoolean(),
+    // () -> RightBumper2.getAsBoolean()));
 
     // -------------------------------------
 
@@ -195,10 +195,10 @@ public class RobotContainer {
     /*************/
     // extend, retract
     // extenderSubsystem.setDefaultCommand(
-    //     new ExtenderManual(
-    //       extenderSubsystem,
-    //         () -> startButton2.getAsBoolean(),
-    //         () -> BackButton2.getAsBoolean()));
+    // new ExtenderManual(
+    // extenderSubsystem,
+    // () -> startButton2.getAsBoolean(),
+    // () -> BackButton2.getAsBoolean()));
 
     // -------------------------------------
 
@@ -207,10 +207,10 @@ public class RobotContainer {
     /*************/
 
     // wristSubsystem.setDefaultCommand(
-    //     new WristManual(
-    //       wristSubsystem, 
-    //       () -> xButton1.getAsBoolean(), 
-    //       () -> bButton1.getAsBoolean()));
+    // new WristManual(
+    // wristSubsystem,
+    // () -> xButton1.getAsBoolean(),
+    // () -> bButton1.getAsBoolean()));
 
     // -------------------------------------
 
@@ -246,7 +246,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
-    compressor.enableAnalog(100, 120);
+    // compressor.enableAnalog(100, 120);
+    compressor.disableCompressor();
     // CameraServer.startAutomaticCapture();
   }
 
@@ -337,13 +338,32 @@ public class RobotContainer {
                 5,
                 5)),
         true));
-    Autons.addOption("HARDCODED PATH", new SequentialCommandGroup(
+    Autons.addOption("Drop Cube, Leave Community FAR", new SequentialCommandGroup(
         new DriveForward(SwerveDrive, .5, -30, 1),
         new WaitCommand(1),
-        new DriveForward(SwerveDrive, 4, 15, 3.5)
-    // new WaitCommand(1),
-    // new DriveForward(SwerveDrive, 2, -15, 2)
+        new DriveForward(SwerveDrive, 4, 15, 7)));
+
+    Autons.addOption("[UNSTABLE] drop cube, charge pad", new SequentialCommandGroup(
+        new DriveForward(SwerveDrive, .5, -30, 1),
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+        new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 0, -35, 4) // reverse back onto the pad
     ));
+
+    // HAS NO REVERSE TO HIT THE GRID
+    Autons.addOption("[UNSTABLE] charge pad PRACTICE", new SequentialCommandGroup(
+        new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+        new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+        new WaitCommand(1),
+        new DriveForward(SwerveDrive, 0, -35, 4) // reverse back onto the pad
+    ));
+
+    // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
+    // new DriveForward(SwerveDrive, .5, -30, 1),
+    // new WaitCommand(1),
+    // new DriveForward(SwerveDrive, 4, 20, 4)));
     // Autons.addOption("mobility", new mobilitytest());
     // Autons.addOption("AutoBalance", new TestPathPlannerAuton());
   }

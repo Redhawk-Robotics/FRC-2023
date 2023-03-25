@@ -72,21 +72,19 @@ public class DriveForward extends CommandBase {
   public void end(boolean interrupted) {
     double velo = this.veloicty;
     double bigStart = this.timer.get();
-    while (this.timer.get() - bigStart < 1 && Math.abs(velo) > 0) {
-      double start = this.timer.get();
-      while (this.timer.get() - start < 0.01) {
-        // pause
-      }
-      Swerve.drive(new Translation2d(velo,0), 0, true, true);
-      if (this.veloicty > 0) {
-        velo -= 3;
-        
-      } else {
+    // while (this.timer.get() - bigStart < 1 && Math.abs(velo) > 0) {
+    //   double start = this.timer.get();
+    //   while (this.timer.get() - start < 0.01) {
+    //     // pause
+    //   }
+    //   Swerve.drive(new Translation2d(velo,0), 0, true, true);
+    //   if (this.veloicty > 0) {
+    //     velo -= 3;
+    //   } else {
+    //     velo += 3;
+    //   }
 
-        velo += 3;
-      }
-
-    }
+    // }
     Swerve.drive(new Translation2d(0,0), 0, true, true);
     this.timer.stop();
   }
