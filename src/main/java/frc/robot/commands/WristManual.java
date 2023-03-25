@@ -13,8 +13,7 @@ import frc.robot.constants.Ports;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.test.testClawMotors;
 
-
-public class DefaultArmCommand extends CommandBase {
+public class WristManual extends CommandBase {
 
   private testClawMotors armSubsystem;
 
@@ -25,9 +24,8 @@ public class DefaultArmCommand extends CommandBase {
   SlewRateLimiter leftRateLimiter = new SlewRateLimiter(1);
   SlewRateLimiter rightRateLimiter = new SlewRateLimiter(1);
 
-
   /** Creates a new DefaultDemandCommand. */
-  public DefaultArmCommand(testClawMotors arm, XboxController con) {
+  public WristManual(testClawMotors arm, XboxController con) {
     // Use addRequirements() here to declare subsystem dependencies.
 
     this.armSubsystem = arm;
@@ -49,7 +47,7 @@ public class DefaultArmCommand extends CommandBase {
   @Override
   public void execute() {
 
-    leftArmPower  = XboxController.Axis.kLeftTrigger.value;
+    leftArmPower = XboxController.Axis.kLeftTrigger.value;
     rightArmPower = XboxController.Axis.kRightTrigger.value;
 
     armSubsystem.setSpeed(leftRateLimiter.calculate(leftArmPower), rightRateLimiter.calculate(rightArmPower));
@@ -58,7 +56,7 @@ public class DefaultArmCommand extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    
+
     armSubsystem.stop();
   }
 

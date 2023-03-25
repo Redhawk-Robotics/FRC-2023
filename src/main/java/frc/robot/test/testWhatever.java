@@ -13,19 +13,15 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 
 public class testWhatever extends SubsystemBase {
   /** Creates a new testWhatever. */
-  private final CANSparkMax armMotorLeft;
-  private final CANSparkMax armMotorRight;
+  private final CANSparkMax armMotorLeft, armMotorRight;
 
-  private final RelativeEncoder armEncoderLeft;
-  private final RelativeEncoder armEncoderRight;
-
-  // compressor
-  private final CANSparkMax leftClaw;
-  private final CANSparkMax rightClaw;
+  private final RelativeEncoder armEncoderLeft, armEncoderRight;
+  private final CANSparkMax leftClaw, rightClaw;
 
   private final CANSparkMax wrist;
   private final RelativeEncoder wristEncoder;
@@ -46,68 +42,88 @@ public class testWhatever extends SubsystemBase {
   private double armSpeed = 0.3;
   private double armSpeedReverse = -0.1;
 
-  private double clawSpeed = 0.5;
-  private double clawSpeedReverse = -0.5;
-
-  private double EncoderValue;
-
   public testWhatever() {
-    armMotorLeft = new CANSparkMax(9, MotorType.kBrushless);
-    armMotorRight = new CANSparkMax(10, MotorType.kBrushless);
-
-    extender = new CANSparkMax(11, MotorType.kBrushless);
-
-    leftClaw = new CANSparkMax(12, MotorType.kBrushless);
-    rightClaw = new CANSparkMax(13, MotorType.kBrushless);
-
-    wrist = new CANSparkMax(14, MotorType.kBrushless);
-
-    clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, 0, 1);
-
-    armMotorRight.follow(armMotorLeft,false);
-
+    // ARM LEFT
+    armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
+    armEncoderLeft = armMotorLeft.getEncoder();
+    armMotorLeft.setInverted(false);
     armMotorLeft.restoreFactoryDefaults();
+
+    // ------------------------------------- ARM RIGHT
+
+    armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
+    armEncoderRight = armMotorRight.getEncoder();
+    armMotorRight.setInverted(true);
     armMotorRight.restoreFactoryDefaults();
-    extender.restoreFactoryDefaults();
-    wrist.restoreFactoryDefaults();
+    armMotorRight.follow(armMotorLeft, false); // <= follow
 
+    // ------------------------------------- EXTENDER
+
+    extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
+    extenderEncoder = extender.getEncoder();
     extender.setInverted(true);
+    extender.restoreFactoryDefaults();
 
-    wrist.setInverted(false);
-
+    // ------------------------------------- LEFT CLAW
+ 
+    leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
     leftClaw.setInverted(false);
+
+    // RIGHT CLAW
+    rightClaw = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless); // 13
     rightClaw.setInverted(true);
 
-    armMotorLeft.setInverted(false);
-    armMotorRight.setInverted(true);
+    // ------------------------------------- WRIST
 
-    armEncoderLeft = armMotorLeft.getEncoder();
-    armEncoderRight = armMotorRight.getEncoder();
-
+    wrist = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless); // 14
     wristEncoder = wrist.getEncoder();
-    extenderEncoder = extender.getEncoder();
+    wrist.setInverted(false);
+    wrist.restoreFactoryDefaults();
+
+    // -------------------------------------
+
+    clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawForwardChan,
+        Setting.clawPneumatic.clawReverseChan);
+
+    // ----------------------------------------------------------------------------------
+
+    /************/
+    /*** ARM ***/
+    /***********/
 
     armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
     armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
     armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
-   
-    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
-    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+
+    // -------------------------------------
+
+    /****************/
+    /*** EXTENDER ***/
+    /***************/
 
     extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 310);
     extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
     extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    
+
+    /*************/
+    /*** WRIST ***/
+    /*************/
 
     wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, -10);
     wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
     wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
+    // -------------------------------------
+
+    // FIXME
+    // check if both right and left are going the correct directions FIXME
+    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
+    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
   }
 
   @Override
@@ -122,39 +138,10 @@ public class testWhatever extends SubsystemBase {
     SmartDashboard.putNumber("TEST wrist pivot", wristEncoder.getPosition());
   }
 
-  // arm
-  public void setMotor(double speed) {
-    armMotorLeft.set(speed);
-    armMotorRight.set(speed);
-  }
+  /*************/
+  /*** ARM ***/
+  /*************/
 
-  // claw motors
-  public void setMotorClaw(double speed) {
-    rightClaw.set(speed);
-    leftClaw.set(speed);
-  }
-
-  public double getEncoderMetersLeftArm(double positionLeft) {
-    positionLeft = armEncoderLeft.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positionLeft;
-  }
-
-  public double getEncoderMetersRightArm(double positionRight) {
-    positionRight = armEncoderRight.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positionRight;
-  }
-
-  public double getEncoderMetersExtender(double positonExtender) {
-    positonExtender = extenderEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positonExtender;
-  }
-
-  public double getEncoderMetersWrist(double positonWrist) {
-    positonWrist = wristEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positonWrist;
-  }
-
-  // arm
   public void upGoArm() {
     armMotorLeft.set(armSpeed);
     armMotorRight.set(armSpeed);
@@ -170,21 +157,11 @@ public class testWhatever extends SubsystemBase {
     armMotorRight.set(stop);
   }
 
-  // Claw
-  public void upGoClaw() {
-    leftClaw.set(clawSpeed);
-    rightClaw.set(clawSpeed);
-  }
+  // -------------------------------------
 
-  public void downGoClaw() {
-    leftClaw.set(clawSpeedReverse);
-    rightClaw.set(clawSpeedReverse);
-  }
-
-  // public void stopClaw() {
-  //   leftClaw.set(stop);
-  //   rightClaw.set(stop);
-  // }
+  /*************/
+  /*** CLAW ***/
+  /*************/
 
   public void coneIntake() {
     clawOpen.set(Value.kForward);
@@ -203,22 +180,19 @@ public class testWhatever extends SubsystemBase {
     // leftClaw.set(.75);
     // rightClaw.set(.75);
   }
+
   public void stopClaw() {
     clawOpen.set(Value.kOff);
     // leftClaw.set(0);
     // rightClaw.set(0);
   }
 
-  // Pneumatics with claw
-  public void closeClaw() {
-    clawOpen.set(Value.kReverse);
-  }
+  // -------------------------------------
 
-  public void openClaw() {
-    clawOpen.set(Value.kForward);
-  }
+  /*************/
+  /*** WRIST ***/
+  /*************/
 
-  // Wrist
   public void upGoWrist() {
     wrist.set(wristSpeed);
   }
@@ -230,8 +204,13 @@ public class testWhatever extends SubsystemBase {
   public void downGoWrist() {
     wrist.set(wristSpeedReverse);
   }
+  
+  // -------------------------------------
 
-  // Extender
+  /*************/
+  /*** EXTENDER ***/
+  /*************/
+  
   public void upExtender() {
     extender.set(extenderSpeed);
   }

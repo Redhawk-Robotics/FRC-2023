@@ -126,12 +126,8 @@ public class ArmSubsystem extends SubsystemBase {
   // TODO try with the wrist that if its in code that its coast, and moves freely,
   // then this method is not needed
   public void enableMotors(boolean on) {
-    IdleMode mode;
-    if (on) {
-      mode = IdleMode.kBrake;
-    } else {
-      mode = IdleMode.kCoast;
-    }
+    IdleMode mode = on ? IdleMode.kBrake: IdleMode.kCoast;
+
     leftArmMotor.setIdleMode(mode);
     rightArmMotor.setIdleMode(mode);
   }
@@ -139,13 +135,6 @@ public class ArmSubsystem extends SubsystemBase {
   public void setMotor(double speed) {
     leftArmMotor.set(speed);
     rightArmMotor.set(speed);
-
-    leftArmMotor.enableSoftLimit(SoftLimitDirection.kForward, SmartDashboard.getBoolean("Forward Soft Limit", false));
-    leftArmMotor.enableSoftLimit(SoftLimitDirection.kForward, SmartDashboard.getBoolean("Forward Soft Limit", false));
-    rightArmMotor.enableSoftLimit(SoftLimitDirection.kReverse,
-        SmartDashboard.getBoolean("Reverse Soft Limit Enabled", false));
-    rightArmMotor.enableSoftLimit(SoftLimitDirection.kReverse,
-        SmartDashboard.getBoolean("Reverse Soft Limit Enabled", false));
   }
 
   public void resetEncoder() {

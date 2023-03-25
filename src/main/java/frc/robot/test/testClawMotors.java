@@ -32,7 +32,6 @@ public class testClawMotors extends SubsystemBase {
 
     this.leftClawMotor.set(power);
     this.rightClawMotor.set(power);
-    //101206
   }
 
   public void stop() {

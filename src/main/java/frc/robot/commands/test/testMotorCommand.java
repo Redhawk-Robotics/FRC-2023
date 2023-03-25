@@ -38,7 +38,7 @@ public class testMotorCommand extends CommandBase {
     // } else {
     //   setPower = 0;
     // }
-    tester.setMotor(0.3);
+    //tester.setMotor(0.3);
   }
 
   // Called once the command ends or is interrupted.

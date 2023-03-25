@@ -120,8 +120,8 @@ public interface Setting {
         public static final int relativeMinPressure = 60;
     }
     public static final class clawPneumatic {
-        public static final int clawForwardChan = 4;
-        public static final int clawReverseChan = 5; 
+        public static final int clawForwardChan = 0;
+        public static final int clawReverseChan = 1; 
     }
     public static final class clawSetting{
         public static final double clawP = 0;

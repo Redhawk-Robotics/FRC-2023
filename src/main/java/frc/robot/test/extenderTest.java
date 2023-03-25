@@ -21,9 +21,7 @@ public class extenderTest extends SubsystemBase {
   /** Creates a new ExtendSubsystem. */
   private final CANSparkMax extenderMotor;
   private final RelativeEncoder extenderEncoder;
-
   private final SparkMaxPIDController extenderController;
-
   private double extenderEncoderValue;
 
   public extenderTest() {
@@ -32,8 +30,7 @@ public class extenderTest extends SubsystemBase {
 
     extenderController = extenderMotor.getPIDController();
 
-    configArmMotor(extenderMotor,extenderEncoder,extenderController,Ports.Extender.ExtenderMotorInvert);
-
+    configArmMotor(extenderMotor, extenderEncoder, extenderController, Ports.Extender.ExtenderMotorInvert);
   }
 
   @Override
@@ -41,7 +38,9 @@ public class extenderTest extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("Extender Encoder Value", getEncoderMetersLeft(extenderEncoderValue));
   }
-  private void configArmMotor(CANSparkMax extenderMotor, RelativeEncoder extenderEncoder, SparkMaxPIDController extenderController, boolean Invert) {
+
+  private void configArmMotor(CANSparkMax extenderMotor, RelativeEncoder extenderEncoder,
+      SparkMaxPIDController extenderController, boolean Invert) {
     extenderMotor.restoreFactoryDefaults();
     CANSparkMaxUtil.setCANSparkMaxBusUsage(extenderMotor, Usage.kPositionOnly);
     extenderMotor.setSmartCurrentLimit(Setting.extenderSetting.extenderContinousCurrentLimit);
@@ -55,10 +54,11 @@ public class extenderTest extends SubsystemBase {
     extenderMotor.enableVoltageCompensation(Setting.extenderSetting.maxVoltage);
     extenderMotor.burnFlash();
     Timer.delay(1);
-    //resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
-    }
-    public void setMotor(double speed) {
-      extenderMotor.set(speed);
+    // resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
+  }
+
+  public void setMotor(double speed) {
+    extenderMotor.set(speed);
   }
 
   public double getEncoderMetersLeft(double position) {
