@@ -4,6 +4,8 @@
 
 package frc.robot.test;
 
+import java.util.Set;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -12,6 +14,8 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
@@ -65,7 +69,7 @@ public class testWhatever extends SubsystemBase {
     extender.restoreFactoryDefaults();
 
     // ------------------------------------- LEFT CLAW
- 
+
     leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
     leftClaw.setInverted(false);
 
@@ -102,7 +106,7 @@ public class testWhatever extends SubsystemBase {
     /*** EXTENDER ***/
     /***************/
 
-    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 310);
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 290);
     extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
     extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
@@ -204,13 +208,13 @@ public class testWhatever extends SubsystemBase {
   public void downGoWrist() {
     wrist.set(wristSpeedReverse);
   }
-  
+
   // -------------------------------------
 
   /*************/
   /*** EXTENDER ***/
   /*************/
-  
+
   public void upExtender() {
     extender.set(extenderSpeed);
   }
@@ -222,4 +226,28 @@ public class testWhatever extends SubsystemBase {
   public void downExtender() {
     extender.set(extenderSpeedReverse);
   }
+
+  /****************/
+  /*** COMMANDS ***/
+  /***************/
+
+  public Command rasieShoulderCMD() {
+    return new Command() {
+
+      @Override
+      public Set<Subsystem> getRequirements() {
+        // TODO Auto-generated method stub
+        return null;
+
+      };
+
+      @Override
+      public void execute() {
+        upGoArm();
+        // armEncoderLeft
+
+      }
+    };
+  }
 }
+// thing
