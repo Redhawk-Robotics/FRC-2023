@@ -8,7 +8,6 @@ import frc.robot.commands.WristManual;
 import frc.robot.commands.Arm.ArmManual;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Autons.mobility;
-import frc.robot.commands.Autons.mobilitytest;
 import frc.robot.commands.Claw.ClawManual;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
@@ -90,26 +89,23 @@ public class RobotContainer {
   private final int rightTrigger1 = XboxController.Axis.kRightTrigger.value;
 
   /* Driver Buttons */
-  private final Trigger zeroGyro = new JoystickButton(DRIVER, XboxController.Button.kA.value);
-  private final Trigger robotCentric = new JoystickButton(DRIVER, XboxController.Button.kY.value);
+  private final Trigger driver_A_zeroGyro = new JoystickButton(DRIVER, XboxController.Button.kA.value);
+  private final Trigger driver_Y_robotCentric = new JoystickButton(DRIVER, XboxController.Button.kY.value);
 
-  private final Trigger slowSpeed = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);// slowspeed
-                                                                                                         // for right
-                                                                                                         // side of the
-                                                                                                         // controller
+  private final Trigger driver_slowSpeed = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);
 
   // Additional buttons
-  private final Trigger lock = new JoystickButton(DRIVER, XboxController.Button.kLeftBumper.value);
+  private final Trigger driver_leftBump_lock = new JoystickButton(DRIVER, XboxController.Button.kLeftBumper.value);
 
-  private final Trigger bButton1 = new JoystickButton(DRIVER, XboxController.Button.kB.value);
+  private final Trigger driver_B = new JoystickButton(DRIVER, XboxController.Button.kB.value);
 
-  private final Trigger xButton1 = new JoystickButton(DRIVER, XboxController.Button.kX.value);
+  private final Trigger driver_X = new JoystickButton(DRIVER, XboxController.Button.kX.value);
 
-  private final Trigger startButton1 = new JoystickButton(DRIVER, XboxController.Button.kStart.value);
-  private final Trigger BackButton1 = new JoystickButton(DRIVER, XboxController.Button.kBack.value);
+  private final Trigger driver_startButton1 = new JoystickButton(DRIVER, XboxController.Button.kStart.value);
+  private final Trigger driver_BackButton1 = new JoystickButton(DRIVER, XboxController.Button.kBack.value);
 
-  private final Trigger LeftStickButton1 = new JoystickButton(DRIVER, XboxController.Button.kLeftStick.value);
-  private final Trigger RightStickButton1 = new JoystickButton(DRIVER, XboxController.Button.kRightStick.value);
+  private final Trigger driver_LeftStickButton1 = new JoystickButton(DRIVER, XboxController.Button.kLeftStick.value);
+  private final Trigger driver_RightStickButton1 = new JoystickButton(DRIVER, XboxController.Button.kRightStick.value);
 
   // Controller two - Operator
   private final int leftYAxis2 = XboxController.Axis.kLeftY.value;
@@ -121,19 +117,19 @@ public class RobotContainer {
   private final int leftTrigger2 = XboxController.Axis.kLeftTrigger.value;
   private final int rightTrigger2 = XboxController.Axis.kRightTrigger.value;
 
-  private final Trigger Abutton2 = new JoystickButton(OPERATOR, XboxController.Button.kA.value);
-  private final Trigger Bbutton2 = new JoystickButton(OPERATOR, XboxController.Button.kB.value);
-  private final Trigger Xbutton2 = new JoystickButton(OPERATOR, XboxController.Button.kX.value);
-  private final Trigger Ybutton2 = new JoystickButton(OPERATOR, XboxController.Button.kY.value);
+  private final Trigger opperator_A = new JoystickButton(OPERATOR, XboxController.Button.kA.value);
+  private final Trigger opperator_B = new JoystickButton(OPERATOR, XboxController.Button.kB.value);
+  private final Trigger opperator_X = new JoystickButton(OPERATOR, XboxController.Button.kX.value);
+  private final Trigger opperator_Y = new JoystickButton(OPERATOR, XboxController.Button.kY.value);
 
-  private final Trigger RightBumper2 = new JoystickButton(OPERATOR, XboxController.Button.kRightBumper.value);
-  private final Trigger leftBumper2 = new JoystickButton(OPERATOR, XboxController.Button.kLeftBumper.value);
+  private final Trigger opperator_RightBumper = new JoystickButton(OPERATOR, XboxController.Button.kRightBumper.value);
+  private final Trigger opperator_leftBumper = new JoystickButton(OPERATOR, XboxController.Button.kLeftBumper.value);
 
-  private final Trigger startButton2 = new JoystickButton(OPERATOR, XboxController.Button.kStart.value);
-  private final Trigger BackButton2 = new JoystickButton(OPERATOR, XboxController.Button.kBack.value);
+  private final Trigger opperator_startButton = new JoystickButton(OPERATOR, XboxController.Button.kStart.value);
+  private final Trigger opperator_BackButton = new JoystickButton(OPERATOR, XboxController.Button.kBack.value);
 
-  private final Trigger LeftStickButton2 = new JoystickButton(OPERATOR, XboxController.Button.kLeftStick.value);
-  private final Trigger RightStickButton2 = new JoystickButton(OPERATOR, XboxController.Button.kRightStick.value);
+  private final Trigger opperator_LeftStick = new JoystickButton(OPERATOR, XboxController.Button.kLeftStick.value);
+  private final Trigger opperator_RightStick = new JoystickButton(OPERATOR, XboxController.Button.kRightStick.value);
 
   // Create SmartDashboard chooser for autonomous routines
   private static SendableChooser<Command> Autons = new SendableChooser<>();
@@ -151,14 +147,14 @@ public class RobotContainer {
     /*** DRIVE ***/
     /*************/
 
-    SwerveDrive.setDefaultCommand(
-        new Drive(
-            SwerveDrive,
-            () -> -DRIVER.getRawAxis(translationAxis),
-            () -> -DRIVER.getRawAxis(strafeAxis),
-            () -> -DRIVER.getRawAxis(rotationAxis),
-            () -> robotCentric.getAsBoolean(),
-            () -> slowSpeed.getAsBoolean()));
+    // SwerveDrive.setDefaultCommand(
+    //     new Drive(
+    //         SwerveDrive,
+    //         () -> -DRIVER.getRawAxis(translationAxis),
+    //         () -> -DRIVER.getRawAxis(strafeAxis),
+    //         () -> -DRIVER.getRawAxis(rotationAxis),
+    //         () -> driver_Y_robotCentric.getAsBoolean(),
+    //         () -> driver_slowSpeed.getAsBoolean()));
 
     // -------------------------------------
 
@@ -168,10 +164,10 @@ public class RobotContainer {
 
     // up, down
     // armSubsystem.setDefaultCommand(
-    // new ArmManual(
-    // armSubsystem,
-    // () -> Abutton2.getAsBoolean(),
-    // () -> Ybutton2.getAsBoolean()));
+    //     new ArmManual(
+    //         armSubsystem,
+    //         () -> opperator_A.getAsBoolean(),
+    //         () -> opperator_Y.getAsBoolean()));
 
     // -------------------------------------
 
@@ -179,26 +175,27 @@ public class RobotContainer {
     /*** CLAW ***/
     /*************/
 
-    // coneIntake, cubeIntake, leftOutTake, rightOutTake
+    // METHODS: coneIntake, cubeIntake, leftOutTake, rightOutTake
     // clawSubsystem.setDefaultCommand(
-    // new ClawManual(
-    // clawSubsystem,
-    // () -> Xbutton2.getAsBoolean(),
-    // () -> Bbutton2.getAsBoolean(),
-    // () -> leftBumper2.getAsBoolean(),
-    // () -> RightBumper2.getAsBoolean()));
+    //     new ClawManual(
+    //         clawSubsystem,
+    //         () -> opperator_X.getAsBoolean(),
+    //         () -> opperator_B.getAsBoolean(),
+    //         () -> opperator_leftBumper.getAsBoolean(),
+    //         () -> opperator_RightBumper.getAsBoolean()));
 
     // -------------------------------------
 
     /*************/
     /*** EXTENDER ***/
     /*************/
-    // extend, retract
+
+    // METHODS: extend, retract
     // extenderSubsystem.setDefaultCommand(
-    // new ExtenderManual(
-    // extenderSubsystem,
-    // () -> startButton2.getAsBoolean(),
-    // () -> BackButton2.getAsBoolean()));
+    //     new ExtenderManual(
+    //         extenderSubsystem,
+    //         () -> opperator_startButton.getAsBoolean(),
+    //         () -> opperator_BackButton.getAsBoolean()));
 
     // -------------------------------------
 
@@ -206,20 +203,16 @@ public class RobotContainer {
     /*** WRIST ***/
     /*************/
 
+    // METHODS: up, down
     // wristSubsystem.setDefaultCommand(
-    // new WristManual(
-    // wristSubsystem,
-    // () -> xButton1.getAsBoolean(),
-    // () -> bButton1.getAsBoolean()));
+    //     new WristManual(
+    //         wristSubsystem,
+    //         () -> driver_X.getAsBoolean(),
+    //         () -> driver_B.getAsBoolean()));
 
     // -------------------------------------
 
     // Configure the trigger bindings, defaults, Autons
-
-    // wristSubsystem.setDefaultCommand(
-    // new WristManual(wristSubsystem,
-    // () -> OPERATOR.getRawAxis(leftYAxis2)));
-
     configureDefaultCommands();
     configureButtonBindings();
     configureAutons();
@@ -259,60 +252,43 @@ public class RobotContainer {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
     // new Trigger(m_exampleSubsystem::exampleCondition)
     // .onTrue(new ExampleCommand(m_exampleSubsystem));
-
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is
     // pressed,
     // cancelling on release.
 
-    // DRVIER.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
-    zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));// A value for the Xbox Controller
+    // ------------------------------------- GYRO
+    driver_A_zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));// A value for the Xbox Controller
 
-    // lock.onTrue(new InstantCommand(() -> SwerveDrive.Lock()));//try this line if
-    // not add whiletrue
-    // lock.onTrue(new RepeatCommand(new InstantCommand(() -> SwerveDrive.Lock())));
+    // ------------------------------------- ARM
+    opperator_Y.whileTrue(new InstantCommand(() -> testers.upGoArm()));
+    opperator_A.whileTrue(new InstantCommand(() -> testers.downGoArm()));
 
-    Abutton2.whileTrue(new InstantCommand(() -> testers.upGoArm()));
-    Abutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    opperator_Y.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    opperator_A.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    Ybutton2.whileTrue(new InstantCommand(() -> testers.downGoArm()));
-    Ybutton2.whileFalse(new InstantCommand(() -> testers.stopArm()));
+    // ------------------------------------- CLAW
+    opperator_X.onTrue(new InstantCommand(() -> testers.coneIntake()));
+    opperator_B.onTrue(new InstantCommand(() -> testers.cubeIntake()));
 
-    // Abutton2.onTrue(new InstantCommand(() -> testers.upGoClaw()));
-    // Abutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    opperator_X.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    opperator_B.onFalse(new InstantCommand(() -> testers.stopClaw()));
 
-    // Bbutton2.onTrue(new InstantCommand(() -> testers.downGoClaw()));
-    // Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    opperator_leftBumper.onFalse(new InstantCommand(() -> testers.outTake()));
+    opperator_RightBumper.onFalse(new InstantCommand(() -> testers.outTake()));
 
-    // solenoids
+    // ------------------------------------- WRIST
+    driver_X.onTrue(new InstantCommand(() -> testers.upGoWrist()));
+    driver_X.onFalse(new InstantCommand(() -> testers.stopWrist()));
 
-    // test.toggleOnTrue(new InstantCommand(() -> testers.coneIntake()));
+    driver_B.onTrue(new InstantCommand(() -> testers.downGoWrist()));
+    driver_B.onFalse(new InstantCommand(() -> testers.stopWrist()));
 
-    Xbutton2.onTrue(new InstantCommand(() -> testers.coneIntake()));
-    Xbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
-    RightBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
+    // ------------------------------------- EXTENDER
+    opperator_startButton.onTrue(new InstantCommand(() -> testers.upExtender()));
+    opperator_startButton.onFalse(new InstantCommand(() -> testers.stopExtender()));
 
-    Bbutton2.onTrue(new InstantCommand(() -> testers.cubeIntake()));
-    Bbutton2.onFalse(new InstantCommand(() -> testers.stopClaw()));
-    leftBumper2.onFalse(new InstantCommand(() -> testers.outTake()));
-
-    xButton1.onTrue(new InstantCommand(() -> testers.upGoWrist()));
-    xButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));
-
-    bButton1.onTrue(new InstantCommand(() -> testers.downGoWrist()));
-    bButton1.onFalse(new InstantCommand(() -> testers.stopWrist()));
-
-    // // extender and wrist needs another button to go back
-    startButton2.onTrue(new InstantCommand(() -> testers.upExtender()));
-    startButton2.onFalse(new InstantCommand(() -> testers.stopExtender()));
-
-    BackButton2.onTrue(new InstantCommand(() -> testers.downExtender()));
-    BackButton2.onFalse(new InstantCommand(() -> testers.stopExtender()));
-
-    // BackButton1.onTrue(new InstantCommand(()-> compressor.disableCompressor()));
-
-    // LeftStickButton2.whileFalse((new InstantCommand(()-> compressor.disable())));
-    // startButton1.onTrue(new InstantCommand(()-> new WristSetPoint(wristSubsystem,
-    // 0.5)));//try out cmd
+    opperator_BackButton.onTrue(new InstantCommand(() -> testers.downExtender()));
+    opperator_BackButton.onFalse(new InstantCommand(() -> testers.stopExtender()));
   }
 
   public void DefaultClawMotorCommand() {

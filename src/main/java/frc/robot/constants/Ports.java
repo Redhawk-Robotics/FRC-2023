@@ -38,8 +38,8 @@ public static final class Arm{
     public static final int leftArm = 9;
     public static final int rightArm = 10;
 
-    public static final boolean leftArmMotorInvert = true;
-    public static final boolean rightArmMotorInvert = false;
+    public static final boolean leftArmMotorInvert = false;
+    public static final boolean rightArmMotorInvert = true;
 }
 public static final class Extender{
     public static final int extender = 11;

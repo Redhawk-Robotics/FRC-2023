@@ -8,6 +8,7 @@ import java.util.Set;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.SoftLimitDirection;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -19,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
+import frc.robot.subsystems.modules.SparkMaxModule;
 
 public class testWhatever extends SubsystemBase {
   /** Creates a new testWhatever. */
@@ -96,9 +98,9 @@ public class testWhatever extends SubsystemBase {
     /***********/
 
     armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
+    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 3000); // 3887, 3500
     armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -10);
+    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
 
     // -------------------------------------
 
@@ -250,4 +252,3 @@ public class testWhatever extends SubsystemBase {
     };
   }
 }
-// thing

@@ -44,7 +44,8 @@ public class WristManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double power = up.getAsBoolean() ? Setting.wristSetting.wristSpeed: (down.getAsBoolean() ? Setting.wristSetting.wristSpeedReverse: 0);
+    double power = up.getAsBoolean() ? Setting.wristSetting.wristSpeed
+        : (down.getAsBoolean() ? Setting.wristSetting.wristSpeedReverse : 0);
     armSubsystem.setMotor(power);
   }
 
