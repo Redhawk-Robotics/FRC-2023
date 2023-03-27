@@ -51,7 +51,7 @@ public static final class Claw{
     public static final int rightClaw = 13;
 
     public static final boolean leftClawMotorInvert = true;
-    public static final boolean rightClawMotorInvert = false;
+    public static final boolean rightClawMotorInvert = true;
 }
 public static final class Wrist{
     public static final int wrist = 14;

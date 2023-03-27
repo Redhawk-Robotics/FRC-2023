@@ -8,7 +8,7 @@ import java.util.Set;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.SoftLimitDirection;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
-import frc.robot.subsystems.modules.SparkMaxModule;
 
 public class testWhatever extends SubsystemBase {
   /** Creates a new testWhatever. */
@@ -45,7 +44,7 @@ public class testWhatever extends SubsystemBase {
   private double wristSpeed = 0.1;
   private double wristSpeedReverse = -0.1;
 
-  private double armSpeed = 0.3;
+  private double armSpeed = 0.1;
   private double armSpeedReverse = -0.1;
 
   public testWhatever() {
@@ -53,13 +52,15 @@ public class testWhatever extends SubsystemBase {
     armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
     armEncoderLeft = armMotorLeft.getEncoder();
     armMotorLeft.setInverted(false);
+    armMotorLeft.setIdleMode(IdleMode.kCoast);
     armMotorLeft.restoreFactoryDefaults();
 
     // ------------------------------------- ARM RIGHT
 
     armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
     armEncoderRight = armMotorRight.getEncoder();
-    armMotorRight.setInverted(true);
+    armMotorRight.setInverted(false);
+    armMotorRight.setIdleMode(IdleMode.kCoast);
     armMotorRight.restoreFactoryDefaults();
     armMotorRight.follow(armMotorLeft, false); // <= follow
 
@@ -67,22 +68,26 @@ public class testWhatever extends SubsystemBase {
 
     extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
     extenderEncoder = extender.getEncoder();
+    extender.setIdleMode(IdleMode.kCoast);
     extender.setInverted(true);
     extender.restoreFactoryDefaults();
 
-    // ------------------------------------- LEFT CLAW
+    // ------------------------------------- CLAW
 
     leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
-    leftClaw.setInverted(false);
+    leftClaw.setInverted(true);
+    leftClaw.setIdleMode(IdleMode.kCoast);
 
     // RIGHT CLAW
     rightClaw = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless); // 13
     rightClaw.setInverted(true);
+    rightClaw.setIdleMode(IdleMode.kCoast);
 
     // ------------------------------------- WRIST
 
     wrist = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless); // 14
     wristEncoder = wrist.getEncoder();
+
     wrist.setInverted(false);
     wrist.restoreFactoryDefaults();
 
@@ -97,10 +102,15 @@ public class testWhatever extends SubsystemBase {
     /*** ARM ***/
     /***********/
 
-    armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 3000); // 3887, 3500
-    armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+    // armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    // armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 250);
+    // armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    // armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+
+    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 250);
+    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
 
     // -------------------------------------
 
@@ -108,19 +118,19 @@ public class testWhatever extends SubsystemBase {
     /*** EXTENDER ***/
     /***************/
 
-    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 290);
-    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
-    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    // extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
+    // extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    // extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -290);
+    // extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
     /*************/
     /*** WRIST ***/
     /*************/
 
-    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, -10);
-    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
-    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    // wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, -10);
+    // wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    // wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
+    // wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
     // -------------------------------------
 
@@ -149,13 +159,22 @@ public class testWhatever extends SubsystemBase {
   /*************/
 
   public void upGoArm() {
+    System.out.println("ARMUP");
     armMotorLeft.set(armSpeed);
     armMotorRight.set(armSpeed);
+    System.out.println("LEFT: " + armMotorLeft.getAppliedOutput());
+    System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
+  }
+  public double armEncoder(){
+    return armEncoderLeft.getPosition();
   }
 
   public void downGoArm() {
+    System.out.println("ARMDOWN");
     armMotorLeft.set(armSpeedReverse);
     armMotorRight.set(armSpeedReverse);
+    System.out.println("LEFT: " + armMotorLeft.getAppliedOutput());
+    System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
   }
 
   public void stopArm() {
@@ -171,26 +190,36 @@ public class testWhatever extends SubsystemBase {
 
   public void coneIntake() {
     clawOpen.set(Value.kForward);
-    leftClaw.set(.5);
-    rightClaw.set(.5);
+    if(rightClaw.getOutputCurrent() < 20 && leftClaw.getOutputCurrent() < 20){
+    rightClaw.set(.4);  
+    leftClaw.set(-.4);
+    }else{
+      rightClaw.set(0);  
+      leftClaw.set(0);
+    }
   }
 
   public void outTake() {
     clawOpen.set(Value.kReverse);
-    // leftClaw.set(-.25);
-    // rightClaw.set(-.25);
+    leftClaw.set(-.25);
+    rightClaw.set(.25);
   }
 
   public void cubeIntake() {
     clawOpen.set(Value.kReverse);
-    // leftClaw.set(.75);
-    // rightClaw.set(.75);
+    if(rightClaw.getOutputCurrent() < 20 && leftClaw.getOutputCurrent() < 20){
+      rightClaw.set(.5);  
+      leftClaw.set(-.5);
+      }else{
+        rightClaw.set(0);  
+        leftClaw.set(0);
+      }
   }
 
   public void stopClaw() {
-    clawOpen.set(Value.kOff);
-    // leftClaw.set(0);
-    // rightClaw.set(0);
+    // clawOpen.set(Value.kOff);
+    leftClaw.set(0);
+    rightClaw.set(0);
   }
 
   // -------------------------------------
@@ -229,7 +258,7 @@ public class testWhatever extends SubsystemBase {
     extender.set(extenderSpeedReverse);
   }
 
-  /****************/
+  /***************/
   /*** COMMANDS ***/
   /***************/
 

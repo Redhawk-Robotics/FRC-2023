@@ -6,6 +6,7 @@ package frc.robot;
 
 import frc.robot.commands.WristManual;
 import frc.robot.commands.Arm.ArmManual;
+import frc.robot.commands.Arm.ArmSetPoint;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Autons.mobility;
 import frc.robot.commands.Claw.ClawManual;
@@ -147,14 +148,14 @@ public class RobotContainer {
     /*** DRIVE ***/
     /*************/
 
-    // SwerveDrive.setDefaultCommand(
-    //     new Drive(
-    //         SwerveDrive,
-    //         () -> -DRIVER.getRawAxis(translationAxis),
-    //         () -> -DRIVER.getRawAxis(strafeAxis),
-    //         () -> -DRIVER.getRawAxis(rotationAxis),
-    //         () -> driver_Y_robotCentric.getAsBoolean(),
-    //         () -> driver_slowSpeed.getAsBoolean()));
+    SwerveDrive.setDefaultCommand(
+        new Drive(
+            SwerveDrive,
+            () -> -DRIVER.getRawAxis(translationAxis),
+            () -> -DRIVER.getRawAxis(strafeAxis),
+            () -> -DRIVER.getRawAxis(rotationAxis),
+            () -> driver_Y_robotCentric.getAsBoolean(),
+            () -> driver_slowSpeed.getAsBoolean()));
 
     // -------------------------------------
 
@@ -239,8 +240,8 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
-    // compressor.enableAnalog(100, 120);
-    compressor.disableCompressor();
+    compressor.enableAnalog(100, 120);
+    // compressor.disableCompressor();
     // CameraServer.startAutomaticCapture();
   }
 
@@ -270,8 +271,8 @@ public class RobotContainer {
     opperator_X.onTrue(new InstantCommand(() -> testers.coneIntake()));
     opperator_B.onTrue(new InstantCommand(() -> testers.cubeIntake()));
 
-    opperator_X.onFalse(new InstantCommand(() -> testers.stopClaw()));
-    opperator_B.onFalse(new InstantCommand(() -> testers.stopClaw()));
+    opperator_X.whileFalse(new InstantCommand(() -> testers.stopClaw()));
+    opperator_B.whileFalse(new InstantCommand(() -> testers.stopClaw()));
 
     opperator_leftBumper.onFalse(new InstantCommand(() -> testers.outTake()));
     opperator_RightBumper.onFalse(new InstantCommand(() -> testers.outTake()));
@@ -289,6 +290,7 @@ public class RobotContainer {
 
     opperator_BackButton.onTrue(new InstantCommand(() -> testers.downExtender()));
     opperator_BackButton.onFalse(new InstantCommand(() -> testers.stopExtender()));
+    
   }
 
   public void DefaultClawMotorCommand() {
@@ -336,6 +338,9 @@ public class RobotContainer {
         new DriveForward(SwerveDrive, 0, -35, 4) // reverse back onto the pad
     ));
 
+    Autons.addOption("armSetpoint", new SequentialCommandGroup(
+      new ArmSetPoint(testers, 20)
+    ));
     // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
     // new DriveForward(SwerveDrive, .5, -30, 1),
     // new WaitCommand(1),
