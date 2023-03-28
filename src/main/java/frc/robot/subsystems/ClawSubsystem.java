@@ -41,13 +41,13 @@ public class ClawSubsystem extends SubsystemBase {
     leftEncoder = leftNeo550.getEncoder();
     rightEncoder = rightNeo550.getEncoder();
 
-    leftNeo550.follow(rightNeo550);
+    leftNeo550.follow(rightNeo550,false);
     
     clawSpeedPIDController = leftNeo550.getPIDController();
     
     configClawMotor(leftNeo550, leftEncoder, clawSpeedPIDController, Ports.Claw.leftClawMotorInvert);
-    configClawMotor(rightNeo550, rightEncoder, clawSpeedPIDController, Ports.Claw.rightClawMotorInvert);
 
+    PID();
     //enableMotors(true);//TODO test later
   }
 
@@ -68,7 +68,7 @@ public class ClawSubsystem extends SubsystemBase {
   
   public void coneIntake() {
     clawSolenoid.set(Value.kForward);
-    leftNeo550.set(.5);
+    leftNeo550.set(-.5);
     rightNeo550.set(.5);
   }
 
@@ -80,30 +80,33 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void cubeIntake() {
     clawSolenoid.set(Value.kReverse);
-    // leftClaw.set(.75);
-    // rightClaw.set(.75);
+    leftNeo550.set(.75);
+    rightNeo550.set(-.75);
   }
 
   public void stopClaw() {
     clawSolenoid.set(Value.kOff);
-    // leftClaw.set(0);
-    // rightClaw.set(0);
   }
 
 
   public void configClawMotor(CANSparkMax clawMotor, RelativeEncoder clawEncoder, SparkMaxPIDController clawController, boolean invert) {
     clawMotor.restoreFactoryDefaults();
+    clawMotor.clearFaults();
     CANSparkMaxUtil.setCANSparkMaxBusUsage(clawMotor, Usage.kAll);
     clawMotor.setSmartCurrentLimit(Setting.clawSetting.clawContinousCurrentLimit);
     clawMotor.setIdleMode(Setting.clawSetting.clawNeutralMode);
     clawMotor.setInverted(invert);
     clawEncoder.setVelocityConversionFactor(Setting.clawSetting.clawConversionVelocityFactor);
     clawEncoder.setPositionConversionFactor(Setting.clawSetting.clawConversionPositionFactor);
-    clawController.setP(Setting.clawSetting.clawP);
-    clawController.setI(Setting.clawSetting.clawI);
-    clawController.setD(Setting.clawSetting.clawD);
-    clawController.setFF(Setting.clawSetting.clawFF);
     clawMotor.enableVoltageCompensation(Setting.clawSetting.maxVoltage);
+    clawController.setFeedbackDevice(clawEncoder);
     clawMotor.burnFlash();
+  }
+
+  private void PID(){
+    clawSpeedPIDController.setP(Setting.clawSetting.clawP);
+    clawSpeedPIDController.setI(Setting.clawSetting.clawI);
+    clawSpeedPIDController.setD(Setting.clawSetting.clawD);
+    clawSpeedPIDController.setFF(Setting.clawSetting.clawFF);
   }
 }

@@ -25,8 +25,6 @@ public class WristSubsystem extends SubsystemBase {
 
   private final SparkMaxPIDController wristAngleController;
 
-  private double wristEncoderValue;
-
   public WristSubsystem() {
     wristMotor = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless);
     wristEncoder = wristMotor.getEncoder();
@@ -38,16 +36,18 @@ public class WristSubsystem extends SubsystemBase {
     wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 15);
+    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);//mayb using float to get a more precise number
     wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
 
-    SmartDashboard.putNumber("wrist Forward Soft Limit",
-        wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
+    setSmartMotionParams();
+    PID();
+    // SmartDashboard.putNumber("wrist Forward Soft Limit",
+    //     wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
 
-    SmartDashboard.putNumber("wrist Reverse Soft Limit",
-        wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
+    // SmartDashboard.putNumber("wrist Reverse Soft Limit",
+    //     wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
 
-    resetEncoder();
+    ///resetEncoder();
     // enableMotors(true);//TODO test later
   }
 
@@ -58,40 +58,69 @@ public class WristSubsystem extends SubsystemBase {
     SmartDashboard.putNumber("Wrist Encoder Value", wristEncoder.getPosition());
 
     // only if we need for debugging
-    wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-        SmartDashboard.getBoolean("wrist Forward Soft Limit Enabled", true));
-    wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-        SmartDashboard.getBoolean("wrist Reverse Soft Limit Enabled", true));
+    // wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+    //     SmartDashboard.getBoolean("wrist Forward Soft Limit Enabled", true));
+    // wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+    //     SmartDashboard.getBoolean("wrist Reverse Soft Limit Enabled", true));
 
-    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-        (float) SmartDashboard.getNumber("wrist Forward Soft Limit", 15));
+    // wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+    //     (float) SmartDashboard.getNumber("wrist Forward Soft Limit", 15));
 
-    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-        (float) SmartDashboard.getNumber("wrist Reverse Soft Limit", 0));
+    // wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+    //     (float) SmartDashboard.getNumber("wrist Reverse Soft Limit", 0));
   }
-
+  private void setSmartMotionParams() {
+    wristAngleController.setSmartMotionMaxVelocity(Setting.wristSetting.SmartMotionParameters.maxVel, Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionMinOutputVelocity(Setting.wristSetting.SmartMotionParameters.minVel, Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionMaxAccel(Setting.wristSetting.SmartMotionParameters.maxAccel,Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionAllowedClosedLoopError(Setting.wristSetting.SmartMotionParameters.maxErr, Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+  }
+  
   // Methods for config for the motors used in this subsystems
   private void configWristMotor(CANSparkMax wristMotor, RelativeEncoder wristEncoder,
       SparkMaxPIDController wristAngleController, boolean Invert) {
     wristMotor.restoreFactoryDefaults();
+    wristMotor.clearFaults();
     CANSparkMaxUtil.setCANSparkMaxBusUsage(wristMotor, Usage.kPositionOnly);
     wristMotor.setSmartCurrentLimit(Setting.wristSetting.wristContinousCurrentLimit);
     wristMotor.setInverted(Invert);
     wristMotor.setIdleMode(Setting.wristSetting.wristNeutralMode);
     wristEncoder.setPositionConversionFactor(Setting.wristSetting.wristConversionFactor);
+    wristMotor.enableVoltageCompensation(Setting.wristSetting.maxVoltage);
+    wristAngleController.setFeedbackDevice(wristEncoder);
+    wristMotor.burnFlash();
+    Timer.delay(1);
+  }
+
+  private void PID(){
     wristAngleController.setP(Setting.wristSetting.wristP);
     wristAngleController.setI(Setting.wristSetting.wristI);
     wristAngleController.setD(Setting.wristSetting.wristD);
     wristAngleController.setFF(Setting.wristSetting.wristFF);
-    wristMotor.enableVoltageCompensation(Setting.wristSetting.maxVoltage);
-    wristMotor.burnFlash();
-    Timer.delay(1);
-    // resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
   }
 
-  public double getEncoderMeters() {
-    double position = wristEncoder.getPosition() * Setting.wristSetting.kEncoderTick2Meter;
-    return position;
+  public void setPosition(double targetPosition) {
+    wristAngleController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
+  }
+
+  public void setSmartMotionPosition(double targetPosition) {
+    wristAngleController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
+  }
+
+  //Getters
+ public double getCurrentPosition() {
+    return wristEncoder.getPosition();
+  }
+  public void setMotor(double speed) {
+    wristMotor.set(speed);
+  }
+
+  public double getWristVelocity() {
+    return wristMotor.getEncoder().getVelocity();
+  }
+
+  public double getWristCurrent() {
+    return wristMotor.getOutputCurrent();
   }
 
   // TODO try with the wrist that if its in code that its coast, and moves freely,
@@ -104,10 +133,6 @@ public class WristSubsystem extends SubsystemBase {
       mode = IdleMode.kCoast;
     }
     wristMotor.setIdleMode(mode);
-  }
-
-  public void setMotor(double speed) {
-    wristMotor.set(speed);
   }
 
   public void resetEncoder() {

@@ -190,7 +190,7 @@ public class testWhatever extends SubsystemBase {
 
   public void coneIntake() {
     clawOpen.set(Value.kForward);
-    if(rightClaw.getOutputCurrent() < 20 && leftClaw.getOutputCurrent() < 20){
+    if(rightClaw.getOutputCurrent() < 10 && leftClaw.getOutputCurrent() < 10){
     rightClaw.set(.4);  
     leftClaw.set(-.4);
     }else{
@@ -207,7 +207,7 @@ public class testWhatever extends SubsystemBase {
 
   public void cubeIntake() {
     clawOpen.set(Value.kReverse);
-    if(rightClaw.getOutputCurrent() < 20 && leftClaw.getOutputCurrent() < 20){
+    if(rightClaw.getOutputCurrent() < 10 && leftClaw.getOutputCurrent() < 10){
       rightClaw.set(.5);  
       leftClaw.set(-.5);
       }else{

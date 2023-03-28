@@ -4,32 +4,19 @@
 
 package frc.robot;
 
-import frc.robot.commands.WristManual;
-import frc.robot.commands.Arm.ArmManual;
-import frc.robot.commands.Arm.ArmSetPoint;
 import frc.robot.commands.Autons.DoNothingAuton;
-import frc.robot.commands.Autons.mobility;
-import frc.robot.commands.Claw.ClawManual;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
-import frc.robot.commands.Wrist.WristSetPoint;
-import frc.robot.commands.extender.ExtenderManual;
+import frc.robot.commands.arm.ArmSetPoint;
 import frc.robot.constants.Ports;
-import frc.robot.constants.Setting.wristSetting;
-import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.WristSubsystem;
-import frc.robot.subsystems.extenderSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
 import frc.robot.subsystems.modules.PDH;
-import frc.robot.test.testClawMotors;
 import frc.robot.test.testWhatever;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -93,7 +80,7 @@ public class RobotContainer {
   private final Trigger driver_A_zeroGyro = new JoystickButton(DRIVER, XboxController.Button.kA.value);
   private final Trigger driver_Y_robotCentric = new JoystickButton(DRIVER, XboxController.Button.kY.value);
 
-  private final Trigger driver_slowSpeed = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);
+  private final Trigger driver_slowSpeed_rightBumper = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);
 
   // Additional buttons
   private final Trigger driver_leftBump_lock = new JoystickButton(DRIVER, XboxController.Button.kLeftBumper.value);
@@ -135,10 +122,6 @@ public class RobotContainer {
   // Create SmartDashboard chooser for autonomous routines
   private static SendableChooser<Command> Autons = new SendableChooser<>();
 
-  // THIS BUTTON IS ALREADY ASSIGNED
-  // private final Trigger test = new JoystickButton(DRIVER,
-  // XboxController.Button.kX.value);
-
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -155,7 +138,7 @@ public class RobotContainer {
             () -> -DRIVER.getRawAxis(strafeAxis),
             () -> -DRIVER.getRawAxis(rotationAxis),
             () -> driver_Y_robotCentric.getAsBoolean(),
-            () -> driver_slowSpeed.getAsBoolean()));
+            () -> driver_slowSpeed_rightBumper.getAsBoolean()));
 
     // -------------------------------------
 
@@ -239,9 +222,11 @@ public class RobotContainer {
   /****************/
 
   private void configureDefaultCommands() {
-    // compressor.enableCompressorAnalog(0, 120); //TODO try minpressure 100
-    compressor.enableAnalog(100, 120);
+    //Compressor code
+    compressor.enableAnalog(100, 115);
     // compressor.disableCompressor();
+
+    //Camera Server
     // CameraServer.startAutomaticCapture();
   }
 
@@ -293,22 +278,14 @@ public class RobotContainer {
     
   }
 
-  public void DefaultClawMotorCommand() {
-
-    // testClawMotors.setDefaultCommand(new DefaultArmCommand(testClawMotors,
-    // OPERATOR));
-  }
-
   /**************/
   /*** AUTONS ***/
   /**************/
-
-  // testing this
-
   public void configureAutons() {
     SmartDashboard.putData("Autonomous: ", Autons);
 
     Autons.setDefaultOption("Do Nothing", new DoNothingAuton());
+
     Autons.addOption("SPPLI2 Simple Auton", SwerveDrive.followTraj(
         PathPlanner.loadPath(
             "New New Path",
@@ -316,6 +293,7 @@ public class RobotContainer {
                 5,
                 5)),
         true));
+
     Autons.addOption("Drop Cube, Leave Community FAR", new SequentialCommandGroup(
         new DriveForward(SwerveDrive, .5, -30, 1),
         new WaitCommand(1),
@@ -341,12 +319,14 @@ public class RobotContainer {
     Autons.addOption("armSetpoint", new SequentialCommandGroup(
       new ArmSetPoint(testers, 20)
     ));
+
     // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
     // new DriveForward(SwerveDrive, .5, -30, 1),
     // new WaitCommand(1),
     // new DriveForward(SwerveDrive, 4, 20, 4)));
     // Autons.addOption("mobility", new mobilitytest());
     // Autons.addOption("AutoBalance", new TestPathPlannerAuton());
+
   }
 
   /**

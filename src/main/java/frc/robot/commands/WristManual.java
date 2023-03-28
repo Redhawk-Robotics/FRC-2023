@@ -10,7 +10,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.commands.test.testMotorCommand;
 //import frc.robot.Constants;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
@@ -18,6 +17,7 @@ import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.test.testClawMotors;
 
+@Deprecated
 public class WristManual extends CommandBase {
 
   private WristSubsystem armSubsystem;

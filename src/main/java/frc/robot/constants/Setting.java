@@ -142,31 +142,53 @@ public interface Setting {
         public static final double clawI = 0;
         public static final double clawD = 0;
         public static final double clawFF = 0;
-        public static final double maxVoltage = 0;
+        public static final double maxVoltage = 6;
         public static final double clawConversionPositionFactor = 0;// FIXME need to find the conversion Factor
         public static final double clawConversionVelocityFactor = clawConversionPositionFactor / 60;
 
-        public static final int clawContinousCurrentLimit = 40;
+        public static final int clawContinousCurrentLimit = 20;
 
-        public static final IdleMode clawNeutralMode = IdleMode.kCoast;
+        public static final IdleMode clawNeutralMode = IdleMode.kBrake;
+
+        public static class SmartMotionParameters {
+            public static final int smartMotionSlot = 0;
+            public static final double maxVel = 5200.0;
+            public static final double minVel = 0.0;
+            public static final double maxAccel = 1000.0;
+            public static final double maxErr = 100.0;
+          }
 
     }
 
     public static final class armSetting {
         public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.1 * Math.PI;
 
-        public static final double armP = 0;
-        public static final double armI = 0;
-        public static final double armD = 0;
-        public static final double armFF = 0;
-        public static final double maxVoltage = 0;
+        public static final double armPup = 0;
+        public static final double armIup = 0;
+        public static final double armDup = 0;
+        public static final double armFFup = 0;
+        
+        public static final double armPdown = 0;
+        public static final double armIdown = 0;
+        public static final double armDdown = 0;
+        public static final double armFFdown = 0;
+
+        public static final double maxVoltage = 6;
         public static final double armConversionFactor = 0;// FIXME need to find the conversion Factor
 
-        public static final int armContinousCurrentLimit = 40;
+        public static final int armContinousCurrentLimit = 20;
         public static final double armSpeed = 0.3;
         public static final double armSpeedReverse = -0.1;
 
-        public static final IdleMode armNeutralMode = IdleMode.kCoast;
+        public static final IdleMode armNeutralMode = IdleMode.kBrake;
+        
+        public static class SmartMotionParameters {
+            public static final int smartMotionSlot = 0;
+            public static final double maxVel = 5200.0;
+            public static final double minVel = 0.0;
+            public static final double maxAccel = 1000.0;
+            public static final double maxErr = 100.0;
+          }
 
     }
 
@@ -177,14 +199,22 @@ public interface Setting {
         public static final double extenderI = 0;
         public static final double extenderD = 0;
         public static final double extenderFF = 0;
-        public static final double maxVoltage = 0;
+        public static final double maxVoltage = 6;
         public static final double extenderConversionFactor = 0;// FIXME need to find the conversion Factor
 
-        public static final int extenderContinousCurrentLimit = 40;
+        public static final int extenderContinousCurrentLimit = 20;
         public static final double extenderSpeed = 1;
         public static final double extenderSpeedReverse = -1;
 
         public static final IdleMode extenderNeutralMode = IdleMode.kBrake;
+
+            public static class SmartMotionParameters {
+            public static final int smartMotionSlot = 0;
+            public static final double maxVel = 5200.0;
+            public static final double minVel = 0.0;
+            public static final double maxAccel = 1000.0;
+            public static final double maxErr = 100.0;
+          }
     }
 
     public static final class wristSetting {
@@ -194,14 +224,26 @@ public interface Setting {
         public static final double wristI = 0;
         public static final double wristD = 0;
         public static final double wristFF = 0;
-        public static final double maxVoltage = 0;
+
+        public static final double maxVoltage = 6;
         public static final double wristConversionFactor = 0;// FIXME need to find the conversion Factor
 
-        public static final int wristContinousCurrentLimit = 40;
+        public static final int wristContinousCurrentLimit = 20;
         public static final double wristSpeed = 0.1;
         public static final double wristSpeedReverse = -0.1;
 
         public static final IdleMode wristNeutralMode = IdleMode.kBrake;
+
+        public static class SmartMotionParameters {
+            public static final int smartMotionSlot = 0;
+            public static final double maxVel = 5200.0;
+            public static final double minVel = 0.0;
+            public static final double maxAccel = 1000.0;
+            public static final double maxErr = 100.0;
+          }
+    }
+    public static final class setPoint{
+
     }
 
     public static final class AutoConstants {

@@ -54,10 +54,10 @@ public class armTest extends SubsystemBase {
     ArmMotor.setInverted(Invert);
     ArmMotor.setIdleMode(Setting.armSetting.armNeutralMode);
     ArmEncoder.setPositionConversionFactor(Setting.armSetting.armConversionFactor);
-    armAngleController.setP(Setting.armSetting.armP);
-    armAngleController.setI(Setting.armSetting.armI);
-    armAngleController.setD(Setting.armSetting.armD);
-    armAngleController.setFF(Setting.armSetting.armFF);
+    // armAngleController.setP(Setting.armSetting.armP);
+    // armAngleController.setI(Setting.armSetting.armI);
+    // armAngleController.setD(Setting.armSetting.armD);
+    // armAngleController.setFF(Setting.armSetting.armFF);
     ArmMotor.enableVoltageCompensation(Setting.armSetting.maxVoltage);
     ArmMotor.burnFlash();
     Timer.delay(1);
