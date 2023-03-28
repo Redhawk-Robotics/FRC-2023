@@ -85,7 +85,7 @@ public class WristSubsystem extends SubsystemBase {
     wristMotor.setSmartCurrentLimit(Setting.wristSetting.wristContinousCurrentLimit);
     wristMotor.setInverted(Invert);
     wristMotor.setIdleMode(Setting.wristSetting.wristNeutralMode);
-    wristEncoder.setPositionConversionFactor(Setting.wristSetting.wristConversionFactor);
+    // wristEncoder.setPositionConversionFactor(Setting.wristSetting.wristConversionFactor);
     wristMotor.enableVoltageCompensation(Setting.wristSetting.maxVoltage);
     wristAngleController.setFeedbackDevice(wristEncoder);
     wristMotor.burnFlash();

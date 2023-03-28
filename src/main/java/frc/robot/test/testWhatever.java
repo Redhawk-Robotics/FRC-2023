@@ -5,6 +5,7 @@
 package frc.robot.test;
 
 import java.util.Set;
+import java.util.function.DoubleSupplier;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -23,9 +24,6 @@ import frc.robot.constants.Setting;
 
 public class testWhatever extends SubsystemBase {
   /** Creates a new testWhatever. */
-  private final CANSparkMax armMotorLeft, armMotorRight;
-
-  private final RelativeEncoder armEncoderLeft, armEncoderRight;
   private final CANSparkMax leftClaw, rightClaw;
 
   private final CANSparkMax wrist;
@@ -38,31 +36,13 @@ public class testWhatever extends SubsystemBase {
 
   private double stop = 0;
 
-  private double extenderSpeed = -.5;
-  private double extenderSpeedReverse = .5;
+  private double extenderSpeed = .5;
+  private double extenderSpeedReverse = -.5;
 
   private double wristSpeed = 0.3;
   private double wristSpeedReverse = -0.2;
 
-  private double armSpeed = 0.1;
-  private double armSpeedReverse = -0.1;
-
   public testWhatever() {
-    // ------------------------------------- ARM LEFT
-    armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
-    armEncoderLeft = armMotorLeft.getEncoder();
-    armMotorLeft.setInverted(false);
-    armMotorLeft.setIdleMode(IdleMode.kCoast);
-    armMotorLeft.restoreFactoryDefaults();
-
-    // ------------------------------------- ARM RIGHT
-
-    armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
-    armEncoderRight = armMotorRight.getEncoder();
-    armMotorRight.setInverted(false);
-    armMotorRight.setIdleMode(IdleMode.kCoast);
-    armMotorRight.restoreFactoryDefaults();
-    armMotorRight.follow(armMotorLeft, false); // <= follow
 
     // ------------------------------------- EXTENDER
 
@@ -98,21 +78,6 @@ public class testWhatever extends SubsystemBase {
         Setting.clawPneumatic.clawReverseChan);
 
     // ----------------------------------------------------------------------------------
-
-    /************/
-    /*** ARM ***/
-    /***********/
-
-    // armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    // armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 250);
-    // armMotorLeft.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    // armMotorLeft.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
-
-    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 250);
-    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
-
     // -------------------------------------
 
     /****************/
@@ -128,19 +93,12 @@ public class testWhatever extends SubsystemBase {
     /*** WRIST ***/
     /*************/
 
-    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
+    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 5);
     wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -28);
+    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -30);
     wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
     // -------------------------------------
-
-    // FIXME
-    // check if both right and left are going the correct directions FIXME
-    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 50);
-    // armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    // armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
   }
 
   @Override
@@ -149,38 +107,9 @@ public class testWhatever extends SubsystemBase {
     // SmartDashboard.putNumber("testMotor Encoder Value",
     // getEncoderMeters(EncoderValue));
 
-    SmartDashboard.putNumber("TEST arm pivot left", armEncoderLeft.getPosition());
-    SmartDashboard.putNumber("TEST arm pivot right", armEncoderRight.getPosition());
+    // SmartDashboard.putNumber("TEST arm pivot right", armEncoderRight.getPosition());
     SmartDashboard.putNumber("TEST arm extender", extenderEncoder.getPosition());
     SmartDashboard.putNumber("TEST wrist pivot", wristEncoder.getPosition());
-  }
-
-  /*************/
-  /*** ARM ***/
-  /*************/
-
-  public void upGoArm() {
-    System.out.println("ARMUP");
-    armMotorLeft.set(armSpeed);
-    armMotorRight.set(armSpeed);
-    System.out.println("LEFT: " + armMotorLeft.getAppliedOutput());
-    System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
-  }
-  public double armEncoder(){
-    return armEncoderLeft.getPosition();
-  }
-
-  public void downGoArm() {
-    System.out.println("ARMDOWN");
-    armMotorLeft.set(armSpeedReverse);
-    armMotorRight.set(armSpeedReverse);
-    System.out.println("LEFT: " + armMotorLeft.getAppliedOutput());
-    System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
-  }
-
-  public void stopArm() {
-    armMotorLeft.set(stop);
-    armMotorRight.set(stop);
   }
 
   // -------------------------------------
@@ -191,7 +120,7 @@ public class testWhatever extends SubsystemBase {
 
   public void coneIntake() {
     clawOpen.set(Value.kForward);
-    if(rightClaw.getOutputCurrent() < 10 && leftClaw.getOutputCurrent() < 10){
+    if(rightClaw.getOutputCurrent() < 5 && leftClaw.getOutputCurrent() < 5){
     rightClaw.set(.4);  
     leftClaw.set(-.4);
     }else{
@@ -202,13 +131,13 @@ public class testWhatever extends SubsystemBase {
 
   public void outTake() {
     clawOpen.set(Value.kReverse);
-    leftClaw.set(-.25);
-    rightClaw.set(.25);
+    leftClaw.set(.25);
+    rightClaw.set(-.25);
   }
 
   public void cubeIntake() {
     clawOpen.set(Value.kReverse);
-    if(rightClaw.getOutputCurrent() < 10 && leftClaw.getOutputCurrent() < 10){
+    if(rightClaw.getOutputCurrent() < 5 && leftClaw.getOutputCurrent() < 5){
       rightClaw.set(.5);  
       leftClaw.set(-.5);
       }else{
@@ -228,6 +157,9 @@ public class testWhatever extends SubsystemBase {
   /*************/
   /*** WRIST ***/
   /*************/
+  public void wristController(double speed){
+    wrist.set(speed);
+  }
 
   public void upGoWrist() {
     wrist.set(wristSpeed);
@@ -246,6 +178,9 @@ public class testWhatever extends SubsystemBase {
   /*************/
   /*** EXTENDER ***/
   /*************/
+  public void extenderController(double speed){
+    extender.set(speed);
+  }
 
   public void upExtender() {
     extender.set(extenderSpeed);
@@ -275,7 +210,7 @@ public class testWhatever extends SubsystemBase {
 
       @Override
       public void execute() {
-        upGoArm();
+        //upGoArm();
         // armEncoderLeft
 
       }

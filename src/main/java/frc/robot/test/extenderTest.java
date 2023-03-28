@@ -46,7 +46,7 @@ public class extenderTest extends SubsystemBase {
     extenderMotor.setSmartCurrentLimit(Setting.extenderSetting.extenderContinousCurrentLimit);
     extenderMotor.setInverted(Invert);
     extenderMotor.setIdleMode(Setting.extenderSetting.extenderNeutralMode);
-    extenderEncoder.setPositionConversionFactor(Setting.extenderSetting.extenderConversionFactor);
+    // extenderEncoder.setPositionConversionFactor(Setting.extenderSetting.extenderConversionFactor);
     extenderController.setP(Setting.extenderSetting.extenderP);
     extenderController.setI(Setting.extenderSetting.extenderI);
     extenderController.setD(Setting.extenderSetting.extenderD);

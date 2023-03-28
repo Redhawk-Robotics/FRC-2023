@@ -2,18 +2,19 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.arm;
+package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.test.armTest;
 import frc.robot.test.testWhatever;
 
 public class ArmSetPoint extends CommandBase {
   /** Creates a new ArmSetPoint. */
   // public ArmSubsystem armSubsystem;
-  private testWhatever tester;
+  private armTest tester;
   double encoderValue;
 
-  public ArmSetPoint(testWhatever tester, double encoderValue) {
+  public ArmSetPoint(armTest tester, double encoderValue) {
     // Use addRequirements() here to declare subsystem dependencies.
     // this.armSubsystem = armSubsystem;
     this.tester = tester;
@@ -35,6 +36,8 @@ public class ArmSetPoint extends CommandBase {
     } else {
       tester.downGoArm();
     }
+
+
   }
 
   // Called once the command ends or is interrupted.

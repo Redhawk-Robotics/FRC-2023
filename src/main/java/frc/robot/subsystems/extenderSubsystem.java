@@ -87,7 +87,7 @@ public class extenderSubsystem extends SubsystemBase {
     extenderMotor.setSmartCurrentLimit(Setting.extenderSetting.extenderContinousCurrentLimit);
     extenderMotor.setInverted(Invert);
     extenderMotor.setIdleMode(Setting.extenderSetting.extenderNeutralMode);
-    extenderEncoder.setPositionConversionFactor(Setting.extenderSetting.extenderConversionFactor);
+    // extenderEncoder.setPositionConversionFactor(Setting.extenderSetting.extenderConversionFactor);
     extenderMotor.enableVoltageCompensation(Setting.extenderSetting.maxVoltage);
     extenderController.setFeedbackDevice(extenderEncoder);
     extenderMotor.burnFlash();

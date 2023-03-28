@@ -28,6 +28,7 @@ public class LEDController extends SubsystemBase {
         }
         return instance;
     }
+    
   public LEDController() {
     this.controller = new PWMSparkMax(0);//Make a constant
     this.lastUpdate = new StopWatch();

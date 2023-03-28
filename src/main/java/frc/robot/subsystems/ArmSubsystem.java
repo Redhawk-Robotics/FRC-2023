@@ -94,7 +94,7 @@ public class ArmSubsystem extends SubsystemBase {
     ArmMotor.setSmartCurrentLimit(Setting.armSetting.armContinousCurrentLimit);
     ArmMotor.setInverted(Invert);
     ArmMotor.setIdleMode(Setting.armSetting.armNeutralMode);
-    ArmEncoder.setPositionConversionFactor(Setting.armSetting.armConversionFactor);
+    // ArmEncoder.setPositionConversionFactor(Setting.armSetting.armConversionFactor);
     ArmMotor.enableVoltageCompensation(Setting.armSetting.maxVoltage);
     armAngleController.setFeedbackDevice(ArmEncoder);
     ArmMotor.burnFlash();

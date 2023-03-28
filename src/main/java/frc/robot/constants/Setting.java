@@ -174,7 +174,7 @@ public interface Setting {
         public static final double armFFdown = 0;
 
         public static final double maxVoltage = 6;
-        public static final double armConversionFactor = 0;// FIXME need to find the conversion Factor
+        // public static final double armConversionFactor = 0;// FIXME need to find the conversion Factor
 
         public static final int armContinousCurrentLimit = 20;
         public static final double armSpeed = 0.3;
@@ -200,7 +200,7 @@ public interface Setting {
         public static final double extenderD = 0;
         public static final double extenderFF = 0;
         public static final double maxVoltage = 6;
-        public static final double extenderConversionFactor = 0;// FIXME need to find the conversion Factor
+        // public static final double extenderConversionFactor = 0;// FIXME need to find the conversion Factor
 
         public static final int extenderContinousCurrentLimit = 20;
         public static final double extenderSpeed = 1;
@@ -226,7 +226,7 @@ public interface Setting {
         public static final double wristFF = 0;
 
         public static final double maxVoltage = 6;
-        public static final double wristConversionFactor = 0;// FIXME need to find the conversion Factor
+        // public static final double wristConversionFactor = 0;// FIXME need to find the conversion Factor
 
         public static final int wristContinousCurrentLimit = 20;
         public static final double wristSpeed = 0.1;

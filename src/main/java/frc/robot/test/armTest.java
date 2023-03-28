@@ -5,83 +5,93 @@
 package frc.robot.test;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
-import frc.robot.constants.Setting;
-import frc.robot.lib.util.CANSparkMaxUtil;
-import frc.robot.lib.util.CANSparkMaxUtil.Usage;
 
 public class armTest extends SubsystemBase {
   /** Creates a new armTest. */
-  private final CANSparkMax leftArmMotor, rightArmMotor;
-  private final RelativeEncoder leftArmEncoder, rightArmEncoder;
+  private final CANSparkMax armMotorLeft, armMotorRight;
 
-  private final SparkMaxPIDController armAngleController;
-  private double leftArmEncoderValue, rightArmEncoderValue;
+  private final RelativeEncoder armEncoderLeft, armEncoderRight;
+
+  private double armSpeed = 0.3;
+  private double armSpeedReverse = -0.3;
+
+  private double stop = 0;
+
 
   public armTest() {
-    leftArmMotor = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless);
-    leftArmEncoder = leftArmMotor.getEncoder();
+       // ------------------------------------- ARM LEFT
+       armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
+       armEncoderLeft = armMotorLeft.getEncoder();
+       armMotorLeft.setInverted(false);
+       armMotorLeft.setIdleMode(IdleMode.kCoast);
+       armMotorLeft.restoreFactoryDefaults();
 
-    rightArmMotor = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless);
-    rightArmEncoder = rightArmMotor.getEncoder();
+       // ------------------------------------- ARM RIGHT
 
-    // armAngleController = leftArmMotor.getPIDController();
-    armAngleController = rightArmMotor.getPIDController();
+    armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
+    armEncoderRight = armMotorRight.getEncoder();
+    armMotorRight.setIdleMode(IdleMode.kCoast);
+    armMotorRight.restoreFactoryDefaults();
+    armMotorLeft.follow(armMotorRight, true); // <= follow
 
-    configArmMotor(leftArmMotor, leftArmEncoder, armAngleController, Ports.Arm.leftArmMotorInvert);
-    configArmMotor(rightArmMotor, rightArmEncoder, armAngleController, Ports.Arm.rightArmMotorInvert);
+
+    /************/
+    /*** ARM ***/
+    /***********/
+
+    armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 44);
+    armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -2);
+
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("RightArm Encoder Value", getEncoderMetersLeft(leftArmEncoderValue));
-    SmartDashboard.putNumber("LeftArm Encoder Value", getEncoderMetersRight(rightArmEncoderValue));
+    SmartDashboard.putNumber("TEST arm pivot left", armEncoderLeft.getPosition());
+
+  }
+  
+  /*************/
+  /*** ARM ***/
+  /*************/
+
+  public void upGoArm() {
+    System.out.println("ARMUP");
+    armMotorLeft.set(armSpeed);
+    armMotorRight.set(armSpeed);
+    System.out.println("LEFT: " + armMotorLeft.getAppliedOutput());
+    System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
   }
 
-  private void configArmMotor(CANSparkMax ArmMotor, RelativeEncoder ArmEncoder,
-      SparkMaxPIDController armAngleController, boolean Invert) {
-    ArmMotor.restoreFactoryDefaults();
-    CANSparkMaxUtil.setCANSparkMaxBusUsage(ArmMotor, Usage.kPositionOnly);
-    ArmMotor.setSmartCurrentLimit(Setting.armSetting.armContinousCurrentLimit);
-    ArmMotor.setInverted(Invert);
-    ArmMotor.setIdleMode(Setting.armSetting.armNeutralMode);
-    ArmEncoder.setPositionConversionFactor(Setting.armSetting.armConversionFactor);
-    // armAngleController.setP(Setting.armSetting.armP);
-    // armAngleController.setI(Setting.armSetting.armI);
-    // armAngleController.setD(Setting.armSetting.armD);
-    // armAngleController.setFF(Setting.armSetting.armFF);
-    ArmMotor.enableVoltageCompensation(Setting.armSetting.maxVoltage);
-    ArmMotor.burnFlash();
-    Timer.delay(1);
-    // resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
+  public void upGoArmController(double speed){
+    armMotorLeft.set(speed);
+    armMotorRight.set(speed);
   }
 
-  public void setMotor(double speed) {
-    leftArmMotor.set(speed);
-    rightArmMotor.set(speed);
+  public double armEncoder(){
+    return armEncoderLeft.getPosition();
   }
 
-  public double getEncoderMetersLeft(double positionLeft) {
-    positionLeft = leftArmEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positionLeft;
+  public void downGoArm() {
+    System.out.println("ARMDOWN");
+    armMotorLeft.set(armSpeedReverse);
+    armMotorRight.set(armSpeedReverse);
+    System.out.println("LEFT: " + armMotorLeft.getAppliedOutput());
+    System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
   }
 
-  public double getEncoderMetersRight(double positionRight) {
-    positionRight = rightArmEncoder.getPosition() * Setting.armSetting.kEncoderTick2Meter;
-    return positionRight;
+  public void stopArm() {
+    armMotorLeft.set(stop);
+    armMotorRight.set(stop);
   }
-
-  public void resetEncoder() {
-    leftArmEncoder.setPosition(0);
-    rightArmEncoder.setPosition(0);
-  }
-
 }

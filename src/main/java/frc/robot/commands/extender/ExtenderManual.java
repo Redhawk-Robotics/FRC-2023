@@ -5,22 +5,24 @@
 package frc.robot.commands.extender;
 
 import java.util.function.BooleanSupplier;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Setting;
 import frc.robot.subsystems.extenderSubsystem;
+import frc.robot.test.testWhatever;
 
 public class ExtenderManual extends CommandBase {
-  public extenderSubsystem extenderSubsystem;
-  public BooleanSupplier extend, retract;
+  // public extenderSubsystem extenderSubsystem;
+  private testWhatever tester;
+  private DoubleSupplier speed;
   /** Creates a new Extender. */
-  public ExtenderManual(extenderSubsystem extenderSubsystem, BooleanSupplier extend, BooleanSupplier retract) {
+  public ExtenderManual(testWhatever tester, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.extenderSubsystem = extenderSubsystem;
-    addRequirements(this.extenderSubsystem);
+    this.tester = tester;
+    this.speed = speed;
 
-    this.extend = extend;
-    this.retract = retract;
+    addRequirements(tester); 
   }
 
   // Called when the command is initially scheduled.
@@ -30,13 +32,15 @@ public class ExtenderManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double power = extend.getAsBoolean() ? Setting.extenderSetting.extenderSpeed: (retract.getAsBoolean() ? Setting.extenderSetting.extenderSpeedReverse: 0);
-    extenderSubsystem.setMotor(power); 
+    tester.extenderController(speed.getAsDouble());
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    tester.extenderController(0);
+  }
 
   // Returns true when the command should end.
   @Override
