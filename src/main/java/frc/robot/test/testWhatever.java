@@ -38,11 +38,11 @@ public class testWhatever extends SubsystemBase {
 
   private double stop = 0;
 
-  private double extenderSpeed = 1;
-  private double extenderSpeedReverse = -1;
+  private double extenderSpeed = -.5;
+  private double extenderSpeedReverse = .5;
 
-  private double wristSpeed = 0.1;
-  private double wristSpeedReverse = -0.1;
+  private double wristSpeed = 0.3;
+  private double wristSpeedReverse = -0.2;
 
   private double armSpeed = 0.1;
   private double armSpeedReverse = -0.1;
@@ -68,28 +68,29 @@ public class testWhatever extends SubsystemBase {
 
     extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
     extenderEncoder = extender.getEncoder();
-    extender.setIdleMode(IdleMode.kCoast);
-    extender.setInverted(true);
     extender.restoreFactoryDefaults();
+
+    extender.setIdleMode(IdleMode.kBrake);
+    extender.setInverted(false);
 
     // ------------------------------------- CLAW
 
     leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
     leftClaw.setInverted(true);
-    leftClaw.setIdleMode(IdleMode.kCoast);
+    // leftClaw.setIdleMode(IdleMode.kCoast);
 
     // RIGHT CLAW
     rightClaw = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless); // 13
     rightClaw.setInverted(true);
-    rightClaw.setIdleMode(IdleMode.kCoast);
+    // rightClaw.setIdleMode(IdleMode.kCoast);
 
     // ------------------------------------- WRIST
 
     wrist = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless); // 14
     wristEncoder = wrist.getEncoder();
-
-    wrist.setInverted(false);
     wrist.restoreFactoryDefaults();
+    wrist.setIdleMode(IdleMode.kBrake);
+    wrist.setInverted(false);
 
     // -------------------------------------
 
@@ -118,19 +119,19 @@ public class testWhatever extends SubsystemBase {
     /*** EXTENDER ***/
     /***************/
 
-    // extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
-    // extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    // extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -290);
-    // extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
+    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -270);
+    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
     /*************/
     /*** WRIST ***/
     /*************/
 
-    // wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, -10);
-    // wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    // wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 50);
-    // wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
+    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -28);
+    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
     // -------------------------------------
 
