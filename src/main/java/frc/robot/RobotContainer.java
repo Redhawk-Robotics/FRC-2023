@@ -6,10 +6,14 @@ package frc.robot;
 
 import frc.robot.commands.Arm.ArmManual;
 import frc.robot.commands.Arm.ArmSetPoint;
+import frc.robot.commands.Arm.StoweAway;
+import frc.robot.commands.Arm.Substation;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
+import frc.robot.commands.Wrist.WristSetPoint;
 import frc.robot.commands.extender.ExtenderManual;
+import frc.robot.commands.extender.ExtenderSetPoint;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
@@ -28,6 +32,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -91,7 +96,8 @@ public class RobotContainer {
   private final Trigger driver_A_zeroGyro = new JoystickButton(DRIVER, XboxController.Button.kA.value);
   private final Trigger driver_Y_robotCentric = new JoystickButton(DRIVER, XboxController.Button.kY.value);
 
-  private final Trigger driver_slowSpeed_rightBumper = new JoystickButton(DRIVER, XboxController.Button.kRightBumper.value);
+  private final Trigger driver_slowSpeed_rightBumper = new JoystickButton(DRIVER,
+      XboxController.Button.kRightBumper.value);
 
   // Additional buttons
   private final Trigger driver_leftBump_lock = new JoystickButton(DRIVER, XboxController.Button.kLeftBumper.value);
@@ -159,22 +165,21 @@ public class RobotContainer {
 
     // up, down
     // armSubsystem.setDefaultCommand(
-    //     new ArmManual(
-    //         armSubsystem,
-    //         () -> opperator_A.getAsBoolean(),
-    //         () -> opperator_Y.getAsBoolean()));
-    //armTest//
+    // new ArmManual(
+    // armSubsystem,
+    // () -> opperator_A.getAsBoolean(),
+    // () -> opperator_Y.getAsBoolean()));
+    // armTest//
     arm.setDefaultCommand(
         new ArmManual(
-          arm,
-            () -> OPERATOR.getRawAxis(rightYAxis2)
-            ));
-    
-    //extederTest//
+            arm,
+            () -> OPERATOR.getRawAxis(leftYAxis2)));
+
+    // extederTest//
     extender.setDefaultCommand(
         new ExtenderManual(
-          extender,
-            () -> OPERATOR.getRawAxis(leftYAxis2)));
+            extender,
+            () -> OPERATOR.getRawAxis(rightYAxis2)));
 
     // -------------------------------------
 
@@ -184,12 +189,12 @@ public class RobotContainer {
 
     // METHODS: coneIntake, cubeIntake, leftOutTake, rightOutTake
     // clawSubsystem.setDefaultCommand(
-    //     new ClawManual(
-    //         clawSubsystem,
-    //         () -> opperator_X.getAsBoolean(),
-    //         () -> opperator_B.getAsBoolean(),
-    //         () -> opperator_leftBumper.getAsBoolean(),
-    //         () -> opperator_RightBumper.getAsBoolean()));
+    // new ClawManual(
+    // clawSubsystem,
+    // () -> opperator_X.getAsBoolean(),
+    // () -> opperator_B.getAsBoolean(),
+    // () -> opperator_leftBumper.getAsBoolean(),
+    // () -> opperator_RightBumper.getAsBoolean()));
 
     // -------------------------------------
 
@@ -199,10 +204,10 @@ public class RobotContainer {
 
     // METHODS: extend, retract
     // extenderSubsystem.setDefaultCommand(
-    //     new ExtenderManual(
-    //         extenderSubsystem,
-    //         () -> opperator_startButton.getAsBoolean(),
-    //         () -> opperator_BackButton.getAsBoolean()));
+    // new ExtenderManual(
+    // extenderSubsystem,
+    // () -> opperator_startButton.getAsBoolean(),
+    // () -> opperator_BackButton.getAsBoolean()));
 
     // -------------------------------------
 
@@ -212,10 +217,10 @@ public class RobotContainer {
 
     // METHODS: up, down
     // wristSubsystem.setDefaultCommand(
-    //     new WristManual(
-    //         wristSubsystem,
-    //         () -> driver_X.getAsBoolean(),
-    //         () -> driver_B.getAsBoolean()));
+    // new WristManual(
+    // wristSubsystem,
+    // () -> driver_X.getAsBoolean(),
+    // () -> driver_B.getAsBoolean()));
 
     // -------------------------------------
 
@@ -245,12 +250,12 @@ public class RobotContainer {
   /****************/
 
   private void configureDefaultCommands() {
-    //Compressor code
+    // Compressor code
     compressor.enableAnalog(100, 120);
     // compressor.disableCompressor();
 
-    //Camera Server
-    //CameraServer.startAutomaticCapture();
+    // Camera Server
+    // CameraServer.startAutomaticCapture();
   }
 
   /***************/
@@ -275,10 +280,36 @@ public class RobotContainer {
     // opperator_Y.whileFalse(new InstantCommand(() -> testers.stopArm()));
     // opperator_A.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    opperator_leftBumper.onTrue(new ArmSetPoint(arm,20) );
+    opperator_leftBumper.onTrue(new ArmSetPoint(arm, 44));
+
     opperator_leftBumper.whileFalse(new InstantCommand(() -> arm.stopArm()));
 
+    // opperator_A.onTrue(new StoweAway(arm, extender, wrist));
+    // opperator_Y.onTrue(new Substation(arm, extender, wrist));
 
+    // test later
+    opperator_A.onTrue(new ParallelCommandGroup(new WristSetPoint(wrist, 0), new ExtenderSetPoint(extender, 0)));
+    // Stoeaway
+    opperator_Y.onTrue(new SequentialCommandGroup(
+        new ParallelCommandGroup(new WristSetPoint(wrist, 0),
+            new ExtenderSetPoint(extender, 0)),
+        new ArmSetPoint(arm, 0)));
+    // Arm goes out, but not extended for arm
+    opperator_B.onTrue(new SequentialCommandGroup(
+        new ParallelCommandGroup(
+            new WristSetPoint(wrist, 0),
+            new ExtenderSetPoint(extender, 0)),
+        new ArmSetPoint(arm, 44)));
+
+    opperator_X.onTrue(new SequentialCommandGroup(
+        new ArmSetPoint(arm, 44),
+        new ExtenderSetPoint(extender, 20),
+        new WaitCommand(1),
+        new WristSetPoint(wrist, -30)));
+
+    // opperator_A.whileFalse(new InstantCommand(() -> arm.stopArm()));
+    // opperator_A.whileFalse(new InstantCommand(() -> extender.stopExtender()));
+    // opperator_A.whileFalse(new InstantCommand(() -> wrist.stopWrist()));
 
     // ------------------------------------- CLAW
     opperator_BackButton.onTrue(new InstantCommand(() -> claw.coneIntake()));
@@ -290,11 +321,11 @@ public class RobotContainer {
     opperator_RightBumper.onTrue(new InstantCommand(() -> claw.outTake()));
 
     // ------------------------------------- WRIST
-    opperator_RightStick.onTrue(new InstantCommand(()-> wrist.upGoWrist()));
-    opperator_RightStick.onFalse(new InstantCommand(()-> wrist.stopWrist()));
+    opperator_RightStick.onTrue(new InstantCommand(() -> wrist.upGoWrist()));
+    opperator_RightStick.onFalse(new InstantCommand(() -> wrist.stopWrist()));
 
-    opperator_startButton.onTrue(new InstantCommand(()-> wrist.downGoWrist()));
-    opperator_startButton.onFalse(new InstantCommand(()-> wrist.stopWrist()));
+    opperator_startButton.onTrue(new InstantCommand(() -> wrist.downGoWrist()));
+    opperator_startButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
 
     // driver_X.onTrue(new InstantCommand(() -> testers.upGoWrist()));
     // driver_X.onFalse(new InstantCommand(() -> testers.stopWrist()));
@@ -303,13 +334,16 @@ public class RobotContainer {
     // driver_B.onFalse(new InstantCommand(() -> testers.stopWrist()));
 
     // ------------------------------------- EXTENDER
-    
-    // opperator_BackButton.onTrue(new InstantCommand(() -> testers.upExtender()));
-    // opperator_BackButton.onFalse(new InstantCommand(() -> testers.stopExtender()));
 
-    // opperator_startButton.onTrue(new InstantCommand(() -> testers.downExtender()));
-    // opperator_startButton.onFalse(new InstantCommand(() -> testers.stopExtender()));
-    
+    // opperator_BackButton.onTrue(new InstantCommand(() -> testers.upExtender()));
+    // opperator_BackButton.onFalse(new InstantCommand(() ->
+    // testers.stopExtender()));
+
+    // opperator_startButton.onTrue(new InstantCommand(() ->
+    // testers.downExtender()));
+    // opperator_startButton.onFalse(new InstantCommand(() ->
+    // testers.stopExtender()));
+
   }
 
   /**************/
@@ -351,8 +385,9 @@ public class RobotContainer {
     ));
 
     Autons.addOption("armSetpoint", new SequentialCommandGroup(
-      new ArmSetPoint(arm, 20)
-    ));
+        new ArmSetPoint(arm, 20)));
+
+    Autons.addOption("Test place cone", new SequentialCommandGroup());
 
     // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
     // new DriveForward(SwerveDrive, .5, -30, 1),

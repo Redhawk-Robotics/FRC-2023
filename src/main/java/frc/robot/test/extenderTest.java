@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 
@@ -17,20 +18,20 @@ public class extenderTest extends SubsystemBase {
   private final CANSparkMax extender;
   private final RelativeEncoder extenderEncoder;
 
-  private double extenderSpeed = .5;
-  private double extenderSpeedReverse = -.5;
+  private double extenderSpeed = 1;
+  private double extenderSpeedReverse = -1;
 
   private double stop = 0;
 
   public extenderTest() {
-// ------------------------------------- EXTENDER
+    // ------------------------------------- EXTENDER
 
-extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
-extenderEncoder = extender.getEncoder();
-extender.restoreFactoryDefaults();
+    extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
+    extenderEncoder = extender.getEncoder();
+    extender.restoreFactoryDefaults();
 
-extender.setIdleMode(IdleMode.kBrake);
-extender.setInverted(false);
+    extender.setIdleMode(IdleMode.kBrake);
+    extender.setInverted(false);
 
     /****************/
     /*** EXTENDER ***/
@@ -46,11 +47,13 @@ extender.setInverted(false);
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("EXTENDER", extenderEncoder.getPosition());
   }
+
   /*************/
   /*** EXTENDER ***/
   /*************/
-  public void extenderController(double speed){
+  public void extenderController(double speed) {
     extender.set(speed);
   }
 
@@ -66,9 +69,8 @@ extender.setInverted(false);
     extender.set(extenderSpeedReverse);
   }
 
-  public double extenderEncoder(){
+  public double extenderEncoder() {
     return extenderEncoder.getPosition();
   }
 
-  
 }

@@ -30,14 +30,14 @@ public class armTest extends SubsystemBase {
        armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
        armEncoderLeft = armMotorLeft.getEncoder();
        armMotorLeft.setInverted(false);
-       armMotorLeft.setIdleMode(IdleMode.kCoast);
+       armMotorLeft.setIdleMode(IdleMode.kBrake);
        armMotorLeft.restoreFactoryDefaults();
 
        // ------------------------------------- ARM RIGHT
 
     armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
     armEncoderRight = armMotorRight.getEncoder();
-    armMotorRight.setIdleMode(IdleMode.kCoast);
+    armMotorRight.setIdleMode(IdleMode.kBrake);
     armMotorRight.restoreFactoryDefaults();
     armMotorLeft.follow(armMotorRight, true); // <= follow
 

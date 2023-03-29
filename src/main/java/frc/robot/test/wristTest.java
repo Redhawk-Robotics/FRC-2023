@@ -9,6 +9,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.RelativeEncoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 
@@ -43,10 +44,13 @@ public class wristTest extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    SmartDashboard.putNumber("WRIST", wristEncoder.getPosition());
   }
    /*************/
   /*** WRIST ***/
   /*************/
+  
+
   public void wristController(double speed){
     wrist.set(speed);
   }
