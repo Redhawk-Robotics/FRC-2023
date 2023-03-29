@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 
+@Deprecated
 public class testWhatever extends SubsystemBase {
   /** Creates a new testWhatever. */
   private final CANSparkMax leftClaw, rightClaw;

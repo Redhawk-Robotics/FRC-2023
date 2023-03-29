@@ -5,64 +5,70 @@
 package frc.robot.test;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
-import frc.robot.constants.Setting;
-import frc.robot.lib.util.CANSparkMaxUtil;
-import frc.robot.lib.util.CANSparkMaxUtil.Usage;
 
 public class extenderTest extends SubsystemBase {
-  /** Creates a new ExtendSubsystem. */
-  private final CANSparkMax extenderMotor;
+  /** Creates a new extenderTest. */
+  private final CANSparkMax extender;
   private final RelativeEncoder extenderEncoder;
-  private final SparkMaxPIDController extenderController;
-  private double extenderEncoderValue;
+
+  private double extenderSpeed = .5;
+  private double extenderSpeedReverse = -.5;
+
+  private double stop = 0;
 
   public extenderTest() {
-    extenderMotor = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless);
-    extenderEncoder = extenderMotor.getEncoder();
+// ------------------------------------- EXTENDER
 
-    extenderController = extenderMotor.getPIDController();
+extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
+extenderEncoder = extender.getEncoder();
+extender.restoreFactoryDefaults();
 
-    configArmMotor(extenderMotor, extenderEncoder, extenderController, Ports.Extender.ExtenderMotorInvert);
+extender.setIdleMode(IdleMode.kBrake);
+extender.setInverted(false);
+
+    /****************/
+    /*** EXTENDER ***/
+    /***************/
+
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
+    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
+    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -270);
+    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("Extender Encoder Value", getEncoderMetersLeft(extenderEncoderValue));
+  }
+  /*************/
+  /*** EXTENDER ***/
+  /*************/
+  public void extenderController(double speed){
+    extender.set(speed);
   }
 
-  private void configArmMotor(CANSparkMax extenderMotor, RelativeEncoder extenderEncoder,
-      SparkMaxPIDController extenderController, boolean Invert) {
-    extenderMotor.restoreFactoryDefaults();
-    CANSparkMaxUtil.setCANSparkMaxBusUsage(extenderMotor, Usage.kPositionOnly);
-    extenderMotor.setSmartCurrentLimit(Setting.extenderSetting.extenderContinousCurrentLimit);
-    extenderMotor.setInverted(Invert);
-    extenderMotor.setIdleMode(Setting.extenderSetting.extenderNeutralMode);
-    // extenderEncoder.setPositionConversionFactor(Setting.extenderSetting.extenderConversionFactor);
-    extenderController.setP(Setting.extenderSetting.extenderP);
-    extenderController.setI(Setting.extenderSetting.extenderI);
-    extenderController.setD(Setting.extenderSetting.extenderD);
-    extenderController.setFF(Setting.extenderSetting.extenderFF);
-    extenderMotor.enableVoltageCompensation(Setting.extenderSetting.maxVoltage);
-    extenderMotor.burnFlash();
-    Timer.delay(1);
-    // resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
+  public void upExtender() {
+    extender.set(extenderSpeed);
   }
 
-  public void setMotor(double speed) {
-    extenderMotor.set(speed);
+  public void stopExtender() {
+    extender.set(stop);
   }
 
-  public double getEncoderMetersLeft(double position) {
-    position = extenderEncoder.getPosition() * Setting.extenderSetting.kEncoderTick2Meter;
-    return position;
+  public void downExtender() {
+    extender.set(extenderSpeedReverse);
   }
+
+  public double extenderEncoder(){
+    return extenderEncoder.getPosition();
+  }
+
+  
 }

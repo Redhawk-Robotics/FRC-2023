@@ -15,7 +15,10 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.modules.CompressorModule;
 import frc.robot.subsystems.modules.PDH;
 import frc.robot.test.armTest;
+import frc.robot.test.clawTest;
+import frc.robot.test.extenderTest;
 import frc.robot.test.testWhatever;
+import frc.robot.test.wristTest;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -47,9 +50,12 @@ public class RobotContainer {
   /* Subsystems */
   private final SwerveSubsystem SwerveDrive = new SwerveSubsystem();
   private final PDH powerDistributionHub = new PDH();
-  private final testWhatever testers = new testWhatever();
+  // private final testWhatever testers = new testWhatever();
 
-  private final armTest armtest = new armTest();
+  private final armTest arm = new armTest();
+  private final clawTest claw = new clawTest();
+  private final wristTest wrist = new wristTest();
+  private final extenderTest extender = new extenderTest();
   // private final ArmSubsystem armSubsystem = new ArmSubsystem();
   // private final ClawSubsystem clawSubsystem = new ClawSubsystem();
   // private final extenderSubsystem extenderSubsystem = new extenderSubsystem();
@@ -158,16 +164,16 @@ public class RobotContainer {
     //         () -> opperator_A.getAsBoolean(),
     //         () -> opperator_Y.getAsBoolean()));
     //armTest//
-    armtest.setDefaultCommand(
+    arm.setDefaultCommand(
         new ArmManual(
-          armtest,
+          arm,
             () -> OPERATOR.getRawAxis(rightYAxis2)
             ));
     
     //extederTest//
-    testers.setDefaultCommand(
+    extender.setDefaultCommand(
         new ExtenderManual(
-            testers,
+          extender,
             () -> OPERATOR.getRawAxis(leftYAxis2)));
 
     // -------------------------------------
@@ -269,23 +275,26 @@ public class RobotContainer {
     // opperator_Y.whileFalse(new InstantCommand(() -> testers.stopArm()));
     // opperator_A.whileFalse(new InstantCommand(() -> testers.stopArm()));
 
-    opperator_leftBumper.onTrue(new ArmSetPoint(armtest,20) );
+    opperator_leftBumper.onTrue(new ArmSetPoint(arm,20) );
+    opperator_leftBumper.whileFalse(new InstantCommand(() -> arm.stopArm()));
+
+
 
     // ------------------------------------- CLAW
-    opperator_BackButton.onTrue(new InstantCommand(() -> testers.coneIntake()));
-    opperator_LeftStick.onTrue(new InstantCommand(() -> testers.cubeIntake()));
+    opperator_BackButton.onTrue(new InstantCommand(() -> claw.coneIntake()));
+    opperator_LeftStick.onTrue(new InstantCommand(() -> claw.cubeIntake()));
 
-    opperator_BackButton.whileFalse(new InstantCommand(() -> testers.stopClaw()));
-    opperator_LeftStick.whileFalse(new InstantCommand(() -> testers.stopClaw()));
+    opperator_BackButton.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+    opperator_LeftStick.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    opperator_RightBumper.onTrue(new InstantCommand(() -> testers.outTake()));
+    opperator_RightBumper.onTrue(new InstantCommand(() -> claw.outTake()));
 
     // ------------------------------------- WRIST
-    opperator_RightStick.onTrue(new InstantCommand(()-> testers.upGoWrist()));
-    opperator_RightStick.onFalse(new InstantCommand(()-> testers.stopWrist()));
+    opperator_RightStick.onTrue(new InstantCommand(()-> wrist.upGoWrist()));
+    opperator_RightStick.onFalse(new InstantCommand(()-> wrist.stopWrist()));
 
-    opperator_startButton.onTrue(new InstantCommand(()-> testers.downGoWrist()));
-    opperator_startButton.onFalse(new InstantCommand(()-> testers.stopWrist()));
+    opperator_startButton.onTrue(new InstantCommand(()-> wrist.downGoWrist()));
+    opperator_startButton.onFalse(new InstantCommand(()-> wrist.stopWrist()));
 
     // driver_X.onTrue(new InstantCommand(() -> testers.upGoWrist()));
     // driver_X.onFalse(new InstantCommand(() -> testers.stopWrist()));
@@ -342,7 +351,7 @@ public class RobotContainer {
     ));
 
     Autons.addOption("armSetpoint", new SequentialCommandGroup(
-      new ArmSetPoint(armtest, 20)
+      new ArmSetPoint(arm, 20)
     ));
 
     // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(

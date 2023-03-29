@@ -10,19 +10,20 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Setting;
 import frc.robot.subsystems.extenderSubsystem;
+import frc.robot.test.extenderTest;
 import frc.robot.test.testWhatever;
 
 public class ExtenderManual extends CommandBase {
   // public extenderSubsystem extenderSubsystem;
-  private testWhatever tester;
+  private extenderTest extender;
   private DoubleSupplier speed;
   /** Creates a new Extender. */
-  public ExtenderManual(testWhatever tester, DoubleSupplier speed) {
+  public ExtenderManual(extenderTest extender, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.tester = tester;
+    this.extender = extender;
     this.speed = speed;
 
-    addRequirements(tester); 
+    addRequirements(extender); 
   }
 
   // Called when the command is initially scheduled.
@@ -32,14 +33,14 @@ public class ExtenderManual extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    tester.extenderController(speed.getAsDouble());
+    extender.extenderController(speed.getAsDouble());
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    tester.extenderController(0);
+    extender.extenderController(0);
   }
 
   // Returns true when the command should end.

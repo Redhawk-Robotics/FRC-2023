@@ -5,83 +5,80 @@
 package frc.robot.test;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
-import frc.robot.lib.util.CANSparkMaxUtil;
-import frc.robot.lib.util.CANSparkMaxUtil.Usage;
+import frc.robot.constants.Ports;
+
 
 public class clawTest extends SubsystemBase {
-
-  private final CANSparkMax leftNeo550, rightNeo550;
-  private final RelativeEncoder leftEncoder, righEncoder;
-  private final SparkMaxPIDController leftPIDController, rightPIDController; 
-  private final DoubleSolenoid clawSolenoid;
-  public final double neoPower = .5;
-
   /** Creates a new clawTest. */
+  private final CANSparkMax leftClaw, rightClaw;
+
+  private final DoubleSolenoid clawOpen;
+
   public clawTest() {
-    clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawForwardChan, Setting.clawPneumatic.clawReverseChan);
-    
-    leftNeo550 = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless);
-    leftEncoder = leftNeo550.getEncoder();
+// ------------------------------------- CLAW
 
-    rightNeo550 = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless);
-    righEncoder = rightNeo550.getEncoder();
+leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
+leftClaw.setInverted(true);
+// leftClaw.setIdleMode(IdleMode.kCoast);
 
-    leftPIDController = leftNeo550.getPIDController();
-    rightPIDController = rightNeo550.getPIDController();
+// RIGHT CLAW
+rightClaw = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless); // 13
+rightClaw.setInverted(true);
+// rightClaw.setIdleMode(IdleMode.kCoast);
 
-    configClawMotor(leftNeo550, leftEncoder, leftPIDController, true);
-    configClawMotor(rightNeo550, righEncoder, rightPIDController, false);
+clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawForwardChan,
+Setting.clawPneumatic.clawReverseChan);
 
-    configClawMotor(leftNeo550, leftEncoder, leftPIDController, Ports.Claw.leftClawMotorInvert);
-    configClawMotor(rightNeo550, righEncoder, rightPIDController, Ports.Claw.rightClawMotorInvert);
-  }
+}
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
   }
+  /*************/
+  /*** CLAW ***/
+  /*************/
 
-  public void runMotors() {
-    leftNeo550.set(neoPower);
-    rightNeo550.set(neoPower);
+  public void coneIntake() {
+    clawOpen.set(Value.kForward);
+    if(rightClaw.getOutputCurrent() < 5 && leftClaw.getOutputCurrent() < 5){
+    rightClaw.set(.4);  
+    leftClaw.set(-.4);
+    }else{
+      rightClaw.set(0);  
+      leftClaw.set(0);
+    }
   }
 
-  public void stopMotors() {
-    leftNeo550.set(0);
-    rightNeo550.set(0);
+  public void outTake() {
+    clawOpen.set(Value.kReverse);
+    leftClaw.set(.25);
+    rightClaw.set(-.25);
   }
 
-  public void closeClaw() {
-    clawSolenoid.set(kForward);
+  public void cubeIntake() {
+    clawOpen.set(Value.kReverse);
+    if(rightClaw.getOutputCurrent() < 5 && leftClaw.getOutputCurrent() < 5){
+      rightClaw.set(.5);  
+      leftClaw.set(-.5);
+      }else{
+        rightClaw.set(0);  
+        leftClaw.set(0);
+      }
   }
 
-  public void openClaw() {
-    clawSolenoid.set(kReverse);
+  public void stopClaw() {
+    // clawOpen.set(Value.kOff);
+    leftClaw.set(0);
+    rightClaw.set(0);
   }
 
-  public void configClawMotor(CANSparkMax clawMotor, RelativeEncoder clawEncoder, SparkMaxPIDController clawController, boolean invert) {
-    clawMotor.restoreFactoryDefaults();
-    CANSparkMaxUtil.setCANSparkMaxBusUsage(clawMotor, Usage.kAll);
-    clawMotor.setSmartCurrentLimit(Setting.clawSetting.clawContinousCurrentLimit);
-    clawMotor.setIdleMode(Setting.clawSetting.clawNeutralMode);
-    clawMotor.setInverted(invert);
-    clawEncoder.setVelocityConversionFactor(Setting.clawSetting.clawConversionVelocityFactor);
-    clawEncoder.setPositionConversionFactor(Setting.clawSetting.clawConversionPositionFactor);
-    clawController.setP(Setting.clawSetting.clawP);
-    clawController.setI(Setting.clawSetting.clawI);
-    clawController.setD(Setting.clawSetting.clawD);
-    clawController.setFF(Setting.clawSetting.clawFF);
-    clawMotor.enableVoltageCompensation(Setting.clawSetting.maxVoltage);
-    clawMotor.burnFlash();
-  }
+  // -------------------------------------
 }
