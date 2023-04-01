@@ -9,6 +9,7 @@ import frc.robot.test.armTest;
 import frc.robot.test.extenderTest;
 import frc.robot.test.wristTest;
 
+@Deprecated
 public class Substation extends CommandBase {
   private armTest arm;
   private extenderTest extender;

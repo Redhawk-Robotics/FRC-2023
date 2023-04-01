@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
+import frc.robot.subsystems.modules.SparkMaxModules;
 
 public class extenderTest extends SubsystemBase {
   /** Creates a new extenderTest. */
@@ -26,28 +27,15 @@ public class extenderTest extends SubsystemBase {
   public extenderTest() {
     // ------------------------------------- EXTENDER
 
-    extender = new CANSparkMax(Ports.Extender.extender, MotorType.kBrushless); // 11
-    extenderEncoder = extender.getEncoder();
-    extender.restoreFactoryDefaults();
-
-    extender.setIdleMode(IdleMode.kBrake);
-    extender.setInverted(false);
-
-    /****************/
-    /*** EXTENDER ***/
-    /***************/
-
-    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);
-    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    extender.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -270);
-    extender.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-
+    extender = SparkMaxModules.extender;
+    extenderEncoder = SparkMaxModules.extenderEncoder;
+    
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("EXTENDER", extenderEncoder.getPosition());
+    SmartDashboard.putNumber("2. EXTENDER", extenderEncoder.getPosition());
   }
 
   /*************/

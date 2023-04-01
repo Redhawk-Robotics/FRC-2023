@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Setting;
+import frc.robot.subsystems.modules.SparkMaxModules;
 import frc.robot.constants.Ports;
 
 public class clawTest extends SubsystemBase {
@@ -24,17 +25,11 @@ public class clawTest extends SubsystemBase {
   public clawTest() {
     // ------------------------------------- CLAW
 
-    leftClaw = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless); // 12
-    leftClaw.setInverted(true);
-    leftClaw.setIdleMode(IdleMode.kCoast);
+    leftClaw = SparkMaxModules.leftClaw;
+    rightClaw = SparkMaxModules.rightClaw;
 
-    // RIGHT CLAW
-    rightClaw = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless); // 13
-    rightClaw.setInverted(true);
-    rightClaw.setIdleMode(IdleMode.kCoast);
-
-    clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawForwardChan,
-        Setting.clawPneumatic.clawReverseChan);
+    clawOpen = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawReverseChan,
+        Setting.clawPneumatic.clawForwardChan);
 
   }
 
@@ -48,30 +43,29 @@ public class clawTest extends SubsystemBase {
   /*************/
 
   public void coneIntake() {
-    clawOpen.set(Value.kForward);
+    clawOpen.set(Value.kReverse);
     if (rightClaw.getOutputCurrent() < 5 && leftClaw.getOutputCurrent() < 5) {
-      rightClaw.set(.4);
       leftClaw.set(-.4);
+      rightClaw.set(.4);
     } else {
-      rightClaw.set(0);
       leftClaw.set(0);
+      rightClaw.set(0);
     }
   }
-
   public void outTake() {
-    clawOpen.set(Value.kReverse);
-    leftClaw.set(.25);
-    rightClaw.set(-.25);
+    clawOpen.set(Value.kForward);
+    leftClaw.set(.5);
+    rightClaw.set(-.5);
   }
 
   public void cubeIntake() {
-    clawOpen.set(Value.kReverse);
+    clawOpen.set(Value.kForward);
     if (rightClaw.getOutputCurrent() < 5 && leftClaw.getOutputCurrent() < 5) {
-      rightClaw.set(.5);
       leftClaw.set(-.5);
+      rightClaw.set(.5);
     } else {
-      rightClaw.set(0);
       leftClaw.set(0);
+      rightClaw.set(0);
     }
   }
 
@@ -81,5 +75,14 @@ public class clawTest extends SubsystemBase {
     rightClaw.set(0);
   }
 
+  
+  public void openClaw(){
+    clawOpen.set(Value.kForward);
+  }
+
+  public void closeClaw(){
+    clawOpen.set(Value.kReverse);
+  }
+  
   // -------------------------------------
 }

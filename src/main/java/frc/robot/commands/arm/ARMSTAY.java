@@ -6,42 +6,46 @@ package frc.robot.commands.Arm;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.test.armTest;
-import frc.robot.test.extenderTest;
-import frc.robot.test.wristTest;
-@Deprecated
-public class stoweAwayRenewed extends CommandBase {
-  /** Creates a new stoweAwayRenewed. */
+
+public class ARMSTAY extends CommandBase {
+  /** Creates a new ArmSetPoint. */
+  // public ArmSubsystem armSubsystem;
   private armTest arm;
-  private extenderTest extender;
-  private wristTest wrist;
+  double encoderValue;
 
-  public stoweAwayRenewed(armTest arm, extenderTest extender, wristTest wrist) {
+  public ARMSTAY(armTest arm, double encoderValue) {
     // Use addRequirements() here to declare subsystem dependencies.
+    // this.armSubsystem = armSubsystem;
     this.arm = arm;
-    this.extender = extender;
-    this.wrist = wrist;
-    addRequirements(arm, extender, wrist);
+    this.encoderValue = encoderValue;
 
+    addRequirements(arm);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-
+    if (arm.armEncoder() > encoderValue) {
+      arm.downGoArm();
+    } else if (arm.armEncoder() < encoderValue) {
+      arm.upGoArm();
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    arm.stopArm();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true;
   }
 }

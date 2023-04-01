@@ -27,10 +27,12 @@ public class ExtenderSetPoint extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (encoderValue - extender.extenderEncoder() > 0) {
+    if (extender.extenderEncoder() > encoderValue) {
+      extender.downExtender();
+    } else if (extender.extenderEncoder() < encoderValue) {
       extender.upExtender();
     } else {
-      extender.downExtender();
+      extender.stopExtender();
     }
   }
 
@@ -44,9 +46,11 @@ public class ExtenderSetPoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(encoderValue - extender.extenderEncoder()) < 5) {
+    if (Math.abs(encoderValue - extender.extenderEncoder()) < 1) {
+      extender.stopExtender();
       return true;
     }
     return false;
+    // return true;
   }
 }

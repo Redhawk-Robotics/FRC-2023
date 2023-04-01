@@ -37,10 +37,12 @@ public class WristSetPoint extends CommandBase {
   public void execute() {
   // double speed = PIDWristController.calculate(wristSubsystem.getCurrentPosition());
   // wristSubsystem.setMotor(speed);
-  if (encoderValue - wrist.wristEncoder() > 0) {
+  if (wrist.wristEncoder() > encoderValue) {
+    wrist.downGoWrist();
+  } else if (wrist.wristEncoder() < encoderValue) {
     wrist.upGoWrist();
   } else {
-    wrist.downGoWrist();
+    wrist.stopWrist();
   }
   }
 
@@ -55,9 +57,11 @@ public class WristSetPoint extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (Math.abs(encoderValue - wrist.wristEncoder()) < 5) {
+    if (Math.abs(encoderValue - wrist.wristEncoder()) < 1.5) {
+      wrist.stopWrist();
       return true;
     }
     return false;
+    // return true;
   }
 }

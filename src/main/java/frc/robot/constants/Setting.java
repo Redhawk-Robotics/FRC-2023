@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Setting {
     /* Swerve Voltage Compensation */
-    public static final double voltageComp = 8.5;
+    public static final double voltageComp = 8.5;//8.5
 
     // RobotCharacterizations
     public static final double drivetrainTrackWidthMeters = Units.inchesToMeters(28.5);
@@ -75,7 +75,7 @@ public interface Setting {
     public static final double angleConversionFactor = 360.0 / angleGearRatio;
 
     public static final class SoftLimits {
-        public static final double armRatio = 5 * 4 * 3; // 5, 4, 4 OR 60
+        public static final double armRatio = 5 * 4 * 3; // 5, 4, 3 OR 60
         public static final double armSprocketRatio = 64. / 22; // top sprocket over lower sprocket (physically on
                                                                 // robot)
         public static final double armMotorRotationsPerEveryFullRotation = armRatio * armSprocketRatio; // 174.545
@@ -88,6 +88,16 @@ public interface Setting {
         public static final double pivotpSrocketRatio = 16. / 22; // top sprocket over lower sprocket (physically on
                                                                   // robot)
         public static final double pivotMotorRotationsPerEveryFullRotation = pivotRatio * pivotpSrocketRatio; // 90.909
+
+        public static final float armForwardLimit = 44;
+        public static final float armReverseLimit = -2;
+        
+        public static final float extenderForwardLimit = 0;
+        public static final float extenderReverseLimit = -270;
+
+        public static final float wristForwardLimit = 5;
+        public static final float wristReverseLimit = -30;
+        public static final float wristMAXReverseLimit = -40;
     }
 
     /*------- CANcoder Config ------- */

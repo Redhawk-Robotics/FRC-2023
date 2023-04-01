@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import edu.wpi.first.math.controller.PIDController;
@@ -80,6 +81,9 @@ public class SwerveSubsystem extends SubsystemBase {
     // Creating and putting the field for Charged Up onto to the SmartDashboard
     field = new Field2d();
     SmartDashboard.putData("Field", field);
+
+    // private SwerveAutoBuilder base = new SwerveAutoBuilder(new Translation2d(), );
+
   }
 
   /*

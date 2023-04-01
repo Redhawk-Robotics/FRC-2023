@@ -35,7 +35,7 @@ public class ArmManual extends CommandBase {
   @Override
   public void execute() {
     // double speedrevert = speed.getAsDouble();
-    tester.upGoArmController(-speed.getAsDouble() * .25);
+    tester.upGoArmController(-speed.getAsDouble() * .3);
   }
 
   // Called once the command ends or is interrupted.

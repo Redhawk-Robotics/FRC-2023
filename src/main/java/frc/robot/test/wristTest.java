@@ -12,6 +12,8 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
+import frc.robot.constants.Setting;
+import frc.robot.subsystems.modules.SparkMaxModules;
 
 public class wristTest extends SubsystemBase {
   /** Creates a new wristTest. */
@@ -26,25 +28,15 @@ public class wristTest extends SubsystemBase {
   public wristTest() {
     // ------------------------------------- WRIST
 
-    wrist = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless); // 14
-    wristEncoder = wrist.getEncoder();
-    wrist.restoreFactoryDefaults();
-    wrist.setIdleMode(IdleMode.kBrake);
-    wrist.setInverted(false);
-
-    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 5);
-    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    wrist.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -30);
-    wrist.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-
-    // ------------------------------------
+    wrist = SparkMaxModules.wrist;
+    wristEncoder = SparkMaxModules.wristEncoder;
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("WRIST", wristEncoder.getPosition());
+    SmartDashboard.putNumber("3. WRIST", wristEncoder.getPosition());
   }
    /*************/
   /*** WRIST ***/
@@ -70,6 +62,10 @@ public class wristTest extends SubsystemBase {
   public double wristEncoder(){
     return wristEncoder.getPosition();
   } 
+
+  // public void wristGroundSOFTLIM() {
+  //   SparkMaxModules.setSoftLimit(wrist, Setting.SoftLimits.wristForwardLimit, Setting.SoftLimits.wristMAXReverseLimit);
+  // }
 
   // -------------------------------------
 

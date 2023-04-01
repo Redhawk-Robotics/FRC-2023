@@ -10,11 +10,12 @@ import frc.robot.test.clawTest;
 import frc.robot.test.extenderTest;
 import frc.robot.test.wristTest;
 
+@Deprecated
 public class StoweAway extends CommandBase {
   private armTest arm;
   private extenderTest extender;
   private wristTest wrist;
-  private boolean checker1, checker2;
+  // private boolean checker1, checker2;
 
   /** Creates a new StoweAway. */
   public StoweAway(armTest arm, extenderTest extender, wristTest wrist) {
@@ -22,8 +23,8 @@ public class StoweAway extends CommandBase {
     this.arm = arm;
     this.extender = extender;
     this.wrist = wrist;
-    this.checker1 = false;
-    this.checker2 = false;
+    // this.checker1 = false;
+    // this.checker2 = false;
     addRequirements(arm, extender, wrist);
   }
 
@@ -51,14 +52,15 @@ public class StoweAway extends CommandBase {
       extender.upExtender();
       if (extender.extenderEncoder() > -1) {
         extender.stopExtender();
-        checker2 = true;
+        // checker2 = true;
       }
     } else {
       wrist.stopWrist();
-      checker1 = true;
+      // checker1 = true;
     }
 
-    if (checker1 && checker2) {
+    // checker1 && checker2
+    if (wrist.wristEncoder() >= 4 && extender.extenderEncoder() >= -100) {
       if (arm.armEncoder() > 0) {
         arm.downGoArm();
       } else {

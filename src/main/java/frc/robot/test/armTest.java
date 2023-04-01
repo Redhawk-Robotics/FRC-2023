@@ -12,6 +12,7 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
+import frc.robot.subsystems.modules.SparkMaxModules;
 
 public class armTest extends SubsystemBase {
   /** Creates a new armTest. */
@@ -19,48 +20,30 @@ public class armTest extends SubsystemBase {
 
   private final RelativeEncoder armEncoderLeft, armEncoderRight;
 
-  private double armSpeed = 0.3;
-  private double armSpeedReverse = -0.3;
+  private double armSpeed = 0.5;
+  private double armSpeedReverse = -0.5;
 
   private double stop = 0;
 
-
   public armTest() {
-       // ------------------------------------- ARM LEFT
-       armMotorLeft = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless); // 9
-       armEncoderLeft = armMotorLeft.getEncoder();
-       armMotorLeft.setInverted(false);
-       armMotorLeft.setIdleMode(IdleMode.kBrake);
-       armMotorLeft.restoreFactoryDefaults();
+    // ------------------------------------- ARM LEFT
+    armMotorLeft = SparkMaxModules.leftArm;
+    armEncoderLeft = SparkMaxModules.leftArmEncoder;
 
-       // ------------------------------------- ARM RIGHT
+    // ------------------------------------- ARM RIGHT
 
-    armMotorRight = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless); // 10
-    armEncoderRight = armMotorRight.getEncoder();
-    armMotorRight.setIdleMode(IdleMode.kBrake);
-    armMotorRight.restoreFactoryDefaults();
-    armMotorLeft.follow(armMotorRight, true); // <= follow
-
-
-    /************/
-    /*** ARM ***/
-    /***********/
-
-    armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 44);
-    armMotorRight.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
-    armMotorRight.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -2);
-
+    armMotorRight = SparkMaxModules.rightArm;
+    armEncoderRight = SparkMaxModules.rightArmEncoder;
 
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("TEST arm pivot left", armEncoderLeft.getPosition());
+    SmartDashboard.putNumber("1. TEST arm pivot left", armEncoderLeft.getPosition());
 
   }
-  
+
   /*************/
   /*** ARM ***/
   /*************/
@@ -73,12 +56,12 @@ public class armTest extends SubsystemBase {
     System.out.println("RIGHT: " + armMotorRight.getAppliedOutput());
   }
 
-  public void upGoArmController(double speed){
+  public void upGoArmController(double speed) {
     armMotorLeft.set(speed);
     armMotorRight.set(speed);
   }
 
-  public double armEncoder(){
+  public double armEncoder() {
     return armEncoderLeft.getPosition();
   }
 

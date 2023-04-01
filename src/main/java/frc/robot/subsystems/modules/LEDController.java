@@ -7,6 +7,7 @@ package frc.robot.subsystems.modules;
 import com.ctre.phoenix.time.StopWatch;
 
 import edu.wpi.first.wpilibj.motorcontrol.PWMSparkMax;
+import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class LEDController extends SubsystemBase {
@@ -14,7 +15,7 @@ public class LEDController extends SubsystemBase {
   private LEDColor LED;
 
     // Motor that controlls the LEDs
-    private final PWMSparkMax controller;
+    private final Spark controller;
 
     // Stopwatch to check when to start overriding manual updates
     private final StopWatch lastUpdate;
@@ -30,7 +31,7 @@ public class LEDController extends SubsystemBase {
     }
     
   public LEDController() {
-    this.controller = new PWMSparkMax(0);//Make a constant
+    this.controller = new Spark(0);//Make a constant
     this.lastUpdate = new StopWatch();
     setColor(LEDColor.OFF);
 
