@@ -32,10 +32,10 @@ public class WristSubsystem extends SubsystemBase {
   public WristSubsystem() {
     wristMotor = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless);
     wristEncoder = wristMotor.getEncoder();
-
     wristAngleController = wristMotor.getPIDController();
 
     configWristMotor(wristMotor, wristEncoder, wristAngleController, Ports.Wrist.wristMotorInvert);
+    wristMotor.setIdleMode(IdleMode.kBrake);
 
     wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
         true);
@@ -105,7 +105,6 @@ public class WristSubsystem extends SubsystemBase {
     wristMotor.burnFlash();
     Timer.delay(1);
   }
-  
 
   private void PID() {
     wristAngleController.setP(Setting.wristSetting.wristP);
@@ -138,7 +137,6 @@ public class WristSubsystem extends SubsystemBase {
   public double getWristCurrent() {
     return wristMotor.getOutputCurrent();
   }
-
 
   public void upGoWrist() {
     wristMotor.set(wristSpeed);

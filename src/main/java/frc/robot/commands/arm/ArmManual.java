@@ -15,33 +15,33 @@ import frc.robot.test.testWhatever;
 
 public class ArmManual extends CommandBase {
   // public ArmSubsystem armSubsystem;
-  private armTest tester;
+  private ArmSubsystem tester;
   private DoubleSupplier speed;
 
   /** Creates a new Arm. */
-  public ArmManual(armTest tester, DoubleSupplier speed) {
+  public ArmManual(ArmSubsystem tester, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.tester = tester;
     this.speed = speed;
 
-    addRequirements(tester); 
+    addRequirements(tester);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     // double speedrevert = speed.getAsDouble();
-    tester.upGoArmController(-speed.getAsDouble() * .3);
+    tester.setMotor(-speed.getAsDouble() * .5);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    tester.upGoArmController(0);
 
   }
 

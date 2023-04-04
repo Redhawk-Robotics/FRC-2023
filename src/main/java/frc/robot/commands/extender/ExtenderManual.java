@@ -15,32 +15,33 @@ import frc.robot.test.testWhatever;
 
 public class ExtenderManual extends CommandBase {
   // public extenderSubsystem extenderSubsystem;
-  private extenderTest extender;
+  private extenderSubsystem extender;
   private DoubleSupplier speed;
+
   /** Creates a new Extender. */
-  public ExtenderManual(extenderTest extender, DoubleSupplier speed) {
+  public ExtenderManual(extenderSubsystem extender, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.extender = extender;
     this.speed = speed;
 
-    addRequirements(extender); 
+    addRequirements(extender);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    extender.extenderController(speed.getAsDouble());
+    extender.setMotor(-speed.getAsDouble());
 
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    extender.extenderController(0);
   }
 
   // Returns true when the command should end.

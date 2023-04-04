@@ -89,11 +89,11 @@ public class RobotContainer {
         private final WristSubsystem wristSubsystem = new WristSubsystem();
         private final ArmSubsystem arm = new ArmSubsystem();
         private final extenderSubsystem extender = new extenderSubsystem();
+        private final ClawSubsystem claw = new ClawSubsystem();
 
         private final CompressorModule compressor = CompressorModule.getCompressorModule(); // this needs to be put into
                                                                                             // a
                                                                                             // PneumaticsSubsystem
-        private final ClawSubsystem claw = new ClawSubsystem();
 
         // private PneumaticHub compressor = new PneumaticHub(1);
 
@@ -237,11 +237,10 @@ public class RobotContainer {
                 /*************/
 
                 // METHODS: extend, retract
-                // extenderSubsystem.setDefaultCommand(
+                // extender.setDefaultCommand(
                 // new ExtenderManual(
-                // extenderSubsystem,
-                // () -> opperator_startButton.getAsBoolean(),
-                // () -> opperator_BackButton.getAsBoolean()));
+                // extender,
+                // () -> OPERATOR.getRawAxis(rightYAxis2)));
 
                 // -------------------------------------
 
@@ -313,9 +312,23 @@ public class RobotContainer {
                 // wristSubsystem.setPosition(15
                 // )));
 
-                opperator_B.onTrue(stoweAway());
-                opperator_Y.onTrue(substationCommand());
-                opperator_X.onTrue(groundCommand());
+                opperator_B.onTrue(midCommand());
+                opperator_X.onTrue(highCommand());
+                // opperator_B.whileFalse(new SequentialCommandGroup(
+                // stoweAway(),
+                // new InstantCommand(() -> claw.stopClaw())));
+
+                opperator_Y.onTrue(substationCommand()); // - good
+                // opperator_Y.whileFalse(stoweAway());
+                opperator_Y.whileFalse(new InstantCommand(() -> claw.stopClaw()));// - good
+
+                opperator_A.onTrue(groundCommand()); // - good
+                opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));// - good
+                // opperator_X.whileFalse(stoweAway());
+
+                // opperator_X.whileFalse(new SequentialCommandGroup(
+                // stoweAway(),
+                // new InstantCommand(() -> claw.stopClaw())));
                 // driver_B.onTrue(new InstantCommand(() -> wristSubsystem.setPosition(6)));
                 // driver_Y.onTrue(new InstantCommand(()-> extender.setPosition( 270
                 // )));
@@ -338,7 +351,7 @@ public class RobotContainer {
                 // new ExtenderSetPoint(extender, 0))
                 // ));
 
-                // opperator_leftBumper.onTrue(new ArmSetPoint(arm, 44));
+                // opperator_leftBumper.onTrue(new Ar\[]mSetPoint(arm, 44));
 
                 // opperator_leftBumper.whileFalse(new InstantCommand(() -> arm.stopArm()));
 
@@ -355,34 +368,38 @@ public class RobotContainer {
 
                 // // Stoeaway
                 opperator_leftBumper.whileTrue(stoweAway());
+                opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+                opperator_RightBumper.whileTrue((shootLow()));
+                opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
                 // driver_TopRightRearButton.onTrue(stoweAway());
 
                 // // FIX WRIST
                 // // arm High
-                opperator_X.onTrue(new SequentialCommandGroup(
-                                // PROTECTION
-                                new ParallelCommandGroup(
-                                                new InstantCommand(() -> wristSubsystem.setPosition(0)),
-                                                new InstantCommand(() -> wristSubsystem.setPosition(0)),
-                                                new InstantCommand(() -> arm.setPosition(44))),
-                                new ParallelCommandGroup(
-                                                new InstantCommand(() -> arm.setPosition(44)),
-                                                new InstantCommand(() -> wristSubsystem.setPosition(0))),
-                                new InstantCommand(() -> extender.setPosition(50))));
+                // opperator_X.onTrue(new SequentialCommandGroup(
+                // // PROTECTION
+                // new ParallelCommandGroup(
+                // new InstantCommand(() -> wristSubsystem.setPosition(0)),
+                // new InstantCommand(() -> wristSubsystem.setPosition(0)),
+                // new InstantCommand(() -> arm.setPosition(44))),
+                // new ParallelCommandGroup(
+                // new InstantCommand(() -> arm.setPosition(44)),
+                // new InstantCommand(() -> wristSubsystem.setPosition(0))),
+                // new InstantCommand(() -> extender.setPosition(50))));
 
                 // // arm mid
-                opperator_B.whileTrue(new SequentialCommandGroup(
-                                // //PROTECTION
-                                new ParallelCommandGroup(
-                                                new InstantCommand(() -> wristSubsystem.setPosition(0)),
-                                                new InstantCommand(() -> extender.setPosition(0))),
+                // opperator_B.whileTrue(new SequentialCommandGroup(
+                // // //PROTECTION
+                // new ParallelCommandGroup(
+                // new InstantCommand(() -> wristSubsystem.setPosition(0)),
+                // new InstantCommand(() -> extender.setPosition(0))),
 
-                                new InstantCommand(() -> arm.setPosition(35)),
-                                new ParallelCommandGroup(
-                                                new InstantCommand(() -> wristSubsystem.setPosition(28)),
-                                                new InstantCommand(() -> extender.setPosition(0)),
-                                                new InstantCommand(() -> arm.setPosition(35)))));
+                // new InstantCommand(() -> arm.setPosition(35)),
+                // new ParallelCommandGroup(
+                // new InstantCommand(() -> wristSubsystem.setPosition(28)),
+                // new InstantCommand(() -> extender.setPosition(0)),
+                // new InstantCommand(() -> arm.setPosition(35)))));
 
                 // // substation
                 // opperator_Y.whileTrue(substationCommand());
@@ -393,11 +410,11 @@ public class RobotContainer {
                 // // new ExtenderSetPoint(extender, 20),
                 // // new WristSetPoint(wrist, -35),
                 // // new ArmSetPoint(arm, 44))));
-                opperator_Y.whileTrue(substationCommand());
+                // opperator_Y.whileTrue(substationCommand());
 
                 // // FLOOR
-                opperator_A.whileTrue(groundCommand());
-                opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+                // opperator_A.whileTrue(groundCommand());
+                // opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
                 // opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));
                 // // driver_BottomRightRearButton.whileTrue(new SequentialCommandGroup(
@@ -418,7 +435,7 @@ public class RobotContainer {
 
                 // // ------------------------------------- CLAW
                 opperator_TopLeftRearButton.onTrue(new InstantCommand(() -> claw.coneIntake()));
-                opperator_BottomLeftRearButton.onTrue(new InstantCommand(() -> claw.outTake()));
+                opperator_BottomLeftRearButton.onTrue(new InstantCommand(() -> claw.outTake1()));
 
                 opperator_TopLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
                 opperator_BottomLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
@@ -467,121 +484,133 @@ public class RobotContainer {
                 SmartDashboard.putData("Autonomous: ", Autons);
 
                 Autons.setDefaultOption("Do Nothing", new DoNothingAuton());
+
+                // // Autons.addOption("SPPLI2 Simple Auton", SwerveDrive.followTraj(
+                // // PathPlanner.loadPath(
+                // // "New New Path",
+                // // new PathConstraints(
+                // // 5,
+                // // 5)),
+                // // true));
+
+                // /* Velocity is negative when we are facing grid because the velocity (x-axis)
+                // * is field-centric meaning when looking down, left is negative and right is
+                // postive.
+                // */
+
+                // Autons.addOption("CONE, MOBILTY", new SequentialCommandGroup(
+                // new DriveForward(SwerveDrive, .5, -25, 1),
+                // new WaitCommand(1),
+                // new DriveForward(SwerveDrive, 4, 15, 7)));
+
+                Autons.addOption("TEST", new SequentialCommandGroup(
+                                new InstantCommand(() -> claw.closeClaw()),
+                                new InstantCommand(() -> wristSubsystem.setPosition(5)),
+                                new WaitCommand(.5),
+                                highCommand(),
+                                new WaitCommand(1),
+                                new InstantCommand(() -> wristSubsystem.setPosition(-30)),
+
+                                stoweAway(),
+                                new DriveForward(SwerveDrive, .5, -8, 5)));
+                // new WaitCommand(1),
+                // new DriveForward(SwerveDrive, 4, 15, 7)));
+
+                // Autons.addOption("CONE, ENGAGE", new SequentialCommandGroup(
+                // new DriveForward(SwerveDrive, .5, -25, 1),
+                // new WaitCommand(1),
+                // new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+                // new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+                // new WaitCommand(1),
+                // new DriveForward(SwerveDrive, 0, -30, 2.6), // reverse back onto the pad
+                // new DriveForward(SwerveDrive, 0, 0, 2),
+                // new WristSetPoint(wrist, 0))
+                // );
+
+                // // HAS NO REVERSE TO HIT THE GRID
+                // Autons.addOption("JUST CHARGE STATION", new SequentialCommandGroup(
+                // new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+                // new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+                // new WaitCommand(1),
+                // new DriveForward(SwerveDrive, 0, -30, 3) // reverse back onto the pad
+                // // new DriveForward(SwerveDrive, 0, -25, 2.8), // reverse back onto the pad
+                // // new WaitCommand(1),
+                // // new DriveForward(SwerveDrive, 0, -30, 1)
+                // ));
+
+                // Autons.addOption("[TESTING] CONE, MOB, PICKUP", new SequentialCommandGroup(
+                // new DriveForward(SwerveDrive, .5, -30, 1),
+                // new WaitCommand(1),
+                // new ParallelDeadlineGroup(
+                // new DriveForward(SwerveDrive, 4, 15, 7),
+                // groundCommand()),
+                // new InstantCommand(() -> claw.stopClaw()),
+                // stoweAway()
+                // ));
+
+                // // Autons.addOption("armSetpoint", new SequentialCommandGroup(
+                // // new ArmSetPoint(arm, 20)));
+
+                // Autons.addOption("[TESTING] MID AUTO", new SequentialCommandGroup(
+                // // new ClawCMD(claw, true),
+                // //CLOSE
+                // new InstantCommand(() -> claw.closeClaw()),
+                // // SAFETY UP
+                // new ParallelCommandGroup(
+                // new ExtenderSetPoint(extender, 0),
+                // new WristSetPoint(wrist, 5)),
+                // // MOVE ARM
+                // new ArmSetPoint(arm, 43),
+                // //MOVE WRIST
+                // new ParallelCommandGroup(
+                // new WristSetPoint(wrist, -28),
+                // new ExtenderSetPoint(extender, 0),
+                // new ArmSetPoint(arm, 43)),
+                // new WaitCommand(.3),
+                // // OPEN CLAW
+                // new ParallelCommandGroup(
+                // new InstantCommand(() -> claw.openClaw()),
+                // new ArmSetPoint(arm, 43)),
+                // new WaitCommand(.3),
+                // // SAFETY
+                // new WristSetPoint(wrist, 0),
+                // // WE DIP
+                // stoweAway()
+                // ));
+
+                // // Autons.addOption("[TESTING] MID, ENGAGE", new SequentialCommandGroup(
+                // // // DRIVE BACKWARDS
+                // // // new DriveForward(SwerveDrive, .5, -25, 1),
+                // // // new WaitCommand(1),
+                // // // START PLACING CONE
+                // // // GO UP
+                // // new ClawCMD(claw, true),
+                // // new ArmSetPoint(arm, 43),
+                // // new ParallelCommandGroup(
+                // // new WristSetPoint(wrist, -30),
+                // // new ExtenderSetPoint(extender, 0),
+                // // new ArmSetPoint(arm, 43)),
+                // // // REALSE CONE
+                // // new ParallelCommandGroup(new ClawCMD(claw, false), new ArmSetPoint(arm,
+                // 43)),
+                // // new WaitCommand(1),
+                // // // STOWE AWAY
+                // // new ParallelCommandGroup(new WristSetPoint(wrist, 0),
+                // // new ExtenderSetPoint(extender, 0)),
+                // // new ArmSetPoint(arm, 0),
+                // // new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
+                // // new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
+                // // new WaitCommand(1),
+                // // new DriveForward(SwerveDrive, 0, 30, 2.6)));
+
+                // // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
+                // // new DriveForward(SwerveDrive, .5, -30, 1),
+                // // new WaitCommand(1),
+                // // new DriveForward(SwerveDrive, 4, 20, 4)));
+                // // Autons.addOption("mobility", new mobilitytest());
+                // // Autons.addOption("AutoBalance", new TestPathPlannerAuton());
+
         }
-
-        // // Autons.addOption("SPPLI2 Simple Auton", SwerveDrive.followTraj(
-        // // PathPlanner.loadPath(
-        // // "New New Path",
-        // // new PathConstraints(
-        // // 5,
-        // // 5)),
-        // // true));
-
-        // /* Velocity is negative when we are facing grid because the velocity (x-axis)
-        // * is field-centric meaning when looking down, left is negative and right is
-        // postive.
-        // */
-
-        // Autons.addOption("CONE, MOBILTY", new SequentialCommandGroup(
-        // new DriveForward(SwerveDrive, .5, -25, 1),
-        // new WaitCommand(1),
-        // new DriveForward(SwerveDrive, 4, 15, 7)));
-
-        // Autons.addOption("CONE, ENGAGE", new SequentialCommandGroup(
-        // new DriveForward(SwerveDrive, .5, -25, 1),
-        // new WaitCommand(1),
-        // new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
-        // new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
-        // new WaitCommand(1),
-        // new DriveForward(SwerveDrive, 0, -30, 2.6), // reverse back onto the pad
-        // new DriveForward(SwerveDrive, 0, 0, 2),
-        // new WristSetPoint(wrist, 0))
-        // );
-
-        // // HAS NO REVERSE TO HIT THE GRID
-        // Autons.addOption("JUST CHARGE STATION", new SequentialCommandGroup(
-        // new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
-        // new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
-        // new WaitCommand(1),
-        // new DriveForward(SwerveDrive, 0, -30, 3) // reverse back onto the pad
-        // // new DriveForward(SwerveDrive, 0, -25, 2.8), // reverse back onto the pad
-        // // new WaitCommand(1),
-        // // new DriveForward(SwerveDrive, 0, -30, 1)
-        // ));
-
-        // Autons.addOption("[TESTING] CONE, MOB, PICKUP", new SequentialCommandGroup(
-        // new DriveForward(SwerveDrive, .5, -30, 1),
-        // new WaitCommand(1),
-        // new ParallelDeadlineGroup(
-        // new DriveForward(SwerveDrive, 4, 15, 7),
-        // groundCommand()),
-        // new InstantCommand(() -> claw.stopClaw()),
-        // stoweAway()
-        // ));
-
-        // // Autons.addOption("armSetpoint", new SequentialCommandGroup(
-        // // new ArmSetPoint(arm, 20)));
-
-        // Autons.addOption("[TESTING] MID AUTO", new SequentialCommandGroup(
-        // // new ClawCMD(claw, true),
-        // //CLOSE
-        // new InstantCommand(() -> claw.closeClaw()),
-        // // SAFETY UP
-        // new ParallelCommandGroup(
-        // new ExtenderSetPoint(extender, 0),
-        // new WristSetPoint(wrist, 5)),
-        // // MOVE ARM
-        // new ArmSetPoint(arm, 43),
-        // //MOVE WRIST
-        // new ParallelCommandGroup(
-        // new WristSetPoint(wrist, -28),
-        // new ExtenderSetPoint(extender, 0),
-        // new ArmSetPoint(arm, 43)),
-        // new WaitCommand(.3),
-        // // OPEN CLAW
-        // new ParallelCommandGroup(
-        // new InstantCommand(() -> claw.openClaw()),
-        // new ArmSetPoint(arm, 43)),
-        // new WaitCommand(.3),
-        // // SAFETY
-        // new WristSetPoint(wrist, 0),
-        // // WE DIP
-        // stoweAway()
-        // ));
-
-        // // Autons.addOption("[TESTING] MID, ENGAGE", new SequentialCommandGroup(
-        // // // DRIVE BACKWARDS
-        // // // new DriveForward(SwerveDrive, .5, -25, 1),
-        // // // new WaitCommand(1),
-        // // // START PLACING CONE
-        // // // GO UP
-        // // new ClawCMD(claw, true),
-        // // new ArmSetPoint(arm, 43),
-        // // new ParallelCommandGroup(
-        // // new WristSetPoint(wrist, -30),
-        // // new ExtenderSetPoint(extender, 0),
-        // // new ArmSetPoint(arm, 43)),
-        // // // REALSE CONE
-        // // new ParallelCommandGroup(new ClawCMD(claw, false), new ArmSetPoint(arm,
-        // 43)),
-        // // new WaitCommand(1),
-        // // // STOWE AWAY
-        // // new ParallelCommandGroup(new WristSetPoint(wrist, 0),
-        // // new ExtenderSetPoint(extender, 0)),
-        // // new ArmSetPoint(arm, 0),
-        // // new DriveForward(SwerveDrive, 0, 35, 2), // tilt charge pad
-        // // new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
-        // // new WaitCommand(1),
-        // // new DriveForward(SwerveDrive, 0, 30, 2.6)));
-
-        // // Autons.addOption("GO ON CHARGE PAD", new SequentialCommandGroup(
-        // // new DriveForward(SwerveDrive, .5, -30, 1),
-        // // new WaitCommand(1),
-        // // new DriveForward(SwerveDrive, 4, 20, 4)));
-        // // Autons.addOption("mobility", new mobilitytest());
-        // // Autons.addOption("AutoBalance", new TestPathPlannerAuton());
-
-        // }
 
         // /**
         // * Use this to pass the autonomous command to the main {@link Robot} class.
@@ -593,41 +622,107 @@ public class RobotContainer {
                 return Autons.getSelected();
         }
 
-        public Command substationCommand() {
+        public Command autoSubstationCommand() {
                 return new SequentialCommandGroup(
-                                new InstantCommand(() -> extender.setPosition(0)),
-                                new InstantCommand(() -> arm.setPosition(44)),
-                                new InstantCommand(() -> wristSubsystem.setPosition(-5)),
+                                new ParallelDeadlineGroup(
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6)),
+                                                new InstantCommand(() -> extender.setPosition(0))),
                                 new WaitCommand(1),
+                                new InstantCommand(() -> arm.setPosition(44)),
                                 new ParallelCommandGroup(
                                                 new InstantCommand(() -> extender.setPosition(0)),
-                                                new InstantCommand(() -> wristSubsystem.setPosition(-32)),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(-30)),
                                                 new InstantCommand(() -> arm.setPosition(44))));
+        }
+
+        public Command substationCommand() {
+                return new SequentialCommandGroup(
+                                new InstantCommand(() -> wristSubsystem.setPosition(6)),
+                                new InstantCommand(() -> arm.setPosition(44)),
+                                new ParallelCommandGroup(
+                                                new InstantCommand(() -> extender.setPosition(0)),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(-24)),
+
+                                                new InstantCommand(() -> arm.setPosition(44))),
+                                new InstantCommand(() -> claw.coneIntake()));
         }
 
         public Command stoweAway() {
                 return new SequentialCommandGroup(
                                 new ParallelCommandGroup(
                                                 new InstantCommand(() -> extender.setPosition(0)),
-                                                new InstantCommand(() -> wristSubsystem.setPosition(5))),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6))),
                                 new ParallelCommandGroup(
                                                 new InstantCommand(() -> arm.setPosition(0)),
-                                                new InstantCommand(() -> wristSubsystem.setPosition(5)),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6)),
                                                 new InstantCommand(() -> extender.setPosition(0))));
         }
 
         public Command groundCommand() {
                 return new SequentialCommandGroup(
-                                // new ParallelCommandGroup(
-                                // new InstantCommand(() -> extender.setPosition(0)),
-                                // new InstantCommand(() -> wristSubsystem.setPosition(5))),
-                                // new WaitCommand(2),
-                                new InstantCommand(() -> arm.setPosition(13)),
-                                new InstantCommand(() -> claw.coneIntake()),
+                                new InstantCommand(() -> extender.setPosition(0)),
+
+                                new InstantCommand(() -> arm.setPosition(12)),
+                                new ParallelDeadlineGroup(
+
+                                                new InstantCommand(() -> extender.setPosition(0)),
+
+                                                new InstantCommand(() -> claw.coneIntake())),
+                                new WaitCommand(
+                                                1),
+                                new InstantCommand(() -> wristSubsystem.setPosition(-20))
+
+                );
+        }
+
+        public Command midCommand() {
+                return new SequentialCommandGroup(
+                                new InstantCommand(() -> wristSubsystem.setPosition(6)),
                                 new ParallelCommandGroup(
                                                 new InstantCommand(() -> extender.setPosition(0)),
-                                                new InstantCommand(() -> wristSubsystem.setPosition(-25))));
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6))),
+
+                                new InstantCommand(() -> arm.setPosition(38)),
+                                new InstantCommand(() -> extender.setPosition(0)));
         }
+
+        public Command highCommand() {
+                return new SequentialCommandGroup(
+                                new InstantCommand(() -> wristSubsystem.setPosition(6)),
+                                new ParallelCommandGroup(
+                                                new InstantCommand(() -> extender.setPosition(0)),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6))),
+
+                                new InstantCommand(() -> arm.setPosition(45)),
+                                new InstantCommand(() -> extender.setPosition(0)) // new WaitCommand(
+
+                );
+        }
+
+        public Command shootLow() {
+                return new SequentialCommandGroup(
+                                new ParallelCommandGroup(
+                                                new InstantCommand(() -> extender.setPosition(0)),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6))),
+                                new ParallelCommandGroup(
+                                                new InstantCommand(() -> arm.setPosition(0)),
+                                                new InstantCommand(() -> wristSubsystem.setPosition(6)),
+                                                new InstantCommand(() -> extender.setPosition(0)),
+                                                new InstantCommand(() -> claw.outTake())));
+        }
+        // public Command groundCommand() {
+        // return new SequentialCommandGroup(
+        // new ParallelCommandGroup(
+        // new InstantCommand(() -> extender.setPosition(0)),
+        // new InstantCommand(() -> wristSubsystem.setPosition(5))),
+        // new WaitCommand(2),
+        // new InstantCommand(() -> arm.setPosition(13)),
+        // new InstantCommand(() -> claw.coneIntake()),
+        // new ParallelCommandGroup(
+        // new InstantCommand(() -> extender.setPosition(0)),
+        // new InstantCommand(() -> wristSubsystem.setPosition(-25))));
+        // }
+        // }
 }
 
 // public Command autoMid() {

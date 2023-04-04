@@ -145,6 +145,7 @@ public class ArmSubsystem extends SubsystemBase {
 
   public void setMotor(double speed) {
     rightArmMotor.set(speed);
+
   }
 
   public double getArmVelocity() {
