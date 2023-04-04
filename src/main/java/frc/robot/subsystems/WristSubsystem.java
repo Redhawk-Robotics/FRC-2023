@@ -25,6 +25,10 @@ public class WristSubsystem extends SubsystemBase {
 
   private final SparkMaxPIDController wristAngleController;
 
+  private final double stop = 0;
+  private final double wristSpeed = .2;
+  private final double wristSpeedReverse = -.2;
+
   public WristSubsystem() {
     wristMotor = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless);
     wristEncoder = wristMotor.getEncoder();
@@ -33,21 +37,26 @@ public class WristSubsystem extends SubsystemBase {
 
     configWristMotor(wristMotor, wristEncoder, wristAngleController, Ports.Wrist.wristMotorInvert);
 
-    wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
-    wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
+    wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+        true);
+    wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+        true);
 
-    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);//mayb using float to get a more precise number
-    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+        5);
+
+    wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+        -30);
 
     setSmartMotionParams();
     PID();
     // SmartDashboard.putNumber("wrist Forward Soft Limit",
-    //     wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
+    // wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
 
     // SmartDashboard.putNumber("wrist Reverse Soft Limit",
-    //     wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
+    // wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
 
-    ///resetEncoder();
+    /// resetEncoder();
     // enableMotors(true);//TODO test later
   }
 
@@ -59,23 +68,28 @@ public class WristSubsystem extends SubsystemBase {
 
     // only if we need for debugging
     // wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    //     SmartDashboard.getBoolean("wrist Forward Soft Limit Enabled", true));
+    // SmartDashboard.getBoolean("wrist Forward Soft Limit Enabled", true));
     // wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    //     SmartDashboard.getBoolean("wrist Reverse Soft Limit Enabled", true));
+    // SmartDashboard.getBoolean("wrist Reverse Soft Limit Enabled", true));
 
     // wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    //     (float) SmartDashboard.getNumber("wrist Forward Soft Limit", 15));
+    // (float) SmartDashboard.getNumber("wrist Forward Soft Limit", 15));
 
     // wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    //     (float) SmartDashboard.getNumber("wrist Reverse Soft Limit", 0));
+    // (float) SmartDashboard.getNumber("wrist Reverse Soft Limit", 0));
   }
+
   private void setSmartMotionParams() {
-    wristAngleController.setSmartMotionMaxVelocity(Setting.wristSetting.SmartMotionParameters.maxVel, Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
-    wristAngleController.setSmartMotionMinOutputVelocity(Setting.wristSetting.SmartMotionParameters.minVel, Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
-    wristAngleController.setSmartMotionMaxAccel(Setting.wristSetting.SmartMotionParameters.maxAccel,Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
-    wristAngleController.setSmartMotionAllowedClosedLoopError(Setting.wristSetting.SmartMotionParameters.maxErr, Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionMaxVelocity(Setting.wristSetting.SmartMotionParameters.maxVel,
+        Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionMinOutputVelocity(Setting.wristSetting.SmartMotionParameters.minVel,
+        Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionMaxAccel(Setting.wristSetting.SmartMotionParameters.maxAccel,
+        Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
+    wristAngleController.setSmartMotionAllowedClosedLoopError(Setting.wristSetting.SmartMotionParameters.maxErr,
+        Setting.wristSetting.SmartMotionParameters.smartMotionSlot);
   }
-  
+
   // Methods for config for the motors used in this subsystems
   private void configWristMotor(CANSparkMax wristMotor, RelativeEncoder wristEncoder,
       SparkMaxPIDController wristAngleController, boolean Invert) {
@@ -91,8 +105,9 @@ public class WristSubsystem extends SubsystemBase {
     wristMotor.burnFlash();
     Timer.delay(1);
   }
+  
 
-  private void PID(){
+  private void PID() {
     wristAngleController.setP(Setting.wristSetting.wristP);
     wristAngleController.setI(Setting.wristSetting.wristI);
     wristAngleController.setD(Setting.wristSetting.wristD);
@@ -107,10 +122,11 @@ public class WristSubsystem extends SubsystemBase {
     wristAngleController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
   }
 
-  //Getters
- public double getCurrentPosition() {
+  // Getters
+  public double getCurrentPosition() {
     return wristEncoder.getPosition();
   }
+
   public void setMotor(double speed) {
     wristMotor.set(speed);
   }
@@ -121,6 +137,19 @@ public class WristSubsystem extends SubsystemBase {
 
   public double getWristCurrent() {
     return wristMotor.getOutputCurrent();
+  }
+
+
+  public void upGoWrist() {
+    wristMotor.set(wristSpeed);
+  }
+
+  public void stopWrist() {
+    wristMotor.set(stop);
+  }
+
+  public void downGoWrist() {
+    wristMotor.set(wristSpeedReverse);
   }
 
   // TODO try with the wrist that if its in code that its coast, and moves freely,

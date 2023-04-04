@@ -173,12 +173,12 @@ public interface Setting {
     public static final class armSetting {
         public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.1 * Math.PI;
 
-        public static final double armPup = 0;
+        public static final double armPup = 0.05;
         public static final double armIup = 0;
         public static final double armDup = 0;
         public static final double armFFup = 0;
         
-        public static final double armPdown = 0;
+        public static final double armPdown = 0.05;
         public static final double armIdown = 0;
         public static final double armDdown = 0;
         public static final double armFFdown = 0;
@@ -190,7 +190,7 @@ public interface Setting {
         public static final double armSpeed = 0.3;
         public static final double armSpeedReverse = -0.1;
 
-        public static final IdleMode armNeutralMode = IdleMode.kBrake;
+        public static final IdleMode armNeutralMode = IdleMode.kCoast;
         
         public static class SmartMotionParameters {
             public static final int smartMotionSlot = 0;
@@ -205,7 +205,7 @@ public interface Setting {
     public static final class extenderSetting {
         public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.1 * Math.PI;
 
-        public static final double extenderP = 0;
+        public static final double extenderP = 0.05;
         public static final double extenderI = 0;
         public static final double extenderD = 0;
         public static final double extenderFF = 0;
@@ -216,7 +216,7 @@ public interface Setting {
         public static final double extenderSpeed = 1;
         public static final double extenderSpeedReverse = -1;
 
-        public static final IdleMode extenderNeutralMode = IdleMode.kBrake;
+        public static final IdleMode extenderNeutralMode = IdleMode.kCoast;
 
             public static class SmartMotionParameters {
             public static final int smartMotionSlot = 0;
@@ -230,7 +230,7 @@ public interface Setting {
     public static final class wristSetting {
         public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.1 * Math.PI;
 
-        public static final double wristP = 0;
+        public static final double wristP = 0.05;
         public static final double wristI = 0;
         public static final double wristD = 0;
         public static final double wristFF = 0;
@@ -242,7 +242,7 @@ public interface Setting {
         public static final double wristSpeed = 0.1;
         public static final double wristSpeedReverse = -0.1;
 
-        public static final IdleMode wristNeutralMode = IdleMode.kBrake;
+        public static final IdleMode wristNeutralMode = IdleMode.kCoast;
 
         public static class SmartMotionParameters {
             public static final int smartMotionSlot = 0;

@@ -29,6 +29,7 @@ public class ArmSubsystem extends SubsystemBase {
   public ArmSubsystem() {
 
     leftArmMotor = new CANSparkMax(Ports.Arm.leftArm, MotorType.kBrushless);
+    leftArmMotor.setIdleMode(IdleMode.kCoast);
     leftArmEncoder = leftArmMotor.getEncoder();
 
     rightArmMotor = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless);
@@ -39,16 +40,17 @@ public class ArmSubsystem extends SubsystemBase {
     // armAngleController = leftArmMotor.getPIDController();
     armAngleController = rightArmMotor.getPIDController();
 
-    // configArmMotor(leftArmMotor, leftArmEncoder, armAngleController, Ports.Arm.leftArmMotorInvert);
-    
+    // configArmMotor(leftArmMotor, leftArmEncoder, armAngleController,
+    // Ports.Arm.leftArmMotorInvert);
+
     configArmMotor(rightArmMotor, rightArmEncoder, armAngleController, Ports.Arm.rightArmMotorInvert);
 
     rightArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     rightArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);// TODO check the value for both forward and
-                                                                           // reverse
-    rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
+    rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 44);// TODO check the value for both forward and
+                                                                            // reverse
+    rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -2);
 
     // SmartDashboard.putNumber("Forward Soft Limit",
     // leftArmMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
@@ -57,12 +59,12 @@ public class ArmSubsystem extends SubsystemBase {
     // leftArmMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
 
     // SmartDashboard.putBoolean("Forward Soft Limit",
-    //     leftArmMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kForward));
+    // leftArmMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kForward));
 
     // SmartDashboard.putBoolean("Reverse Soft Limit",
-    //     leftArmMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kReverse));
-    
-    //resetEncoder();
+    // leftArmMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kReverse));
+
+    // resetEncoder();
 
     // enableMotors(true);//TODO test later
 
@@ -71,18 +73,19 @@ public class ArmSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("RightArm Encoder Value", leftArmEncoder.getPosition());
+    SmartDashboard.putNumber("LeftArm Encoder Value", leftArmEncoder.getPosition());
+    SmartDashboard.putNumber("RightArm Encoder Value", rightArmEncoder.getPosition());
 
     // only if we need for debugging
-  //   leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-  //       SmartDashboard.getBoolean("Forward Soft Limit Enabled", true));
-  //   leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-  //       SmartDashboard.getBoolean("Reverse Soft Limit Enabled", true));
+    // leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+    // SmartDashboard.getBoolean("Forward Soft Limit Enabled", true));
+    // leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+    // SmartDashboard.getBoolean("Reverse Soft Limit Enabled", true));
 
-  //   leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-  //       (float) SmartDashboard.getNumber("Forward Soft Limit", 15));
-  //   leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-  //       (float) SmartDashboard.getNumber("Reverse Soft Limit", 0));
+    // leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
+    // (float) SmartDashboard.getNumber("Forward Soft Limit", 15));
+    // leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
+    // (float) SmartDashboard.getNumber("Reverse Soft Limit", 0));
   }
 
   // Methods for config for the motors used in this subsystems
@@ -101,27 +104,28 @@ public class ArmSubsystem extends SubsystemBase {
     Timer.delay(1);
     // resetToAbsolute();//FIXME if we are adding a canCODER to the shaft of the arm
   }
-  private void pidUp(){
+
+  private void pidUp() {
     armAngleController.setP(Setting.armSetting.armPup);
     armAngleController.setI(Setting.armSetting.armIup);
     armAngleController.setD(Setting.armSetting.armDup);
     armAngleController.setFF(Setting.armSetting.armFFup);
   }
 
-  private void pidDown(){
+  private void pidDown() {
     armAngleController.setP(Setting.armSetting.armPdown);
     armAngleController.setI(Setting.armSetting.armIdown);
     armAngleController.setD(Setting.armSetting.armDdown);
     armAngleController.setFF(Setting.armSetting.armFFdown);
   }
-  
+
   private void manageMotion(double targetPosition) {
     double currentPosition = getCurrentPosition();
-      if (currentPosition < targetPosition) {
-        pidUp();
-      } else {
-        pidDown();
-      }
+    if (currentPosition < targetPosition) {
+      pidUp();
+    } else {
+      pidDown();
+    }
   }
 
   public void setPosition(double targetPosition) {
@@ -134,10 +138,11 @@ public class ArmSubsystem extends SubsystemBase {
     armAngleController.setReference(targetPosition, CANSparkMax.ControlType.kSmartMotion);
   }
 
-  //Getters
- public double getCurrentPosition() {
+  // Getters
+  public double getCurrentPosition() {
     return rightArmEncoder.getPosition();
   }
+
   public void setMotor(double speed) {
     rightArmMotor.set(speed);
   }
@@ -150,11 +155,10 @@ public class ArmSubsystem extends SubsystemBase {
     return rightArmMotor.getOutputCurrent();
   }
 
-
   // TODO try with the wrist that if its in code that its coast, and moves freely,
   // then this method is not needed
   public void enableMotors(boolean on) {
-    IdleMode mode = on ? IdleMode.kBrake: IdleMode.kCoast;
+    IdleMode mode = on ? IdleMode.kBrake : IdleMode.kCoast;
 
     leftArmMotor.setIdleMode(mode);
     rightArmMotor.setIdleMode(mode);

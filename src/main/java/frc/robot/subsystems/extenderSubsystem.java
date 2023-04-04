@@ -35,8 +35,9 @@ public class extenderSubsystem extends SubsystemBase {
     extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 0);// TODO check the value for both forward and
-                                                                           // reverse
+    extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 270);// TODO check the value for both forward
+                                                                             // and
+    // reverse
     extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
 
     setSmartMotionParams();
