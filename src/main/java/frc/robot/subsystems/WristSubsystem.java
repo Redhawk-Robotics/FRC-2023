@@ -35,7 +35,7 @@ public class WristSubsystem extends SubsystemBase {
     wristAngleController = wristMotor.getPIDController();
 
     configWristMotor(wristMotor, wristEncoder, wristAngleController, Ports.Wrist.wristMotorInvert);
-    wristMotor.setIdleMode(IdleMode.kBrake);
+    wristMotor.setIdleMode(IdleMode.kCoast);
 
     wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
         true);
@@ -43,10 +43,10 @@ public class WristSubsystem extends SubsystemBase {
         true);
 
     wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-        5);
+        0);
 
     wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-        -30);
+        -50);
 
     setSmartMotionParams();
     PID();

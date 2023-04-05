@@ -13,28 +13,24 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class groundCommand extends SequentialCommandGroup {
-  /** Creates a new groundCommand. */
-  public groundCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
+public class groundCubeCommand extends SequentialCommandGroup {
+  /** Creates a new groundCubeCommand. */
+  public groundCubeCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
       ClawSubsystem claw) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+    // Use addRequirements() here to declare subsystem dependencies.
     addCommands(
 
         new InstantCommand(() -> extender.setPosition(0)),
 
-        new InstantCommand(() -> arm.setPosition(22)),
+        new InstantCommand(() -> arm.setPosition(12)),
         new ParallelDeadlineGroup( // FIXME TAKE OUT THIS AFTER TESTING
 
             new InstantCommand(() -> extender.setPosition(0)),
 
-            new InstantCommand(() -> claw.cubeIntake())),
+            new InstantCommand(() -> claw.coneIntake())),
         new WaitCommand(
             1),
-        new InstantCommand(() -> wristSubsystem.setPosition(-26))
+        new InstantCommand(() -> wristSubsystem.setPosition(-28))
 
     );
   }

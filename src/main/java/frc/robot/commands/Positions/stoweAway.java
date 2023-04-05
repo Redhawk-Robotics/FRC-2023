@@ -23,10 +23,10 @@ public class stoweAway extends SequentialCommandGroup {
 
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(6))),
+            new InstantCommand(() -> wristSubsystem.setPosition(0))),
         new ParallelCommandGroup(
             new InstantCommand(() -> arm.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(6)),
+            new InstantCommand(() -> wristSubsystem.setPosition(0)),
             new InstantCommand(() -> extender.setPosition(0))));
   }
 }

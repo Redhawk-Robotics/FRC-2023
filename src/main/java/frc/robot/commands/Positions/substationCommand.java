@@ -23,13 +23,13 @@ public class substationCommand extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
 
-        new InstantCommand(() -> wristSubsystem.setPosition(6)),
-        new InstantCommand(() -> arm.setPosition(44)),
+        new InstantCommand(() -> wristSubsystem.setPosition(0)),
+        new InstantCommand(() -> arm.setPosition(64)),
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(-24)),
+            new InstantCommand(() -> wristSubsystem.setPosition(-37)),
 
-            new InstantCommand(() -> arm.setPosition(44))),
+            new InstantCommand(() -> arm.setPosition(64))),
         new InstantCommand(() -> claw.coneIntake()));
   }
 }

@@ -83,7 +83,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void coneIntake() {
     clawSolenoid.set(Value.kForward);
-    if (rightNeo550.getOutputCurrent() < 5 || leftNeo550.getOutputCurrent() < 5) {
+    if (rightNeo550.getOutputCurrent() > 5 || leftNeo550.getOutputCurrent() > 5) {
       rightNeo550.set(0);
       leftNeo550.set(0);
     } else {
@@ -100,18 +100,18 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void outTake1() {
     clawSolenoid.set(Value.kReverse);
-    leftNeo550.set(.75);
-    rightNeo550.set(-.75);
+    leftNeo550.set(-.75);
+    rightNeo550.set(.75);
   }
 
   public void cubeIntake() {
     clawSolenoid.set(Value.kReverse);
-    if (rightNeo550.getOutputCurrent() < 5 || leftNeo550.getOutputCurrent() < 5) {
+    if (rightNeo550.getOutputCurrent() > 5 || leftNeo550.getOutputCurrent() > 5) {
       rightNeo550.set(0);
       leftNeo550.set(0);
     } else {
-      rightNeo550.set(.5);
-      leftNeo550.set(-.5);
+      rightNeo550.set(.75);
+      leftNeo550.set(-.75);
     }
   }
 

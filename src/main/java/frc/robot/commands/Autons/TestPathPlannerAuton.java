@@ -15,20 +15,19 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /** Add your docs here. */
-public class TestPathPlannerAuton extends AutoBase{
-    List<PathPlannerTrajectory> autoPathGroup =
-        PathPlanner.loadPathGroup("Test", new PathConstraints(2.0, 1.5));
+public class TestPathPlannerAuton extends AutoBase {
+    List<PathPlannerTrajectory> autoPathGroup = PathPlanner.loadPathGroup("Test", new PathConstraints(2.0, 1.5));
 
-        TestPathPlannerAuton(SwerveSubsystem swerveDrive){
-            super(swerveDrive);
+    TestPathPlannerAuton(SwerveSubsystem swerveDrive) {
+        super(swerveDrive);
 
-            SwerveAutoBuilder autoBuilder = CustomSwerveAutoBuilder();
+        SwerveAutoBuilder autoBuilder = CustomSwerveAutoBuilder();
 
-            addCommands(new WaitCommand(2),
+        addCommands(new WaitCommand(2),
 
-			//autoBuilder.fullAuto(autoPathGroup),
-            autoBuilder.fullAuto(autoPathGroup));
-            
-            //new AutoBalanceRenew(swerveDrive);//try later
-        }
+                // autoBuilder.fullAuto(autoPathGroup),
+                autoBuilder.fullAuto(autoPathGroup));
+
+        // new AutoBalanceRenew(swerveDrive);//try later
+    }
 }
