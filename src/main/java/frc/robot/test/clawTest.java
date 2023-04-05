@@ -16,6 +16,7 @@ import frc.robot.constants.Setting;
 import frc.robot.subsystems.modules.SparkMaxModules;
 import frc.robot.constants.Ports;
 
+@Deprecated
 public class clawTest extends SubsystemBase {
   /** Creates a new clawTest. */
   private final CANSparkMax leftClaw, rightClaw;
@@ -52,6 +53,7 @@ public class clawTest extends SubsystemBase {
       rightClaw.set(0);
     }
   }
+
   public void outTake() {
     clawOpen.set(Value.kForward);
     leftClaw.set(.5);
@@ -75,14 +77,13 @@ public class clawTest extends SubsystemBase {
     rightClaw.set(0);
   }
 
-  
-  public void openClaw(){
+  public void openClaw() {
     clawOpen.set(Value.kForward);
   }
 
-  public void closeClaw(){
+  public void closeClaw() {
     clawOpen.set(Value.kReverse);
   }
-  
+
   // -------------------------------------
 }

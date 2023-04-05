@@ -26,8 +26,8 @@ public class WristSubsystem extends SubsystemBase {
   private final SparkMaxPIDController wristAngleController;
 
   private final double stop = 0;
-  private final double wristSpeed = .2;
-  private final double wristSpeedReverse = -.2;
+  private final double wristSpeed = .5;
+  private final double wristSpeedReverse = -.5;
 
   public WristSubsystem() {
     wristMotor = new CANSparkMax(Ports.Wrist.wrist, MotorType.kBrushless);
@@ -50,11 +50,6 @@ public class WristSubsystem extends SubsystemBase {
 
     setSmartMotionParams();
     PID();
-    // SmartDashboard.putNumber("wrist Forward Soft Limit",
-    // wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
-
-    // SmartDashboard.putNumber("wrist Reverse Soft Limit",
-    // wristMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
 
     /// resetEncoder();
     // enableMotors(true);//TODO test later
@@ -65,18 +60,6 @@ public class WristSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("wrist Encoder Value", getEncoderMeters());
     SmartDashboard.putNumber("Wrist Encoder Value", wristEncoder.getPosition());
-
-    // only if we need for debugging
-    // wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    // SmartDashboard.getBoolean("wrist Forward Soft Limit Enabled", true));
-    // wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    // SmartDashboard.getBoolean("wrist Reverse Soft Limit Enabled", true));
-
-    // wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    // (float) SmartDashboard.getNumber("wrist Forward Soft Limit", 15));
-
-    // wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    // (float) SmartDashboard.getNumber("wrist Reverse Soft Limit", 0));
   }
 
   private void setSmartMotionParams() {
@@ -99,7 +82,6 @@ public class WristSubsystem extends SubsystemBase {
     wristMotor.setSmartCurrentLimit(Setting.wristSetting.wristContinousCurrentLimit);
     wristMotor.setInverted(Invert);
     wristMotor.setIdleMode(Setting.wristSetting.wristNeutralMode);
-    // wristEncoder.setPositionConversionFactor(Setting.wristSetting.wristConversionFactor);
     wristMotor.enableVoltageCompensation(Setting.wristSetting.maxVoltage);
     wristAngleController.setFeedbackDevice(wristEncoder);
     wristMotor.burnFlash();

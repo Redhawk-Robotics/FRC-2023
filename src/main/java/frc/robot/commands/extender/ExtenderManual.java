@@ -4,14 +4,10 @@
 
 package frc.robot.commands.extender;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.Setting;
 import frc.robot.subsystems.extenderSubsystem;
-import frc.robot.test.extenderTest;
-import frc.robot.test.testWhatever;
 
 public class ExtenderManual extends CommandBase {
   // public extenderSubsystem extenderSubsystem;

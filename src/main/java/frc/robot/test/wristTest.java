@@ -15,6 +15,7 @@ import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 import frc.robot.subsystems.modules.SparkMaxModules;
 
+@Deprecated
 public class wristTest extends SubsystemBase {
   /** Creates a new wristTest. */
   private final CANSparkMax wrist;
@@ -38,12 +39,12 @@ public class wristTest extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("3. WRIST", wristEncoder.getPosition());
   }
-   /*************/
+
+  /*************/
   /*** WRIST ***/
   /*************/
-  
 
-  public void wristController(double speed){
+  public void wristController(double speed) {
     wrist.set(speed);
   }
 
@@ -59,12 +60,13 @@ public class wristTest extends SubsystemBase {
     wrist.set(wristSpeedReverse);
   }
 
-  public double wristEncoder(){
+  public double wristEncoder() {
     return wristEncoder.getPosition();
-  } 
+  }
 
   // public void wristGroundSOFTLIM() {
-  //   SparkMaxModules.setSoftLimit(wrist, Setting.SoftLimits.wristForwardLimit, Setting.SoftLimits.wristMAXReverseLimit);
+  // SparkMaxModules.setSoftLimit(wrist, Setting.SoftLimits.wristForwardLimit,
+  // Setting.SoftLimits.wristMAXReverseLimit);
   // }
 
   // -------------------------------------

@@ -11,6 +11,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 
+@Deprecated
 public class testClawMotors extends SubsystemBase {
   public CANSparkMax leftClawMotor = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless);
   public CANSparkMax rightClawMotor = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless);

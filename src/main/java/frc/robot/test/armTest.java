@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.modules.SparkMaxModules;
 
+@Deprecated
 public class armTest extends SubsystemBase {
   /** Creates a new armTest. */
   private final CANSparkMax armMotorLeft, armMotorRight;

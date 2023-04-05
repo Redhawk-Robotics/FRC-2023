@@ -1,16 +1,17 @@
-package frc.robot.subsystems.modules;
+package frc.robot.test;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
+@Deprecated
 public class CompressorModule {
-    
+
     private final Compressor phCompressor;
     private static CompressorModule singleton;
 
     private CompressorModule() {
-        this.phCompressor =  new Compressor(PneumaticsModuleType.REVPH);
+        this.phCompressor = new Compressor(PneumaticsModuleType.REVPH);
     }
 
     public static CompressorModule getCompressorModule() {
@@ -34,20 +35,21 @@ public class CompressorModule {
         return phCompressor.getPressure();
     }
     // public void enableDigital(){
-    //     phCompressor.enableDigital();
+    // phCompressor.enableDigital();
     // }
 
-    public void disableCompressor(){
+    public void disableCompressor() {
         phCompressor.disable();
     }
 
     // public void setPressureAnalog(double pressure) {
-    //     if (pressure == 220) {
-    //         compressor.disable();
-    //     } else if (pressure >= 60) {
-    //         enableAnalog(Setting.compressor.absoluteMinPressure, Setting.compressor.absoluteMaxPressure);
-    //     } else {
-    //         enableAnalog(Setting.compressor.relativeMinPressure,Setting.compressor.absoluteMaxPressure);
-    //     }
+    // if (pressure == 220) {
+    // compressor.disable();
+    // } else if (pressure >= 60) {
+    // enableAnalog(Setting.compressor.absoluteMinPressure,
+    // Setting.compressor.absoluteMaxPressure);
+    // } else {
+    // enableAnalog(Setting.compressor.relativeMinPressure,Setting.compressor.absoluteMaxPressure);
+    // }
     // }
 }

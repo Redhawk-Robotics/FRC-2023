@@ -4,14 +4,10 @@
 
 package frc.robot.commands.Arm;
 
-import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.constants.Setting;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.test.armTest;
-import frc.robot.test.testWhatever;
 
 public class ArmManual extends CommandBase {
   // public ArmSubsystem armSubsystem;

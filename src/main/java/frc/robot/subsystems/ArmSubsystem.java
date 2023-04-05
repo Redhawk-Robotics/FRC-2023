@@ -35,34 +35,18 @@ public class ArmSubsystem extends SubsystemBase {
     rightArmMotor = new CANSparkMax(Ports.Arm.rightArm, MotorType.kBrushless);
     rightArmEncoder = rightArmMotor.getEncoder();
 
-    leftArmMotor.follow(rightArmMotor, true); // TODO check the invert
+    leftArmMotor.follow(rightArmMotor, true);
 
-    // armAngleController = leftArmMotor.getPIDController();
     armAngleController = rightArmMotor.getPIDController();
-
-    // configArmMotor(leftArmMotor, leftArmEncoder, armAngleController,
-    // Ports.Arm.leftArmMotorInvert);
 
     configArmMotor(rightArmMotor, rightArmEncoder, armAngleController, Ports.Arm.rightArmMotorInvert);
 
     rightArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     rightArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 44);// TODO check the value for both forward and
-                                                                            // reverse
+    rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 44);
+
     rightArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, -2);
-
-    // SmartDashboard.putNumber("Forward Soft Limit",
-    // leftArmMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kForward));
-
-    // SmartDashboard.putNumber("Reverse Soft Limit",
-    // leftArmMotor.getSoftLimit(CANSparkMax.SoftLimitDirection.kReverse));
-
-    // SmartDashboard.putBoolean("Forward Soft Limit",
-    // leftArmMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kForward));
-
-    // SmartDashboard.putBoolean("Reverse Soft Limit",
-    // leftArmMotor.isSoftLimitEnabled(CANSparkMax.SoftLimitDirection.kReverse));
 
     // resetEncoder();
 
@@ -75,17 +59,6 @@ public class ArmSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     SmartDashboard.putNumber("LeftArm Encoder Value", leftArmEncoder.getPosition());
     SmartDashboard.putNumber("RightArm Encoder Value", rightArmEncoder.getPosition());
-
-    // only if we need for debugging
-    // leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    // SmartDashboard.getBoolean("Forward Soft Limit Enabled", true));
-    // leftArmMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    // SmartDashboard.getBoolean("Reverse Soft Limit Enabled", true));
-
-    // leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    // (float) SmartDashboard.getNumber("Forward Soft Limit", 15));
-    // leftArmMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    // (float) SmartDashboard.getNumber("Reverse Soft Limit", 0));
   }
 
   // Methods for config for the motors used in this subsystems
@@ -97,7 +70,6 @@ public class ArmSubsystem extends SubsystemBase {
     ArmMotor.setSmartCurrentLimit(Setting.armSetting.armContinousCurrentLimit);
     ArmMotor.setInverted(Invert);
     ArmMotor.setIdleMode(Setting.armSetting.armNeutralMode);
-    // ArmEncoder.setPositionConversionFactor(Setting.armSetting.armConversionFactor);
     ArmMotor.enableVoltageCompensation(Setting.armSetting.maxVoltage);
     armAngleController.setFeedbackDevice(ArmEncoder);
     ArmMotor.burnFlash();

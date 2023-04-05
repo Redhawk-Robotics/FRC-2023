@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.modules.SparkMaxModules;
 
+@Deprecated
 public class extenderTest extends SubsystemBase {
   /** Creates a new extenderTest. */
   private final CANSparkMax extender;
@@ -29,7 +30,7 @@ public class extenderTest extends SubsystemBase {
 
     extender = SparkMaxModules.extender;
     extenderEncoder = SparkMaxModules.extenderEncoder;
-    
+
   }
 
   @Override

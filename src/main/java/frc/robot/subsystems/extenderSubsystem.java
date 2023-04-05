@@ -35,9 +35,8 @@ public class extenderSubsystem extends SubsystemBase {
     extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 270);// TODO check the value for both forward
-                                                                             // and
-    // reverse
+    extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 270);
+
     extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, 0);
 
     setSmartMotionParams();
@@ -51,21 +50,8 @@ public class extenderSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // This method will be called once per scheduler run
-    // SmartDashboard.putNumber("extender Encoder Value", getEncoderMeters());
+
     SmartDashboard.putNumber("Extender Encoder Value", extenderEncoder.getPosition());
-
-    // only if we need for debugging
-    // extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    // SmartDashboard.getBoolean("extender Forward Soft Limit Enabled", true));
-    // extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    // SmartDashboard.getBoolean("extender Reverse Soft Limit Enabled", true));
-
-    // extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-    // (float)SmartDashboard.getNumber("extender Forward Soft Limit", 15));
-
-    // extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
-    // (float)SmartDashboard.getNumber("extender Reverse Soft Limit", 0));
   }
 
   // Methods for config for the motors used in this subsystems
@@ -88,7 +74,6 @@ public class extenderSubsystem extends SubsystemBase {
     extenderMotor.setSmartCurrentLimit(Setting.extenderSetting.extenderContinousCurrentLimit);
     extenderMotor.setInverted(Invert);
     extenderMotor.setIdleMode(Setting.extenderSetting.extenderNeutralMode);
-    // extenderEncoder.setPositionConversionFactor(Setting.extenderSetting.extenderConversionFactor);
     extenderMotor.enableVoltageCompensation(Setting.extenderSetting.maxVoltage);
     extenderController.setFeedbackDevice(extenderEncoder);
     extenderMotor.burnFlash();

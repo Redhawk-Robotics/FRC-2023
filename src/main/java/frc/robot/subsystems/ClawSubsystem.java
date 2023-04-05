@@ -26,7 +26,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class ClawSubsystem extends SubsystemBase {
   /** Creates a new ClawSubsystem. */
   private final CANSparkMax leftNeo550, rightNeo550;
-  private final RelativeEncoder leftEncoder, rightEncoder;
+  private final RelativeEncoder leftEncoder;
 
   private final SparkMaxPIDController clawSpeedPIDController;
 
@@ -40,7 +40,6 @@ public class ClawSubsystem extends SubsystemBase {
         Setting.clawPneumatic.clawReverseChan);
 
     leftEncoder = leftNeo550.getEncoder();
-    rightEncoder = rightNeo550.getEncoder();
 
     leftNeo550.follow(rightNeo550, false);
 
@@ -84,12 +83,12 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void coneIntake() {
     clawSolenoid.set(Value.kForward);
-    if (rightNeo550.getOutputCurrent() < 5 && leftNeo550.getOutputCurrent() < 5) {
-      rightNeo550.set(.75);
-      leftNeo550.set(-.75);
-    } else {
+    if (rightNeo550.getOutputCurrent() < 5 || leftNeo550.getOutputCurrent() < 5) {
       rightNeo550.set(0);
       leftNeo550.set(0);
+    } else {
+      rightNeo550.set(.75);
+      leftNeo550.set(-.75);
     }
   }
 
@@ -107,12 +106,12 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void cubeIntake() {
     clawSolenoid.set(Value.kReverse);
-    if (rightNeo550.getOutputCurrent() < 5 && leftNeo550.getOutputCurrent() < 5) {
-      rightNeo550.set(.5);
-      leftNeo550.set(-.5);
-    } else {
+    if (rightNeo550.getOutputCurrent() < 5 || leftNeo550.getOutputCurrent() < 5) {
       rightNeo550.set(0);
       leftNeo550.set(0);
+    } else {
+      rightNeo550.set(.5);
+      leftNeo550.set(-.5);
     }
   }
 
