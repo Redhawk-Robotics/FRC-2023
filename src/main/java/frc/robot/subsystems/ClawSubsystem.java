@@ -18,6 +18,7 @@ import frc.robot.lib.util.CANSparkMaxUtil.Usage;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import static edu.wpi.first.wpilibj.DoubleSolenoid.Value.*;
 
@@ -83,7 +84,10 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void coneIntake() {
     clawSolenoid.set(Value.kForward);
-    if (rightNeo550.getOutputCurrent() > 5 || leftNeo550.getOutputCurrent() > 5) {
+    SmartDashboard.putNumber("leftNeo current", leftNeo550.getOutputCurrent());
+    SmartDashboard.putNumber("rightNeo current", rightNeo550.getOutputCurrent());
+
+    if (rightNeo550.getOutputCurrent() > 1.6 || leftNeo550.getOutputCurrent() > 1.6) {
       rightNeo550.set(0);
       leftNeo550.set(0);
     } else {
@@ -106,7 +110,7 @@ public class ClawSubsystem extends SubsystemBase {
 
   public void cubeIntake() {
     clawSolenoid.set(Value.kReverse);
-    if (rightNeo550.getOutputCurrent() > 5 || leftNeo550.getOutputCurrent() > 5) {
+    if (rightNeo550.getOutputCurrent() > 1.6 || leftNeo550.getOutputCurrent() > 1.6) {
       rightNeo550.set(0);
       leftNeo550.set(0);
     } else {

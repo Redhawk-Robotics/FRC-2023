@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Positions.stoweAway;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -19,8 +20,7 @@ import frc.robot.subsystems.extenderSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class MIDSCORE extends SequentialCommandGroup {
     /** Creates a new MIDSCORE. */
-    public MIDSCORE(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist, ClawSubsystem claw,
-            Command stowAway) {
+    public MIDSCORE(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist, ClawSubsystem claw) {
         // Add your commands in the addCommands() call, e.g.
         // addCommands(new FooCommand(), new BarCommand());
         addCommands(
@@ -49,6 +49,6 @@ public class MIDSCORE extends SequentialCommandGroup {
                 // SAFETY
                 new InstantCommand(() -> wrist.setPosition(5)),
                 // WE DIP
-                stowAway);
+                new stoweAway(extender, arm, wrist));
     }
 }
