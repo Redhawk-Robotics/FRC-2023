@@ -18,7 +18,7 @@ import frc.robot.constants.Setting;
 import frc.robot.lib.util.CANSparkMaxUtil;
 import frc.robot.lib.util.CANSparkMaxUtil.Usage;
 
-public class extenderSubsystem extends SubsystemBase {
+public class extenderSubsystem extends PIDInterface {
   /** Creates a new extenderSubsystem. */
   private final CANSparkMax extenderMotor;
   private final RelativeEncoder extenderEncoder;
@@ -88,6 +88,7 @@ public class extenderSubsystem extends SubsystemBase {
     extenderController.setFF(Setting.extenderSetting.extenderFF);
   }
 
+  @Override
   public void setPosition(double targetPosition) {
     extenderController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
@@ -97,6 +98,7 @@ public class extenderSubsystem extends SubsystemBase {
   }
 
   // Getters
+  @Override
   public double getCurrentPosition() {
     return extenderEncoder.getPosition();
   }

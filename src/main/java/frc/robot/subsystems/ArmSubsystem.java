@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 
-public class ArmSubsystem extends SubsystemBase {
+public class ArmSubsystem extends PIDInterface {
   /** Creates a new ArmSubsystem. */
   private final CANSparkMax leftArmMotor, rightArmMotor;
   private final RelativeEncoder leftArmEncoder, rightArmEncoder;
@@ -100,6 +100,7 @@ public class ArmSubsystem extends SubsystemBase {
     }
   }
 
+  @Override
   public void setPosition(double targetPosition) {
     manageMotion(targetPosition);
     armAngleController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
@@ -111,6 +112,7 @@ public class ArmSubsystem extends SubsystemBase {
   }
 
   // Getters
+  @Override
   public double getCurrentPosition() {
     return rightArmEncoder.getPosition();
   }

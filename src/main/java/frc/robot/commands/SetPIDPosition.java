@@ -2,43 +2,39 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.Swerve;
+package frc.robot.commands;
 
-import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.Limelight;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.PIDInterface;
 
-public class autoAligner extends CommandBase {
-  /** Creates a new autoAligner. */
-  private SwerveSubsystem Swerve;
-  private Limelight Light;
-  private double headingError;
+public class SetPIDPosition extends CommandBase {
+  private PIDInterface sys;
+  private double pos;
 
-  public autoAligner(SwerveSubsystem Swerve, Limelight Light) {
+  /** Creates a new SetPIDPosition. */
+  public SetPIDPosition(PIDInterface sys, double pos) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.Swerve = Swerve;
-    this.Light = Light;
-    NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").setInteger(0);
-    headingError = 0.0;
-    addRequirements(Swerve, Light);
+    this.sys = sys;
+    this.pos = pos;
+    addRequirements(sys);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    this.sys.setPosition(this.pos);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // if()
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+
   }
 
   // Returns true when the command should end.

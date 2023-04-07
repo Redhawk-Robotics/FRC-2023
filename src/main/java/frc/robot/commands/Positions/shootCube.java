@@ -4,6 +4,7 @@
 
 package frc.robot.commands.Positions;
 
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -12,24 +13,20 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
 
-// NOTE:  Consider using this command inline, rather than writing a subclass.  For more
-// information, see:
-// https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class substationCommand extends SequentialCommandGroup {
-  /** Creates a new substationCommand. */
-  public substationCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
-      ClawSubsystem claw) {
+public class shootCube extends SequentialCommandGroup {
+
+  public shootCube(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem, ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
 
-        new InstantCommand(() -> wristSubsystem.setPosition(5)),
-        new InstantCommand(() -> arm.setPosition(68)),
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(-31)),
-
-            new InstantCommand(() -> arm.setPosition(68))),
-        new InstantCommand(() -> claw.coneIntake()));
+            new InstantCommand(() -> wristSubsystem.setPosition(0))),
+        new ParallelCommandGroup(
+            new InstantCommand(() -> arm.setPosition(0)),
+            new InstantCommand(() -> wristSubsystem.setPosition(5)),
+            new InstantCommand(() -> extender.setPosition(0)),
+            new InstantCommand(() -> claw.outTakeCube())));
   }
 }

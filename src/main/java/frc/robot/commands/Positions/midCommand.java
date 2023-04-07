@@ -20,12 +20,12 @@ public class midCommand extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new InstantCommand(() -> wristSubsystem.setPosition(0)),
+        new InstantCommand(() -> wristSubsystem.setPosition(5)),
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(0))),
+            new InstantCommand(() -> wristSubsystem.setPosition(5))),
 
-        new InstantCommand(() -> arm.setPosition(58)),
+        new InstantCommand(() -> arm.setPosition(55)),
         new InstantCommand(() -> extender.setPosition(0)));
 
   }

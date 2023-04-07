@@ -44,8 +44,8 @@ public class DriveTurn extends CommandBase {
     // MOVES ONLY IN THE FIELDS X-DIRECTION
     /* Drive */
     Swerve.drive(
-        new Translation2d(0, this.veloicty),
-        0,
+        new Translation2d(0, 0),
+        this.veloicty,
         true,
         true);
   }

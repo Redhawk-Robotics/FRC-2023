@@ -18,7 +18,7 @@ import frc.robot.constants.Setting;
 import frc.robot.lib.util.CANSparkMaxUtil;
 import frc.robot.lib.util.CANSparkMaxUtil.Usage;
 
-public class WristSubsystem extends SubsystemBase {
+public class WristSubsystem extends PIDInterface {
   /** Creates a new WristSubsystem. */
   private final CANSparkMax wristMotor;
   private final RelativeEncoder wristEncoder;
@@ -35,7 +35,7 @@ public class WristSubsystem extends SubsystemBase {
     wristAngleController = wristMotor.getPIDController();
 
     configWristMotor(wristMotor, wristEncoder, wristAngleController, Ports.Wrist.wristMotorInvert);
-    wristMotor.setIdleMode(IdleMode.kCoast);
+    wristMotor.setIdleMode(IdleMode.kBrake);
 
     wristMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
         true);
@@ -43,7 +43,7 @@ public class WristSubsystem extends SubsystemBase {
         true);
 
     wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward,
-        0);
+        5);
 
     wristMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kReverse,
         -50);
@@ -95,6 +95,7 @@ public class WristSubsystem extends SubsystemBase {
     wristAngleController.setFF(Setting.wristSetting.wristFF);
   }
 
+  @Override
   public void setPosition(double targetPosition) {
     wristAngleController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
@@ -104,6 +105,7 @@ public class WristSubsystem extends SubsystemBase {
   }
 
   // Getters
+  @Override
   public double getCurrentPosition() {
     return wristEncoder.getPosition();
   }

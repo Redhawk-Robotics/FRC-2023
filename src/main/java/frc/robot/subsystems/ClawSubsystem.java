@@ -69,12 +69,12 @@ public class ClawSubsystem extends SubsystemBase {
   }
 
   public void openClaw() {
-    clawSolenoid.set(Value.kReverse);
+    clawSolenoid.set(Value.kForward);
 
   }
 
   public void closeClaw() {
-    clawSolenoid.set(Value.kForward);
+    clawSolenoid.set(Value.kReverse);
 
   }
 
@@ -83,40 +83,48 @@ public class ClawSubsystem extends SubsystemBase {
   /*************/
 
   public void coneIntake() {
-    clawSolenoid.set(Value.kForward);
+    clawSolenoid.set(Value.kReverse);
     SmartDashboard.putNumber("leftNeo current", leftNeo550.getOutputCurrent());
     SmartDashboard.putNumber("rightNeo current", rightNeo550.getOutputCurrent());
 
-    if (rightNeo550.getOutputCurrent() > 1.6 || leftNeo550.getOutputCurrent() > 1.6) {
-      rightNeo550.set(0);
-      leftNeo550.set(0);
-    } else {
-      rightNeo550.set(.75);
-      leftNeo550.set(-.75);
-    }
+    // if (rightNeo550.getOutputCurrent() > 5 || leftNeo550.getOutputCurrent() > 5)
+    // {
+    // rightNeo550.set(0);
+    // leftNeo550.set(0);
+    // } else {
+    rightNeo550.set(.75);
+    leftNeo550.set(-.75);
+    // }
   }
 
   public void outTake() {
+    clawSolenoid.set(Value.kReverse);
+    leftNeo550.set(1);
+    rightNeo550.set(-1);
+  }
+
+  public void outTakeCube() {
+    clawSolenoid.set(Value.kOff);
+    leftNeo550.set(.25);
+    rightNeo550.set(-.25);
+  }
+
+  public void outTake1() {
     clawSolenoid.set(Value.kForward);
     leftNeo550.set(.75);
     rightNeo550.set(-.75);
   }
 
-  public void outTake1() {
-    clawSolenoid.set(Value.kReverse);
-    leftNeo550.set(-.75);
-    rightNeo550.set(.75);
-  }
-
   public void cubeIntake() {
-    clawSolenoid.set(Value.kReverse);
-    if (rightNeo550.getOutputCurrent() > 1.6 || leftNeo550.getOutputCurrent() > 1.6) {
-      rightNeo550.set(0);
-      leftNeo550.set(0);
-    } else {
-      rightNeo550.set(.75);
-      leftNeo550.set(-.75);
-    }
+    clawSolenoid.set(Value.kForward);
+    // if (rightNeo550.getOutputCurrent() > 1.8 || leftNeo550.getOutputCurrent() >
+    // 1.8) {
+    // rightNeo550.set(0);
+    // leftNeo550.set(0);
+    // } else {
+    rightNeo550.set(.75);
+    leftNeo550.set(-.75);
+    // }
   }
 
   public void stopClaw() {

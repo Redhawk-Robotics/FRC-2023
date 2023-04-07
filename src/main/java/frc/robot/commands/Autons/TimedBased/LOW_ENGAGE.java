@@ -25,6 +25,6 @@ public class LOW_ENGAGE extends SequentialCommandGroup {
         new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
         new WaitCommand(1),
         new DriveForward(SwerveDrive, 0, -30, 2.5), // reverse back onto the pad
-        new DriveForward(SwerveDrive, 0, 0, 2));
+        new DriveForward(SwerveDrive, 0, 0, 2.5));
   }
 }

@@ -7,6 +7,7 @@ package frc.robot.commands.Positions;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
@@ -16,18 +17,18 @@ import frc.robot.subsystems.extenderSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class highCommand extends SequentialCommandGroup {
   /** Creates a new highCommand. */
-  public highCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem) {
+  public highCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-        new InstantCommand(() -> wristSubsystem.setPosition(0)),
-        new ParallelCommandGroup(
-            new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(0))),
+        new InstantCommand(() -> wrist.setPosition(5)),
+        // new ParallelCommandGroup(
+        // new InstantCommand(() -> extender.setPosition(0)),
+        // new InstantCommand(() -> wrist.setPosition(5))),
 
-        new InstantCommand(() -> arm.setPosition(65)),
-        new InstantCommand(() -> extender.setPosition(0))
-
-    );
+        new InstantCommand(() -> arm.setPosition(66)),
+        new WaitCommand(1.5),
+        new InstantCommand(() -> extender.setPosition(194)),
+        new InstantCommand(() -> wrist.setPosition(5)));
   }
 }

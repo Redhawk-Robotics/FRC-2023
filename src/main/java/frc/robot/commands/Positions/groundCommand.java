@@ -18,7 +18,7 @@ import frc.robot.subsystems.extenderSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class groundCommand extends SequentialCommandGroup {
   /** Creates a new groundCommand. */
-  public groundCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
+  public groundCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist,
       ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
@@ -26,15 +26,15 @@ public class groundCommand extends SequentialCommandGroup {
 
         new InstantCommand(() -> extender.setPosition(0)),
 
-        new InstantCommand(() -> arm.setPosition(22)),
+        new InstantCommand(() -> arm.setPosition(18)),
         new ParallelDeadlineGroup( // FIXME TAKE OUT THIS AFTER TESTING
 
             new InstantCommand(() -> extender.setPosition(0)),
 
-            new InstantCommand(() -> claw.cubeIntake())),
+            new InstantCommand(() -> claw.coneIntake())),
         new WaitCommand(
             1),
-        new InstantCommand(() -> wristSubsystem.setPosition(-26))
+        new InstantCommand(() -> wrist.setPosition(-21))
 
     );
   }

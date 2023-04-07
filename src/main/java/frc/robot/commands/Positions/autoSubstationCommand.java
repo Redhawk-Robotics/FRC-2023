@@ -18,18 +18,18 @@ import frc.robot.subsystems.extenderSubsystem;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class autoSubstationCommand extends SequentialCommandGroup {
   /** Creates a new autoSubstationCommand. */
-  public autoSubstationCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem) {
+  public autoSubstationCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
         new ParallelDeadlineGroup(
-            new InstantCommand(() -> wristSubsystem.setPosition(6)),
+            new InstantCommand(() -> wrist.setPosition(5)),
             new InstantCommand(() -> extender.setPosition(0))),
         new WaitCommand(1),
         new InstantCommand(() -> arm.setPosition(44)),
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(-30)),
+            new InstantCommand(() -> wrist.setPosition(-30)),
             new InstantCommand(() -> arm.setPosition(44))));
   }
 }

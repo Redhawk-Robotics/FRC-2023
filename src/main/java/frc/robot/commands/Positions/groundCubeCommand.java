@@ -15,22 +15,22 @@ import frc.robot.subsystems.extenderSubsystem;
 
 public class groundCubeCommand extends SequentialCommandGroup {
   /** Creates a new groundCubeCommand. */
-  public groundCubeCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
+  public groundCubeCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist,
       ClawSubsystem claw) {
     // Use addRequirements() here to declare subsystem dependencies.
     addCommands(
 
         new InstantCommand(() -> extender.setPosition(0)),
 
-        new InstantCommand(() -> arm.setPosition(12)),
+        new InstantCommand(() -> arm.setPosition(18)),
         new ParallelDeadlineGroup( // FIXME TAKE OUT THIS AFTER TESTING
 
             new InstantCommand(() -> extender.setPosition(0)),
 
-            new InstantCommand(() -> claw.coneIntake())),
+            new InstantCommand(() -> claw.cubeIntake())),
         new WaitCommand(
             1),
-        new InstantCommand(() -> wristSubsystem.setPosition(-28))
+        new InstantCommand(() -> wrist.setPosition(-21))
 
     );
   }

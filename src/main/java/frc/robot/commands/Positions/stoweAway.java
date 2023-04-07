@@ -7,6 +7,7 @@ package frc.robot.commands.Positions;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
@@ -23,10 +24,11 @@ public class stoweAway extends SequentialCommandGroup {
 
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(0))),
+            new InstantCommand(() -> wristSubsystem.setPosition(5))),
+        // new WaitCommand(.3),
         new ParallelCommandGroup(
             new InstantCommand(() -> arm.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(0)),
+            new InstantCommand(() -> wristSubsystem.setPosition(5)),
             new InstantCommand(() -> extender.setPosition(0))));
   }
 }
