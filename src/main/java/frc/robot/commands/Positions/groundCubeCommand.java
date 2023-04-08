@@ -30,7 +30,7 @@ public class groundCubeCommand extends SequentialCommandGroup {
             new InstantCommand(() -> claw.cubeIntake())),
         new WaitCommand(
             1),
-        new InstantCommand(() -> wrist.setPosition(-21))
+        new InstantCommand(() -> wrist.setPosition(-20))
 
     );
   }

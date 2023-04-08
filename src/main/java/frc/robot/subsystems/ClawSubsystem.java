@@ -103,6 +103,12 @@ public class ClawSubsystem extends SubsystemBase {
     rightNeo550.set(-1);
   }
 
+  public void single() {
+    clawSolenoid.set(Value.kForward);
+    leftNeo550.set(.75);
+    rightNeo550.set(-.75);
+  }
+
   public void outTakeCube() {
     clawSolenoid.set(Value.kOff);
     leftNeo550.set(.25);

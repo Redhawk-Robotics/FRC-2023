@@ -7,6 +7,7 @@ package frc.robot.commands.Positions;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -23,13 +24,14 @@ public class substationCommand extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
 
-        new InstantCommand(() -> wristSubsystem.setPosition(5)),
-        new InstantCommand(() -> arm.setPosition(68)),
+        // new InstantCommand(() -> wristSubsystem.setPosition(5)),
+        new InstantCommand(() -> arm.setPosition(65)),
+        new WaitCommand(.5),
         new ParallelCommandGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(-31)),
+            new InstantCommand(() -> wristSubsystem.setPosition(-30)),
 
-            new InstantCommand(() -> arm.setPosition(68))),
+            new InstantCommand(() -> arm.setPosition(65))),
         new InstantCommand(() -> claw.coneIntake()));
   }
 }

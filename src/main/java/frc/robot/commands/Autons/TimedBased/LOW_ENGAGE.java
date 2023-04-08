@@ -4,8 +4,10 @@
 
 package frc.robot.commands.Autons.TimedBased;
 
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.Positions.groundCommand;
 import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.subsystems.SwerveSubsystem;
 
@@ -15,7 +17,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class LOW_ENGAGE extends SequentialCommandGroup {
   /** Creates a new LOW_ENGAGE. */
 
-  public LOW_ENGAGE(SwerveSubsystem SwerveDrive) {
+  public LOW_ENGAGE(SwerveSubsystem SwerveDrive, Command groundCommand) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -25,6 +27,7 @@ public class LOW_ENGAGE extends SequentialCommandGroup {
         new DriveForward(SwerveDrive, 0, 20, 3), // continue past charge pad
         new WaitCommand(1),
         new DriveForward(SwerveDrive, 0, -30, 2.5), // reverse back onto the pad
+        groundCommand,
         new DriveForward(SwerveDrive, 0, 0, 2.5));
   }
 }

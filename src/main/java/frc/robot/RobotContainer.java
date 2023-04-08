@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import frc.robot.commands.Autons.AutoBalanceRenew;
 import frc.robot.commands.Autons.AutoBase;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Autons.TimedBased.CONE_MOBILITY;
@@ -24,26 +23,22 @@ import frc.robot.commands.Positions.substationCommand;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.commands.Swerve.DriveTurn;
-import frc.robot.commands.Wrist.WristManual;
+import frc.robot.commands.extender.ExtenderManual;
 import frc.robot.constants.Ports;
-import frc.robot.constants.Setting;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -83,7 +78,8 @@ public class RobotContainer {
 
 	// Positions
 	private final autoSubstationCommand autoSubstationCommand = new autoSubstationCommand(extender, arm, wrist);
-	private final groundCommand groundCommand = new groundCommand(extender, arm, wrist, claw);
+	// private final groundCommand groundCommand = new groundCommand(extender, arm,
+	// wrist, claw);
 	private final highCommand highCommand = new highCommand(extender, arm, wrist);
 	private final midCommand midCommand = new midCommand(extender, arm, wrist);
 	private final shootLow shootLow = new shootLow(extender, arm, wrist, claw);
@@ -226,7 +222,7 @@ public class RobotContainer {
 		// compressor.disableCompressor();
 
 		// Camera Server
-		CameraServer.startAutomaticCapture();
+		// CameraServer.startAutomaticCapture();
 	}
 
 	/***************/
@@ -242,8 +238,11 @@ public class RobotContainer {
 		opperator_X.onTrue(highCommand);
 		// opperator_X.onTrue(highCommand());//works
 
-		dpadUpButton.onTrue(groundCommand);
+		dpadUpButton.onTrue(new groundCommand(extender, arm, wrist, claw));
 		dpadUpButton.whileFalse(new InstantCommand(() -> claw.stopClaw()));// - good
+
+		dpadLeftButton.onTrue(new singleSubstation(extender, arm, wrist, claw));
+		dpadLeftButton.whileFalse(new InstantCommand(() -> claw.stopClaw()));// - good
 
 		dpadDownButton.onTrue(groundCubeCommand);
 		dpadDownButton.whileFalse(new InstantCommand(() -> claw.stopClaw()));// - good
@@ -327,8 +326,9 @@ public class RobotContainer {
 				new InstantCommand(() -> wrist.setPosition(-29)),
 				new WaitCommand(2),
 				new InstantCommand(() -> claw.openClaw()),
-				new stoweAway(extender, arm, wrist),
-				new DriveForward(SwerveDrive, .5, -15, 7)));
+				new stoweAway(extender, arm, wrist)
+		// new DriveForward(SwerveDrive, .5, -15, 7)
+		));
 
 		Autons.addOption("[BLUE-RIGHT] PLACE MID, DIP", new SequentialCommandGroup(
 				new WaitCommand(6),
@@ -372,9 +372,25 @@ public class RobotContainer {
 				new DriveForward(SwerveDrive, 0, 5, 5),
 				new InstantCommand(() -> claw.stopClaw())));
 
+		Autons.addOption("single", new SequentialCommandGroup(
+				new stoweAway(extender, arm, wrist),
+				new singleSubstation(extender, arm, wrist, claw)));
+
+		Autons.addOption("high", new SequentialCommandGroup(
+				new WaitCommand(6),
+				new InstantCommand(() -> claw.closeClaw()),
+				new stoweAway(extender, arm, wrist),
+				new highCommand(extender, arm, wrist),
+				new InstantCommand(() -> wrist.setPosition(-29)),
+				new WaitCommand(2),
+				new InstantCommand(() -> claw.openClaw()),
+				new DriveForward(SwerveDrive, 0, -3, 2),
+				new stoweAway(extender, arm, wrist),
+				new DriveTurn(SwerveDrive, 0, -35, 1.5)));
+
 		Autons.addOption(" CONE_MOBILITY", new CONE_MOBILITY(SwerveDrive));
 		Autons.addOption("JUST_CHARGE_PAD", new JUST_CHARGE_PAD(SwerveDrive));
-		Autons.addOption("LOW_ENGAGE", new LOW_ENGAGE(SwerveDrive));
+		Autons.addOption("LOW_ENGAGE", new LOW_ENGAGE(SwerveDrive, new groundCommand(extender, arm, wrist, claw)));
 		// Autons.addOption("TEST GYRO RENEW", new AutoBalanceRenew(SwerveDrive));
 	}
 

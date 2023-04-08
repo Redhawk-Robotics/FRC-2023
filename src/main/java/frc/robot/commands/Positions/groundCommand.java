@@ -23,18 +23,13 @@ public class groundCommand extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-
         new InstantCommand(() -> extender.setPosition(0)),
-
         new InstantCommand(() -> arm.setPosition(18)),
-        new ParallelDeadlineGroup( // FIXME TAKE OUT THIS AFTER TESTING
-
+        new ParallelDeadlineGroup(
             new InstantCommand(() -> extender.setPosition(0)),
-
             new InstantCommand(() -> claw.coneIntake())),
-        new WaitCommand(
-            1),
-        new InstantCommand(() -> wrist.setPosition(-21))
+        new WaitCommand(1),
+        new InstantCommand(() -> wrist.setPosition(-20))
 
     );
   }

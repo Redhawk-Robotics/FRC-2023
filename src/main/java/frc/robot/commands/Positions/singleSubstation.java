@@ -27,8 +27,8 @@ public class singleSubstation extends SequentialCommandGroup {
             new InstantCommand(() -> wristSubsystem.setPosition(0))),
         new ParallelCommandGroup(
             new InstantCommand(() -> arm.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(0)),
+            new InstantCommand(() -> wristSubsystem.setPosition(1)),
             new InstantCommand(() -> extender.setPosition(0)),
-            new InstantCommand(() -> claw.coneIntake())));
+            new InstantCommand(() -> claw.single())));
   }
 }
