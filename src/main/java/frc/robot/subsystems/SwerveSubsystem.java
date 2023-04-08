@@ -82,7 +82,8 @@ public class SwerveSubsystem extends SubsystemBase {
     field = new Field2d();
     SmartDashboard.putData("Field", field);
 
-    // private SwerveAutoBuilder base = new SwerveAutoBuilder(new Translation2d(), );
+    // private SwerveAutoBuilder base = new SwerveAutoBuilder(new Translation2d(),
+    // );
 
   }
 
@@ -191,7 +192,12 @@ public class SwerveSubsystem extends SubsystemBase {
   // Ressetting the Pigeon Gyroscope in order for feild centric driving
   public void zeroGyro() {
     m_Pigeon.setYaw(0.0);
-    System.out.println("Feild Centric Activate :)))");
+    System.out.println("Field Centric Activate :)))");
+  }
+
+  public void autoReverseGyro() {
+    m_Pigeon.setYaw(180.0);
+    System.out.println("AUTO Field Centric Activate :)))");
   }
 
   // Method to get the rotation of the SwerveDrive heading
@@ -244,9 +250,9 @@ public class SwerveSubsystem extends SubsystemBase {
             traj,
             this::getPose,
             Setting.mKinematics,
-            new PIDController(Setting.AutoConstants.kPXController, 0, 0),//x
-            new PIDController(Setting.AutoConstants.kPYController, 0, 0),//y
-            new PIDController(Setting.AutoConstants.kPThetaController, 0, 0),//rotation
+            new PIDController(Setting.AutoConstants.kPXController, 0, 0), // x
+            new PIDController(Setting.AutoConstants.kPYController, 0, 0), // y
+            new PIDController(Setting.AutoConstants.kPThetaController, 0, 0), // rotation
             this::setModuleStates,
             true,
             this));

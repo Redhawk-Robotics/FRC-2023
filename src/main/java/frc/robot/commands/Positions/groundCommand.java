@@ -29,7 +29,7 @@ public class groundCommand extends SequentialCommandGroup {
             new InstantCommand(() -> extender.setPosition(0)),
             new InstantCommand(() -> claw.coneIntake())),
         new WaitCommand(1),
-        new InstantCommand(() -> wrist.setPosition(-20))
+        new InstantCommand(() -> wrist.setPosition(-19))
 
     );
   }

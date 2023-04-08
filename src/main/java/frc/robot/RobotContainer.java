@@ -317,20 +317,24 @@ public class RobotContainer {
 
 		// rename to BLUE-LEFT
 		Autons.addOption("[BLUE-LEFT] PLACE MID, DIP", new SequentialCommandGroup(
+				new InstantCommand(() -> SwerveDrive.autoReverseGyro()),
 				new WaitCommand(6),
 				new InstantCommand(() -> claw.closeClaw()),
 				new InstantCommand(() -> wrist.setPosition(0)),
 				new WaitCommand(1),
+				new stoweAway(extender, arm, wrist),
 				new midCommand(extender, arm, wrist),
 				new WaitCommand(2.5),
 				new InstantCommand(() -> wrist.setPosition(-29)),
 				new WaitCommand(2),
 				new InstantCommand(() -> claw.openClaw()),
-				new stoweAway(extender, arm, wrist)
-		// new DriveForward(SwerveDrive, .5, -15, 7)
+				new stoweAway(extender, arm, wrist),
+				new DriveForward(SwerveDrive, 0, 2, 1) // Should be pos velo now because of
+		// autoReverseGyro
 		));
 
 		Autons.addOption("[BLUE-RIGHT] PLACE MID, DIP", new SequentialCommandGroup(
+				new InstantCommand(() -> SwerveDrive.zeroGyro()),
 				new WaitCommand(6),
 				new InstantCommand(() -> claw.closeClaw()),
 				new InstantCommand(() -> wrist.setPosition(0)),
@@ -388,9 +392,23 @@ public class RobotContainer {
 				new stoweAway(extender, arm, wrist),
 				new DriveTurn(SwerveDrive, 0, -35, 1.5)));
 
-		Autons.addOption(" CONE_MOBILITY", new CONE_MOBILITY(SwerveDrive));
+		Autons.addOption("[P] LOW CONE + MOBILITY", new CONE_MOBILITY(SwerveDrive));
 		Autons.addOption("JUST_CHARGE_PAD", new JUST_CHARGE_PAD(SwerveDrive));
 		Autons.addOption("LOW_ENGAGE", new LOW_ENGAGE(SwerveDrive, new groundCommand(extender, arm, wrist, claw)));
+
+		Autons.addOption("[PP] UNTESTED pls change", new SequentialCommandGroup(
+				new WaitCommand(6),
+				new InstantCommand(() -> claw.closeClaw()),
+				new stoweAway(extender, arm, wrist),
+				new highCommand(extender, arm, wrist),
+				new WaitCommand(1),
+				new InstantCommand(() -> wrist.setPosition(-29)),
+				new WaitCommand(0.5),
+				new InstantCommand(() -> claw.openClaw()),
+				new DriveForward(SwerveDrive, 0, -15, 7),
+				new stoweAway(extender, arm, wrist)).finallyDo((end) -> {
+					SwerveDrive.autoReverseGyro();
+				}));
 		// Autons.addOption("TEST GYRO RENEW", new AutoBalanceRenew(SwerveDrive));
 	}
 
