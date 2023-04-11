@@ -4,10 +4,14 @@ import java.util.HashMap;
 
 import com.revrobotics.CANSparkMax.IdleMode;
 
+import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.lib.util.Gains;
 
 public interface Setting {
     /* Swerve Voltage Compensation */
@@ -259,6 +263,51 @@ public interface Setting {
     public static final class setPoint {
 
     }
+
+    
+  public static final class LimelightConstants{
+    public static final int APRILTAG_PIPELINE = 0;
+
+    public static final Gains GAINS_VISION_X = new Gains(0.07, 0.03, 0.0, 0.0, 50);
+    public static final Gains GAINS_VISION_Y = new Gains(0.085, 0.03, 0.0, 0.0, 50);
+
+    public static final double VISION_POS_TOLLERANCE = 0.5;
+    
+    public static final double ALIGNED_GRID_APRIL_X = -12.0;
+    public static final double ALIGNED_GRID_APRIL_Y = -3.0;
+    public static final double ALIGNED_GRID_APRIL_AREA = 3.7;
+
+    public static final double ALIGNED_SUBSTATION_APRIL_X = -18.3;
+    public static final double ALIGNED_SUBSTATION_APRIL_Y = -16.3;
+    public static final double ALIGNED_SUBSTATION_APRIL_AREA = 6.0;
+
+    public static final double ALIGNED_LEFT_CONE_X = -18.3;
+    public static final double ALIGNED_LEFT_CONE_Y = -16.3;
+    public static final double ALIGNED_LEFT_CONE_AREA = 6.0;
+
+    public static final double ALIGNED_RIGHT_CONE_X = -18.3;
+    public static final double ALIGNED_RIGHT_CONE_Y = -16.3;
+    public static final double ALIGNED_RIGHT_CONE_AREA = 6.0;
+
+    
+
+    public static final double SETPOINT_DIS_FROM_MID_CONE = 24;
+    public static final double SETPOINT_DIS_FROM_TOP_CONE = 40;
+
+    public static final double SETPOINT_DIS_FROM_GRID_APRIL = 14.062222;
+    public static final double SETPOINT_DIS_FROM_SUBSTATION_APRIL = 5;
+    // height of vision tape center in inches
+    public static final double HEIGHT_CONE_NODE_TAP = 24.125;
+    public static final double HEIGHT_GRID_APRIL = 18.25;
+    public static final double HEIGHT_SUBSTATION_APRIL = 27.375;
+
+    public static final Transform3d CAMERA_TO_ROBOT = new Transform3d(new Translation3d(0.0, 0.0, 0.0), new Rotation3d(0.0, 0.0, 0.0));
+
+    public static final Gains GAINS_ANGLE_SNAP = new Gains(0.02, 0.0, 0.0, 0.0, 50);
+    
+    public static final Gains GAINS_BALANCE = new Gains(0.05, 0.0, 0.0, 0.0, 50);
+
+}
 
     public static final class AutoConstants {
         // tune later

@@ -17,9 +17,9 @@ import frc.robot.subsystems.extenderSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class substationCommand extends SequentialCommandGroup {
+public class doubleSubstation extends SequentialCommandGroup {
   /** Creates a new substationCommand. */
-  public substationCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
+  public doubleSubstation(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem,
       ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
