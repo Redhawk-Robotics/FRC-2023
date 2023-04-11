@@ -26,7 +26,6 @@ public class JUST_CHARGE_PAD extends SequentialCommandGroup {
   public JUST_CHARGE_PAD(SwerveSubsystem SwerveDrive) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    pigeonModule = pigeonModule.getPigeonModule();
     addCommands(
         new DriveForward(SwerveDrive, .5, -25, 1),
         new WaitCommand(1),
@@ -35,57 +34,56 @@ public class JUST_CHARGE_PAD extends SequentialCommandGroup {
         new WaitCommand(1),
         new DriveForward(SwerveDrive, 0, -30, 2), // reverse back onto the pad
         new WaitCommand(1),
-        new DriveForward(SwerveDrive, 0, -10, 3.3));
+        new DriveForward(SwerveDrive, 0, -10, 4),
+        new Command() {
+
+          @Override
+          public Set<Subsystem> getRequirements() {
+            // TODO Auto-generated method stub
+            return m_requirements;
+          }
+
+          @Override
+          public void end(boolean interrupted) {
+            // TODO Auto-generated method stub
+            SwerveDrive.drive(
+                new Translation2d(0, 0),
+                0,
+                true,
+                true);
+          }
+
+          @Override
+          public boolean isFinished() {
+            // TODO Auto-generated method stub
+            return Math.abs(pigeonModule.getRoll()) < 1;
+          }
+
+          @Override
+          public void execute() {
+            if (pigeonModule.getRoll() > 3) {
+              SwerveDrive.drive(
+                  new Translation2d(3, 0),
+                  0,
+                  true,
+                  true);
+              // new DriveForward(SwerveDrive, 0, 3, .3);
+            } else if (pigeonModule.getRoll() < -3) {
+              SwerveDrive.drive(
+                  new Translation2d(-3, 0),
+                  0,
+                  true,
+                  true);
+              // new DriveForward(SwerveDrive, 0, -3, .3);
+            } else {
+              SwerveDrive.drive(
+                  new Translation2d(0, 0),
+                  0,
+                  true,
+                  true);
+              // new DriveForward(SwerveDrive, 0, 0, 0);
+            }
+          }
+        });
   }
 }
-
-// new Command() {
-
-// @Override
-// public Set<Subsystem> getRequirements() {
-// // TODO Auto-generated method stub
-// return m_requirements;
-// }
-
-// @Override
-// public void end(boolean interrupted) {
-// // TODO Auto-generated method stub
-// SwerveDrive.drive(
-// new Translation2d(0, 0),
-// 0,
-// true,
-// true);
-// }
-
-// @Override
-// public boolean isFinished() {
-// // TODO Auto-generated method stub
-// return Math.abs(pigeonModule.getPitch()) < 1;
-// }
-
-// @Override
-// public void execute() {
-// if (pigeonModule.getPitch() > 3) {
-// SwerveDrive.drive(
-// new Translation2d(3, 0),
-// 0,
-// true,
-// true);
-// // new DriveForward(SwerveDrive, 0, 3, .3);
-// } else if (pigeonModule.getPitch() < -3) {
-// SwerveDrive.drive(
-// new Translation2d(-3, 0),
-// 0,
-// true,
-// true);
-// // new DriveForward(SwerveDrive, 0, -3, .3);
-// } else {
-// SwerveDrive.drive(
-// new Translation2d(0, 0),
-// 0,
-// true,
-// true);
-// // new DriveForward(SwerveDrive, 0, 0, 0);
-// }
-// }
-// }

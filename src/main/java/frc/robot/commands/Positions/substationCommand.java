@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.extender.ResetExtender;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -28,7 +29,7 @@ public class substationCommand extends SequentialCommandGroup {
         new InstantCommand(() -> arm.setPosition(65)),
         new WaitCommand(.5),
         new ParallelCommandGroup(
-            new InstantCommand(() -> extender.setPosition(0)),
+            new ResetExtender(extender, 0),
             new InstantCommand(() -> wristSubsystem.setPosition(-30)),
 
             new InstantCommand(() -> arm.setPosition(65))),

@@ -7,28 +7,34 @@ package frc.robot.commands.Positions;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.extender.ResetExtender;
 import frc.robot.subsystems.ArmSubsystem;
-import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class shootLow extends SequentialCommandGroup {
-  /** Creates a new shootLow. */
-  public shootLow(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem, ClawSubsystem claw) {
+public class highAuto extends SequentialCommandGroup {
+  /** Creates a new highCommand. */
+  public highAuto(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+        new InstantCommand(() -> wrist.setPosition(5)),
+        // new ParallelCommandGroup(
+        // new InstantCommand(() -> extender.setPosition(0)),
+        // new InstantCommand(() -> wrist.setPosition(5))),
 
-        new ParallelCommandGroup(
-            new ResetExtender(extender, 0),
-            new InstantCommand(() -> wristSubsystem.setPosition(0))),
-        new ParallelCommandGroup(
-            new InstantCommand(() -> arm.setPosition(0)),
-            new InstantCommand(() -> wristSubsystem.setPosition(5)),
-            new InstantCommand(() -> claw.outTake())));
+        new InstantCommand(() -> arm.setPosition(66)),
+        new WaitCommand(1.5),
+        // new InstantCommand(() -> extender.setPosition(194)), // 194 when neo was 27:1
+        // ratio
+        new InstantCommand(() -> extender.setPosition(21))
+    // 194 when neo was 27:1
+    // ratio
+    // new InstantCommand(() -> wrist.setPosition(5))
+    );
   }
 }

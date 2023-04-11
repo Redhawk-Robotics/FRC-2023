@@ -35,4 +35,8 @@ public class PigeonModule {
     public double getAnglePerpendicularToGroundDEG() {
         return this.m_Pigeon.getYaw();
     }
+
+    public double getRoll() {
+        return this.m_Pigeon.getRoll();
+    }
 }

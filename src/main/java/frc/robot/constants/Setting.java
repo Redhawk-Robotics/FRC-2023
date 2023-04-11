@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 
 public interface Setting {
     /* Swerve Voltage Compensation */
-    public static final double voltageComp = 8.5;//8.5
+    public static final double voltageComp = 8.5;// 8.5
 
     // RobotCharacterizations
     public static final double drivetrainTrackWidthMeters = Units.inchesToMeters(28.5);
@@ -91,7 +91,7 @@ public interface Setting {
 
         public static final float armForwardLimit = 44;
         public static final float armReverseLimit = -2;
-        
+
         public static final float extenderForwardLimit = 0;
         public static final float extenderReverseLimit = -270;
 
@@ -166,7 +166,7 @@ public interface Setting {
             public static final double minVel = 0.0;
             public static final double maxAccel = 1000.0;
             public static final double maxErr = 100.0;
-          }
+        }
 
     }
 
@@ -177,28 +177,29 @@ public interface Setting {
         public static final double armIup = 0;
         public static final double armDup = 0;
         public static final double armFFup = 0;
-        
+
         public static final double armPdown = 0.05;
         public static final double armIdown = 0;
         public static final double armDdown = 0;
         public static final double armFFdown = 0;
 
         public static final double maxVoltage = 6;
-        // public static final double armConversionFactor = 0;// FIXME need to find the conversion Factor
+        // public static final double armConversionFactor = 0;// FIXME need to find the
+        // conversion Factor
 
         public static final int armContinousCurrentLimit = 20;
         public static final double armSpeed = 0.3;
         public static final double armSpeedReverse = -0.1;
 
         public static final IdleMode armNeutralMode = IdleMode.kCoast;
-        
+
         public static class SmartMotionParameters {
             public static final int smartMotionSlot = 0;
             public static final double maxVel = 5200.0;
             public static final double minVel = 0.0;
             public static final double maxAccel = 1000.0;
             public static final double maxErr = 100.0;
-          }
+        }
 
     }
 
@@ -210,7 +211,8 @@ public interface Setting {
         public static final double extenderD = 0;
         public static final double extenderFF = 0;
         public static final double maxVoltage = 6;
-        // public static final double extenderConversionFactor = 0;// FIXME need to find the conversion Factor
+        // public static final double extenderConversionFactor = 0;// FIXME need to find
+        // the conversion Factor
 
         public static final int extenderContinousCurrentLimit = 20;
         public static final double extenderSpeed = 1;
@@ -218,13 +220,13 @@ public interface Setting {
 
         public static final IdleMode extenderNeutralMode = IdleMode.kCoast;
 
-            public static class SmartMotionParameters {
+        public static class SmartMotionParameters {
             public static final int smartMotionSlot = 0;
             public static final double maxVel = 5200.0;
             public static final double minVel = 0.0;
             public static final double maxAccel = 1000.0;
             public static final double maxErr = 100.0;
-          }
+        }
     }
 
     public static final class wristSetting {
@@ -236,7 +238,8 @@ public interface Setting {
         public static final double wristFF = 0;
 
         public static final double maxVoltage = 6;
-        // public static final double wristConversionFactor = 0;// FIXME need to find the conversion Factor
+        // public static final double wristConversionFactor = 0;// FIXME need to find
+        // the conversion Factor
 
         public static final int wristContinousCurrentLimit = 20;
         public static final double wristSpeed = 0.1;
@@ -250,9 +253,10 @@ public interface Setting {
             public static final double minVel = 0.0;
             public static final double maxAccel = 1000.0;
             public static final double maxErr = 100.0;
-          }
+        }
     }
-    public static final class setPoint{
+
+    public static final class setPoint {
 
     }
 

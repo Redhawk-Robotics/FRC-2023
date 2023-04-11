@@ -21,19 +21,21 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AutoBase extends SequentialCommandGroup {
   /** Creates a new AutoBase. */
   private SwerveSubsystem swerve;
+
   public AutoBase(SwerveSubsystem swerveDrive) {
     swerve = swerveDrive;
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands();
   }
+
   public SwerveAutoBuilder CustomSwerveAutoBuilder() {
     return new SwerveAutoBuilder(
-      swerve::getPose, // pose2d supplier
-      swerve::resetOdometry, // reset odometry at the beginning of auto
+        swerve::getPose, // pose2d supplier
+        swerve::resetOdometry, // reset odometry at the beginning of auto
         Setting.mKinematics, // swerve kinematics
-        new PIDConstants(AutoConstants.kPXController, 0.0, 0.0), // x y controller
-        new PIDConstants(AutoConstants.kPThetaController, 0.0, 0.0), // theta controller
+        new PIDConstants(25, 0.0, 1), // x y controller
+        new PIDConstants(25, 0.0, 1), // theta controller
         swerve::setModuleStates,
         AutoConstants.EventMap,
         true,
@@ -42,13 +44,13 @@ public class AutoBase extends SequentialCommandGroup {
 
   public PPSwerveControllerCommand CustomPathControllerCommand(PathPlannerTrajectory trajectory) {
     return new PPSwerveControllerCommand(
-        trajectory, 
-        swerve::getPose, 
-        Setting.mKinematics, 
-        new PIDController(AutoConstants.kPXController, 0, 0), 
-        new PIDController(AutoConstants.kPYController, 0, 0), 
-        new PIDController(AutoConstants.kPThetaController, 0, 0), 
-        swerve::setModuleStates, 
+        trajectory,
+        swerve::getPose,
+        Setting.mKinematics,
+        new PIDController(AutoConstants.kPXController, 0, 0),
+        new PIDController(AutoConstants.kPYController, 0, 0),
+        new PIDController(AutoConstants.kPThetaController, 0, 0),
+        swerve::setModuleStates,
         swerve);
   }
 }

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.extender.ResetExtender;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -20,16 +21,11 @@ public class groundCubeCommand extends SequentialCommandGroup {
     // Use addRequirements() here to declare subsystem dependencies.
     addCommands(
 
-        new InstantCommand(() -> extender.setPosition(0)),
+        new ResetExtender(extender, 0),
 
         new InstantCommand(() -> arm.setPosition(18)),
-        new ParallelDeadlineGroup( // FIXME TAKE OUT THIS AFTER TESTING
-
-            new InstantCommand(() -> extender.setPosition(0)),
-
-            new InstantCommand(() -> claw.cubeIntake())),
-        new WaitCommand(
-            1),
+        new InstantCommand(() -> claw.cubeIntake()),
+        new WaitCommand(1),
         new InstantCommand(() -> wrist.setPosition(-19))
 
     );

@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.extender.ResetExtender;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
@@ -30,7 +31,7 @@ public class highCommand extends SequentialCommandGroup {
         new WaitCommand(1.5),
         // new InstantCommand(() -> extender.setPosition(194)), // 194 when neo was 27:1
         // ratio
-        new InstantCommand(() -> extender.setPosition(24)) // 194 when neo was 27:1
+        new ResetExtender(extender, 21) // 194 when neo was 27:1
     // ratio
     // new InstantCommand(() -> wrist.setPosition(5))
     );
