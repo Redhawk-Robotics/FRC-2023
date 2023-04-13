@@ -46,6 +46,8 @@ import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
+import com.pathplanner.lib.commands.FollowPathWithEvents;
+
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.XboxController;
@@ -72,7 +74,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final SwerveSubsystem SwerveDrive = new SwerveSubsystem();
-    private final Limelight Limelight = new Limelight();
+    // private final Limelight Limelight = new Limelight();
     // private final LEDController LEDS = new LEDController();
 
     private final WristSubsystem wrist = new WristSubsystem();
@@ -98,7 +100,8 @@ public class RobotContainer {
 
     private final stoweAway stoweAway = new stoweAway(extender, arm, wrist);
 
-    private final autoAligner autoAligner = new autoAligner(SwerveDrive, Limelight);
+    // private final autoAligner autoAligner = new autoAligner(SwerveDrive,
+    // Limelight);
 
     // Replace with CommandPS4Controller or CommandJoystick if needed
 
@@ -247,7 +250,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         // Driver
         driver_A_zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));
-        driver_B.onTrue(autoAligner);//may break code
+        // driver_B.onTrue(autoAligner);// may break code
 
         // Operator
         opperator_B.onTrue(midCommand);
@@ -305,18 +308,49 @@ public class RobotContainer {
      */
 
     public void configureAutons() {
+        SwerveAutoBuilder autoBuilder = autoBase.CustomSwerveAutoBuilder();
+
         SmartDashboard.putData("Autonomous: ", Autons);
 
         Autons.setDefaultOption("Do Nothing", new DoNothingAuton());
 
-        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("High, Pickup",
-                new PathConstraints(4, 3));
+        // ------------------------------------- CALIBRATE
+        List<PathPlannerTrajectory> calibrateHardGroup = PathPlanner.loadPathGroup("Cali", new PathConstraints(4, 3));
+        Command caliAuto = autoBuilder.fullAuto(calibrateHardGroup);
+        Autons.addOption("CALI HARD PATH", caliAuto);
 
+        List<PathPlannerTrajectory> calibrateSimpleGroup = PathPlanner.loadPathGroup("Test", new PathConstraints(1, 1));
+        Command caliSimpleAuto = autoBuilder.fullAuto(calibrateSimpleGroup);
+        Autons.addOption("CALI SIMPLE PATH", caliSimpleAuto);
+        // -------------------------------------
+
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("pls work",
+                new PathConstraints(4, 3));
+        PathPlannerTrajectory test = PathPlanner.loadPath("pls work", new PathConstraints(1, 1));
         // This is just an example event map. It would be better to have a constant,
         // global event map
         // in your code that will be used by all path following commands.
         HashMap<String, Command> eventMap = new HashMap<>();
         eventMap.put("Place High", new SequentialCommandGroup(
+                new CheckCompressor(compressor, 10),
+                new InstantCommand(() -> claw.coneIntake()),
+                new WaitCommand(1),
+                new highAuto(
+                        extender, arm, wrist),
+                new InstantCommand(() -> claw.stopClaw()),
+                new WaitCommand(1.25),
+                new InstantCommand(() -> wrist.setPosition(-29)),
+                new WaitCommand(.5),
+                new InstantCommand(() -> claw.openClaw()),
+                new stoweAway(extender, arm, wrist)));
+        eventMap.put("Stowe1", new stoweAway(extender, arm, wrist));
+        eventMap.put("Leaving", new InstantCommand(() -> compressor.enableAnalog(100, 120)));
+        eventMap.put("Ground Start", new groundConeCommand(extender, arm, wrist, claw));
+        eventMap.put("Pickup", new InstantCommand(() -> claw.coneIntake()));
+        eventMap.put("Stowe2", new stoweAway(extender, arm, wrist));
+        eventMap.put("Joining Back", new InstantCommand(() -> claw.stopClaw()));
+        eventMap.put("Inside", new InstantCommand(() -> wrist.setPosition(5)));
+        eventMap.put("Finish High", new SequentialCommandGroup(
                 new CheckCompressor(compressor, 10),
                 new InstantCommand(() -> claw.coneIntake()),
                 new WaitCommand(1),
@@ -327,12 +361,33 @@ public class RobotContainer {
                 new WaitCommand(.5),
                 new InstantCommand(() -> claw.openClaw()),
                 new stoweAway(extender, arm, wrist)));
-        eventMap.put("Stowe1", new stoweAway(extender, arm, wrist));
-        eventMap.put("Ground Start", new groundConeCommand(extender, arm, wrist, claw));
+        Command winChamps = autoBuilder.fullAuto(pathGroup);
+        FollowPathWithEvents commandEvents = new FollowPathWithEvents(winChamps, test.getMarkers(), eventMap);
+        Autons.addOption("High, Pickup, High", commandEvents);
 
-        SwerveAutoBuilder autoBuilder = autoBase.CustomSwerveAutoBuilder();
-        Command fullAuto = autoBuilder.fullAuto(pathGroup);
-        Autons.addOption("TEST PATH", fullAuto);
+        List<PathPlannerTrajectory> HGEngage = PathPlanner.loadPathGroup("Leave, Pickup, Engage",
+                new PathConstraints(4, 3));
+        HashMap<String, Command> eventHPE = new HashMap<>();
+        eventHPE.put("Leaving", new InstantCommand(() -> compressor.enableAnalog(100, 120)));
+        eventHPE.put("Ground Start", new groundConeCommand(extender, arm, wrist, claw));
+
+        // New
+        PathPlannerTrajectory tester = PathPlanner.loadPath("HIGH_PICKUP", new PathConstraints(1, 1));
+
+        List<PathPlannerTrajectory> HPtest = PathPlanner.loadPathGroup("HIGH_PICKUP",
+                new PathConstraints(1, 1),
+                new PathConstraints(2, 2));
+        HashMap<String, Command> HIGH_PICKUP = new HashMap<>();
+        HIGH_PICKUP.put("Start", new highCommand(extender, arm, wrist));
+        // HIGH_PICKUP.put("WAIT", new WaitCommand(7));
+        HIGH_PICKUP.put("stowAway", new stoweAway(extender, arm, wrist));
+        HIGH_PICKUP.put("pickUp", new groundConeCommand(extender, arm, wrist, claw));
+        // HIGH_PICKUP.put("stowAway2", new stoweAway(extender, arm, wrist));
+        HIGH_PICKUP.put("End", new stoweAway(extender, arm, wrist));
+        Command fullTestAuto = autoBuilder.fullAuto(HPtest);
+
+        FollowPathWithEvents HIGH_PICKUPtest = new FollowPathWithEvents(fullTestAuto, tester.getMarkers(), HIGH_PICKUP);
+        Autons.addOption("testsmth", HIGH_PICKUPtest);
 
         /*
          * IMPORTANT!!!
@@ -364,7 +419,8 @@ public class RobotContainer {
 
         Autons.addOption("high", new HIGH(SwerveDrive, extender, arm, wrist, claw));
 
-        Autons.addOption("[PP] UNTESTED pls change", new PP_UNTESTED_PLS_CHANGE(SwerveDrive, extender, arm, wrist, claw));
+        Autons.addOption("[PP] UNTESTED pls change",
+                new PP_UNTESTED_PLS_CHANGE(SwerveDrive, extender, arm, wrist, claw));
     }
 
     // /**

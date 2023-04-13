@@ -1,0 +1,187 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.82,
+        "y": 4.93
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8199999999999985,
+        "y": 4.93
+      },
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.8201294447701684,
+        "y": 4.721353803609864
+      },
+      "prevControl": {
+        "x": 2.7134891686678517,
+        "y": 4.721353803609864
+      },
+      "nextControl": {
+        "x": 4.820129444770165,
+        "y": 4.721353803609864
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.25,
+        "y": 4.72
+      },
+      "prevControl": {
+        "x": 4.810627950786448,
+        "y": 4.72
+      },
+      "nextControl": {
+        "x": 5.911017011843794,
+        "y": 4.72
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.431942187192645,
+        "y": 4.59
+      },
+      "prevControl": {
+        "x": 6.097374952255222,
+        "y": 4.59
+      },
+      "nextControl": {
+        "x": 6.766509422130067,
+        "y": 4.59
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": true,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 5.9497613732069565,
+        "y": 3.3953565651492212
+      },
+      "prevControl": {
+        "x": 6.271215249197415,
+        "y": 3.7168104411396805
+      },
+      "nextControl": {
+        "x": 5.585900291801874,
+        "y": 3.031495483744138
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 4.774445639116842,
+        "y": 2.65
+      },
+      "prevControl": {
+        "x": 4.958797048756025,
+        "y": 2.65
+      },
+      "nextControl": {
+        "x": 4.59009422947766,
+        "y": 2.65
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
+      "velOverride": -2.0,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 3.920583781017186,
+        "y": 2.651994476921286
+      },
+      "prevControl": {
+        "x": 4.437118376041294,
+        "y": 2.651994476921286
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    }
+  ],
+  "markers": [
+    {
+      "position": 1.0,
+      "names": [
+        "Stowe1"
+      ]
+    },
+    {
+      "position": 2.0,
+      "names": [
+        "Ground Start"
+      ]
+    }
+  ]
+}

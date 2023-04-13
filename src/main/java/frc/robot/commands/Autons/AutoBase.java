@@ -34,8 +34,8 @@ public class AutoBase extends SequentialCommandGroup {
         swerve::getPose, // pose2d supplier
         swerve::resetOdometry, // reset odometry at the beginning of auto
         Setting.mKinematics, // swerve kinematics
-        new PIDConstants(25, 0.0, 1), // x y controller
-        new PIDConstants(25, 0.0, 1), // theta controller
+        new PIDConstants(52, 0, 0), // x y controller
+        new PIDConstants(11, 0, .001), // theta controller
         swerve::setModuleStates,
         AutoConstants.EventMap,
         true,

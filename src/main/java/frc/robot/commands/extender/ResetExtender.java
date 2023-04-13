@@ -16,6 +16,7 @@ public class ResetExtender extends CommandBase {
     // Use addRequirements() here to declare subsystem dependencies.
     this.extenderSubsystem = extenderSubsystem;
     this.targetPosition = targetPosition;
+    addRequirements(extenderSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -43,6 +44,6 @@ public class ResetExtender extends CommandBase {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(extenderSubsystem.getCurrentPosition() - targetPosition) < 1;
+    return Math.abs(extenderSubsystem.getCurrentPosition() - targetPosition) < 2.5;
   }
 }
