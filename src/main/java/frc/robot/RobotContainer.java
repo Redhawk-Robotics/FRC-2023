@@ -325,7 +325,8 @@ public class RobotContainer {
     Autons.addOption("High, Pickup, High", pathPlannerBuilder.createAuto("pls work"));
     Autons.addOption("High, Pickup, Engage", pathPlannerBuilder.createAuto("Leave, Pickup, Engage"));
     Autons.addOption("HIGH_PICKUP", pathPlannerBuilder.createAuto("HIGH_PICKUP"));
-
+    Autons.addOption("Champs High", pathPlannerBuilder.createAuto("Clean High"));
+    Autons.addOption("Champs Mid", pathPlannerBuilder.createAuto("Clean Mid"));
     /*
      * IMPORTANT!!!
      * IMPORTANT!!!

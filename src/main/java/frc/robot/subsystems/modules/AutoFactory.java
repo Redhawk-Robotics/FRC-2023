@@ -25,7 +25,7 @@ import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
 
 public class AutoFactory {
-    private HashMap<String, Command> eventMap = new HashMap<>();
+    private HashMap<String, Command> eventMap;
     private Double[] pathConstraints = { 4.0, 3.0 }; // velo, accel
     private final extenderSubsystem extender;
     private SwerveAutoBuilder autoBuilder;
@@ -44,6 +44,7 @@ public class AutoFactory {
         this.wrist = wrist;
         this.claw = claw;
         this.arm = arm;
+        this.eventMap = new HashMap<>();
         eventMap();
     }
 
@@ -65,16 +66,18 @@ public class AutoFactory {
         this.pathFileName = path;
     }
 
-    public void eventMap() {
+    private void eventMap() {
         eventMap.put("Stow", new stowAway(extender, arm, wrist));
         eventMap.put("Run Comp", new InstantCommand(() -> compressor.enableAnalog(100, 120)));
         eventMap.put("Fix Wrist", new InstantCommand(() -> wrist.setPosition(5)));
-        eventMap.put("Setup Cone", new groundConeCommand(extender, arm, wrist, claw));
-        eventMap.put("Setup Cube", new groundCubeCommand(extender, arm, wrist, claw));
+        eventMap.put("Cone Start", new groundConeCommand(extender, arm, wrist, claw));
+        eventMap.put("Cube Start", new groundCubeCommand(extender, arm, wrist, claw));
         eventMap.put("High", new PlaceHigh(extender, arm, wrist, claw, compressor));
         eventMap.put("Mid", new PlaceMid(extender, arm, wrist, claw, compressor));
-        eventMap.put("Cone Start", new InstantCommand(() -> claw.coneIntake()));
-        eventMap.put("Cube Start", new InstantCommand(() -> claw.cubeIntake()));
+        eventMap.put("Throw Cone", new InstantCommand(() -> claw.outTakeCone()));
+        eventMap.put("Throw Cube", new InstantCommand(() -> claw.outTakeCube()));
+        eventMap.put("Cone Claw", new InstantCommand(() -> claw.coneIntake()));
+        eventMap.put("Cube Claw", new InstantCommand(() -> claw.cubeIntake()));
         eventMap.put("Stop Claw", new InstantCommand(() -> claw.stopClaw()));
     }
 

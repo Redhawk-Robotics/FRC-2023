@@ -10,7 +10,6 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.constants.Ports;
@@ -26,7 +25,6 @@ public class Drive extends CommandBase {
   private DoubleSupplier rotationSup;
   private BooleanSupplier robotCentricSup;
   private BooleanSupplier slowSpeedSup;
-  private Field2d field;
 
   private SlewRateLimiter translationLimiter = new SlewRateLimiter(3.0);
   private SlewRateLimiter strafeLimiter = new SlewRateLimiter(3.0);
@@ -48,7 +46,6 @@ public class Drive extends CommandBase {
     this.rotationSup = rotationSup;
     this.robotCentricSup = robotCentricSup;
     this.slowSpeedSup = slowSpeedSup;
-    this.field = new Field2d();
   }
 
   // Called when the command is initially scheduled.
@@ -59,7 +56,6 @@ public class Drive extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    field.setRobotPose(Swerve.getPose());
     double speedMultiplier = slowSpeedSup.getAsBoolean() ? 0.5 : 1.0;// try 1.0 : 0.5
 
     /* Get Values, Deadband */
