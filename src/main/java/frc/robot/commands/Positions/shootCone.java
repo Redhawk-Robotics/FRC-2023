@@ -29,6 +29,6 @@ public class shootCone extends SequentialCommandGroup {
         new ParallelCommandGroup(
             new InstantCommand(() -> arm.setPosition(0)),
             new InstantCommand(() -> wristSubsystem.setPosition(5)),
-            new InstantCommand(() -> claw.outTake())));
+            new InstantCommand(() -> claw.outTakeCone())));
   }
 }

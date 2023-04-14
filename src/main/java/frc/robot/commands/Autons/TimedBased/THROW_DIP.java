@@ -20,19 +20,18 @@ import frc.robot.subsystems.extenderSubsystem;
 public class THROW_DIP extends SequentialCommandGroup {
   /** Creates a new THROW_DIP. */
   public THROW_DIP(SwerveSubsystem SwerveDrive, extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist,
-  ClawSubsystem claw) {
+      ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new InstantCommand(() -> claw.closeClaw()),
-    new InstantCommand(() -> wrist.setPosition(1)),
-    new WaitCommand(.5),
-    new InstantCommand(
-        () -> claw.outTake1()),
-    new WaitCommand(.5),
-    new InstantCommand(
-        () -> claw.stopClaw()),
-    new DriveForward(SwerveDrive, .5, -12, 5))
-    ;
+        new InstantCommand(() -> claw.closeClaw()),
+        new InstantCommand(() -> wrist.setPosition(1)),
+        new WaitCommand(.5),
+        new InstantCommand(
+            () -> claw.opperatorCloseClaw()),
+        new WaitCommand(.5),
+        new InstantCommand(
+            () -> claw.stopClaw()),
+        new DriveForward(SwerveDrive, .5, -12, 5));
   }
 }

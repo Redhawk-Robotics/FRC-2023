@@ -6,7 +6,7 @@ package frc.robot.commands.Autons.TimedBased;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.Positions.singleSubstation;
-import frc.robot.commands.Positions.stoweAway;
+import frc.robot.commands.Positions.stowAway;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -19,11 +19,11 @@ import frc.robot.subsystems.extenderSubsystem;
 public class Single extends SequentialCommandGroup {
   /** Creates a new Single. */
   public Single(SwerveSubsystem SwerveDrive, extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist,
-  ClawSubsystem claw) {
+      ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new stoweAway(extender, arm, wrist),
-      new singleSubstation(extender, arm, wrist, claw));
+        new stowAway(extender, arm, wrist),
+        new singleSubstation(extender, arm, wrist, claw));
   }
 }

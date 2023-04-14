@@ -97,7 +97,7 @@ public class ClawSubsystem extends SubsystemBase {
     // }
   }
 
-  public void outTake() {
+  public void outTakeCone() {
     clawSolenoid.set(Value.kReverse);
     leftNeo550.set(1);
     rightNeo550.set(-1);
@@ -115,7 +115,13 @@ public class ClawSubsystem extends SubsystemBase {
     rightNeo550.set(-.5);
   }
 
-  public void outTake1() {
+  public void opperatorOpenClaw() {
+    clawSolenoid.set(Value.kReverse);
+    rightNeo550.set(.75);
+    leftNeo550.set(-.75);
+  }
+
+  public void opperatorCloseClaw() {
     clawSolenoid.set(Value.kForward);
     leftNeo550.set(.75);
     rightNeo550.set(-.75);

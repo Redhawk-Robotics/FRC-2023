@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.Positions.highCommand;
-import frc.robot.commands.Positions.stoweAway;
+import frc.robot.commands.Positions.stowAway;
 import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.commands.Swerve.DriveTurn;
 import frc.robot.subsystems.ArmSubsystem;
@@ -23,19 +23,19 @@ import frc.robot.subsystems.extenderSubsystem;
 public class HIGH extends SequentialCommandGroup {
   /** Creates a new HIGH. */
   public HIGH(SwerveSubsystem SwerveDrive, extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist,
-  ClawSubsystem claw) {
+      ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new WaitCommand(6),
-      new InstantCommand(() -> claw.closeClaw()),
-      new stoweAway(extender, arm, wrist),
-      new highCommand(extender, arm, wrist),
-      new InstantCommand(() -> wrist.setPosition(-29)),
-      new WaitCommand(2),
-      new InstantCommand(() -> claw.openClaw()),
-      new DriveForward(SwerveDrive, 0, -3, 2),
-      new stoweAway(extender, arm, wrist),
-      new DriveTurn(SwerveDrive, 0, -35, 1.5));
+        new WaitCommand(6),
+        new InstantCommand(() -> claw.closeClaw()),
+        new stowAway(extender, arm, wrist),
+        new highCommand(extender, arm, wrist),
+        new InstantCommand(() -> wrist.setPosition(-29)),
+        new WaitCommand(2),
+        new InstantCommand(() -> claw.openClaw()),
+        new DriveForward(SwerveDrive, 0, -3, 2),
+        new stowAway(extender, arm, wrist),
+        new DriveTurn(SwerveDrive, 0, -35, 1.5));
   }
 }
