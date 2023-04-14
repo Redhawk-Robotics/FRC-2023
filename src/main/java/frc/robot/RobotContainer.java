@@ -317,16 +317,19 @@ public class RobotContainer {
     Autons.setDefaultOption("Do Nothing", new DoNothingAuton());
 
     // // ------------------------------------- CALIBRATE
-    Autons.addOption("CALI HARD PATH", pathPlannerBuilder.createAuto("Cali"));
-
-    Autons.addOption("CALI SIMPLE PATH", pathPlannerBuilder.createAuto("Test"));
+    Autons.addOption("CALI HARD PATH", pathPlannerBuilder.createAuto("Cali Hard"));
+    Autons.addOption("CALI SIMPLE PATH", pathPlannerBuilder.createAuto("Simple Cali"));
+    Autons.addOption("CALI BONKERS PATH", pathPlannerBuilder.createAuto("Crazy Cali"));
     // // -------------------------------------
 
     Autons.addOption("High, Pickup, High", pathPlannerBuilder.createAuto("pls work"));
     Autons.addOption("High, Pickup, Engage", pathPlannerBuilder.createAuto("Leave, Pickup, Engage"));
     Autons.addOption("HIGH_PICKUP", pathPlannerBuilder.createAuto("HIGH_PICKUP"));
-    Autons.addOption("Champs High", pathPlannerBuilder.createAuto("Clean High"));
-    Autons.addOption("Champs Mid", pathPlannerBuilder.createAuto("Clean Mid"));
+    Autons.addOption("Blue High No Bump", pathPlannerBuilder.createAuto("Blue High No Bump"));
+    Autons.addOption("Blue High BUMP", pathPlannerBuilder.createAuto("Blue High BUMP"));
+    Autons.addOption("Blue Mid NO Bump", pathPlannerBuilder.createAuto("Blue Mid NO Bump"));
+    Autons.addOption("Blue Mid Bump", pathPlannerBuilder.createAuto("Blue Mid Bump"));
+
     /*
      * IMPORTANT!!!
      * IMPORTANT!!!
