@@ -19,8 +19,8 @@
         "names": [
           "High"
         ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "after",
+        "executionBehavior": "parallel",
+        "waitBehavior": "minimum",
         "waitTime": 6.0
       }
     },
@@ -96,8 +96,8 @@
         "names": [
           "Cone Claw"
         ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
+        "executionBehavior": "parallel",
+        "waitBehavior": "minimum",
         "waitTime": 0
       }
     },
@@ -195,8 +195,8 @@
         "names": [
           "High"
         ],
-        "executionBehavior": "sequential",
-        "waitBehavior": "none",
+        "executionBehavior": "parallel",
+        "waitBehavior": "minimum",
         "waitTime": 0
       }
     }

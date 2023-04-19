@@ -12,6 +12,7 @@ import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.commands.Autons.AutoBase;
 import frc.robot.commands.Positions.groundConeCommand;
@@ -24,7 +25,7 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
 
-public class AutoFactory {
+public class AutoFactory extends CommandBase {
     private HashMap<String, Command> eventMap;
     private Double[] pathConstraints = { 4.0, 3.0 }; // velo, accel
     private final extenderSubsystem extender;
@@ -46,6 +47,7 @@ public class AutoFactory {
         this.wrist = wrist;
         this.claw = claw;
         this.arm = arm;
+        addRequirements(arm, extender, wrist, claw);
     }
 
     private List<EventMarker> getPathMarkers() {
