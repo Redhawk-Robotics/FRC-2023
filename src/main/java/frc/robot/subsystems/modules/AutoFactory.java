@@ -38,14 +38,14 @@ public class AutoFactory {
     public AutoFactory(ArmSubsystem arm, extenderSubsystem extender,
             WristSubsystem wrist, ClawSubsystem claw,
             Compressor compressor, AutoBase autoBase) {
+        this.eventMap = new HashMap<>();
+        eventMap();
         this.autoBuilder = autoBase.CustomSwerveAutoBuilder();
         this.compressor = compressor;
         this.extender = extender;
         this.wrist = wrist;
         this.claw = claw;
         this.arm = arm;
-        this.eventMap = new HashMap<>();
-        eventMap();
     }
 
     private List<EventMarker> getPathMarkers() {
@@ -82,6 +82,7 @@ public class AutoFactory {
     }
 
     public Command createAuto(String path) {
+        eventMap();
         setPath(path);
         return new FollowPathWithEvents(pathFollowingCommand(), getPathMarkers(), eventMap);
     }
