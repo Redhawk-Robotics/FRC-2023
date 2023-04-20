@@ -39,7 +39,7 @@ public class BLUE_LEFT_PLACE_MID_DIP extends SequentialCommandGroup {
         new WaitCommand(2),
         new InstantCommand(() -> claw.openClaw()),
         new stowAway(extender, arm, wrist),
-        new DriveForward(SwerveDrive, 0, 2, 1) // Should be pos velo now because of
+        new DriveForward(SwerveDrive, 0, 15, 7) // Should be pos velo now because of
     );
 
   }

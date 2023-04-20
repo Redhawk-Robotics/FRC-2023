@@ -33,6 +33,7 @@ import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.commands.Swerve.DriveTurn;
 import frc.robot.commands.Swerve.autoAligner;
+import frc.robot.commands.extender.ResetExtender;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 import frc.robot.subsystems.ArmSubsystem;
@@ -282,6 +283,7 @@ public class RobotContainer {
 		dpadDownButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
 		opperator_Y.onTrue(doubleSubstation);
+		opperator_Y.whileTrue(new InstantCommand(() -> claw.coneIntake()));
 		opperator_Y.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
 		opperator_A.onTrue(stowAway);
@@ -358,6 +360,23 @@ public class RobotContainer {
 		Autons.addOption("[BLUE-LEFT] PLACE MID, DIP",
 				new BLUE_LEFT_PLACE_MID_DIP(SwerveDrive, extender, arm, wrist, claw));
 
+		Autons.addOption("Place High, DIP", new SequentialCommandGroup(
+				new InstantCommand(() -> SwerveDrive.autoReverseGyro()),
+				new CheckCompressor(compressor, 10),
+				new InstantCommand(() -> claw.closeClaw()),
+				new InstantCommand(() -> wrist.setPosition(0)),
+				new WaitCommand(1),
+				new stowAway(extender, arm, wrist),
+				new highCommand(extender, arm, wrist),
+				new WaitCommand(1),
+				new InstantCommand(() -> wrist.setPosition(-29)),
+				new WaitCommand(2),
+				new InstantCommand(() -> claw.openClaw()),
+				new ResetExtender(extender, 0),
+				new stowAway(extender, arm, wrist),
+				new DriveForward(SwerveDrive, 0, 15, 7) // Should be pos velo now because of
+		));
+
 		Autons.addOption("[BLUE-RIGHT] PLACE MID, DIP",
 				new BLUE_RIGHT_PLACE_MID_DIP(SwerveDrive, extender, arm, wrist, claw));
 
@@ -371,9 +390,10 @@ public class RobotContainer {
 
 		Autons.addOption("LOW_ENGAGE", new LOW_ENGAGE(SwerveDrive));
 
-		Autons.addOption("single", new Single(SwerveDrive, extender, arm, wrist, claw));
+		// Autons.addOption("single", new Single(SwerveDrive, extender, arm, wrist,
+		// claw));
 
-		Autons.addOption("high", new HIGH(SwerveDrive, extender, arm, wrist, claw));
+		// Autons.addOption("high", new HIGH(SwerveDrive, extender, arm, wrist, claw));
 
 		Autons.addOption("[PP] UNTESTED pls change",
 				new PP_UNTESTED_PLS_CHANGE(SwerveDrive, extender, arm, wrist, claw));
@@ -438,3 +458,4 @@ public class RobotContainer {
 		return new FollowPathWithEvents(pathFollowingCommand(), getPathMarkers(), eventMap);
 	}
 }
+// CODE GOBLIN STRIKES AGAIN

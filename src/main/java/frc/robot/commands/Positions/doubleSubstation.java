@@ -32,7 +32,6 @@ public class doubleSubstation extends SequentialCommandGroup {
             new ResetExtender(extender, 0),
             new InstantCommand(() -> wristSubsystem.setPosition(-30)),
 
-            new InstantCommand(() -> arm.setPosition(65))),
-        new InstantCommand(() -> claw.coneIntake()));
+            new InstantCommand(() -> arm.setPosition(65))));
   }
 }
