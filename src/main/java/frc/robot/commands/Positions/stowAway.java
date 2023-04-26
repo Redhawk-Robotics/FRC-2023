@@ -21,6 +21,8 @@ public class stowAway extends SequentialCommandGroup {
   public stowAway(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    addRequirements(extender, arm, wristSubsystem);
+
     addCommands(
 
         new ParallelCommandGroup(

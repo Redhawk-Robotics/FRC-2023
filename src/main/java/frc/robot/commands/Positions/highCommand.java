@@ -21,6 +21,7 @@ public class highCommand extends SequentialCommandGroup {
   public highCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wrist) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    addRequirements(extender, arm, wrist);
     addCommands(
         new InstantCommand(() -> wrist.setPosition(5)),
         // new ParallelCommandGroup(
@@ -31,7 +32,7 @@ public class highCommand extends SequentialCommandGroup {
         new WaitCommand(1.5),
         // new InstantCommand(() -> extender.setPosition(194)), // 194 when neo was 27:1
         // ratio
-        new ResetExtender(extender, 21) // 194 when neo was 27:1
+        new ResetExtender(extender, 36) // 194 when neo was 27:1
     // ratio
     // new InstantCommand(() -> wrist.setPosition(5))
     );

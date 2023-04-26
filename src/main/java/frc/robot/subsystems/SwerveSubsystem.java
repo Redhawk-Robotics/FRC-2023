@@ -110,6 +110,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
   }
 
+  public SwerveModule[] getSwerveModules() {
+    return SwerveMods;
+  }
+
   /* Used by SwerveControllerCommand in Auto */
   // States of the four modules of the SwerveDrive and the desiredState of the
   // optimal location the module need to be in
@@ -214,9 +218,10 @@ public class SwerveSubsystem extends SubsystemBase {
         ? Rotation2d.fromDegrees(360 - m_Pigeon.getPitch())
         : Rotation2d.fromDegrees(m_Pigeon.getPitch());
   }
-  public void stopDrive(){
+
+  public void stopDrive() {
     drive(new Translation2d(0, 0), 0, false, true);
-}
+  }
 
   @Override
   public void periodic() {

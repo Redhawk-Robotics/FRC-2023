@@ -36,8 +36,9 @@ public class extenderSubsystem extends PIDInterface {
     extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kForward, true);
     extenderMotor.enableSoftLimit(CANSparkMax.SoftLimitDirection.kReverse, true);
 
-    extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 30);
+    extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 36.5f);
     // 270 when neo was 27:1 ratio
+    // 30 when neo was 3:1 ratio
     // extenderMotor.setSoftLimit(CANSparkMax.SoftLimitDirection.kForward, 270);//
     // 270 when neo was 27:1 ratio
 

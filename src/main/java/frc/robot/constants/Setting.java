@@ -15,7 +15,7 @@ import frc.robot.lib.util.Gains;
 
 public interface Setting {
     /* Swerve Voltage Compensation */
-    public static final double voltageComp = 9;// 8.5
+    public static final double voltageComp = 9;// 9
 
     // RobotCharacterizations
     public static final double drivetrainTrackWidthMeters = Units.inchesToMeters(28.5);

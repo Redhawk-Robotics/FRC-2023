@@ -37,13 +37,13 @@ public class ResetExtender extends CommandBase {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    extenderSubsystem.setMotor(0);
+    // System.out.println("ResetExtender ended");
     extenderSubsystem.setPosition(targetPosition);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(extenderSubsystem.getCurrentPosition() - targetPosition) < 2.5;
+    return Math.abs(extenderSubsystem.getCurrentPosition() - targetPosition) < 1.5;
   }
 }

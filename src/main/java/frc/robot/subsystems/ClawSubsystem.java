@@ -134,8 +134,8 @@ public class ClawSubsystem extends SubsystemBase {
     // rightNeo550.set(0);
     // leftNeo550.set(0);
     // } else {
-    rightNeo550.set(.5);
-    leftNeo550.set(-.5);
+    rightNeo550.set(.75);
+    leftNeo550.set(-.75);
     // }
   }
 

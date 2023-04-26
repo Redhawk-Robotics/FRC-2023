@@ -92,6 +92,10 @@ public class SwerveModule {
         lastAngle = getState().angle;
     }
 
+    public CANSparkMax getDriverMotor() {
+        return driveMotor;
+    }
+
     /**
      * try the set desired states
      */

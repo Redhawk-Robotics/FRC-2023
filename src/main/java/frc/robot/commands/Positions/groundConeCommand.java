@@ -23,13 +23,12 @@ public class groundConeCommand extends SequentialCommandGroup {
       ClawSubsystem claw) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    addRequirements(extender, arm, wrist, claw);
     addCommands(
         new ResetExtender(extender, 0),
         new InstantCommand(() -> arm.setPosition(18)),
         new InstantCommand(() -> claw.coneIntake()),
         new WaitCommand(1),
-        new InstantCommand(() -> wrist.setPosition(-17))
-
-    );
+        new InstantCommand(() -> wrist.setPosition(-18)));
   }
 }
