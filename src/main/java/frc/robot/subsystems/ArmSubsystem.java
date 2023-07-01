@@ -117,9 +117,12 @@ public class ArmSubsystem extends PIDInterface {
     return rightArmEncoder.getPosition();
   }
 
+  public CANSparkMax getRightMotor() {
+    return rightArmMotor;
+  }
+
   public void setMotor(double speed) {
     rightArmMotor.set(speed);
-
   }
 
   public double getArmVelocity() {

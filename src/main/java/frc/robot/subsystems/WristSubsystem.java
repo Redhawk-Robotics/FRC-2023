@@ -134,6 +134,10 @@ public class WristSubsystem extends PIDInterface {
     wristMotor.set(wristSpeedReverse);
   }
 
+  public CANSparkMax getWristMotor() {
+    return wristMotor;
+  }
+
   // TODO try with the wrist that if its in code that its coast, and moves freely,
   // then this method is not needed
   public void enableMotors(boolean on) {

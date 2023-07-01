@@ -21,14 +21,11 @@ public class groundCubeCommand extends SequentialCommandGroup {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(extender, arm, wrist, claw);
     addCommands(
-
         new ResetExtender(extender, 0),
-
         new InstantCommand(() -> arm.setPosition(18)),
         new InstantCommand(() -> claw.cubeIntake()),
         new WaitCommand(1),
         new InstantCommand(() -> wrist.setPosition(-18))
-
     );
   }
 }

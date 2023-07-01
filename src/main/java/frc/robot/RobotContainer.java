@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import frc.robot.commands.Arm.ArmManual;
 import frc.robot.commands.Autons.AutoBase;
 import frc.robot.commands.Autons.DoNothingAuton;
 import frc.robot.commands.Autons.TimedBased.BLUE_LEFT_PLACE_MID_DIP;
@@ -30,6 +31,8 @@ import frc.robot.commands.Positions.AutoPositions.PlaceHigh;
 import frc.robot.commands.Positions.AutoPositions.PlaceMid;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
+import frc.robot.commands.Wrist.WristManual;
+import frc.robot.commands.extender.ExtenderManual;
 import frc.robot.commands.extender.ResetExtender;
 import frc.robot.constants.Ports;
 import frc.robot.subsystems.ArmSubsystem;
@@ -37,6 +40,8 @@ import frc.robot.subsystems.ClawSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import frc.robot.subsystems.extenderSubsystem;
+import frc.robot.subsystems.modules.AutoFactory;
+
 import java.util.HashMap;
 import java.util.List;
 
@@ -90,8 +95,7 @@ public class RobotContainer {
   private String pathFileName;
   private Double[] pathConstraints = { 4.0, 3.0 }; // velo, accel
 
-  // private final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender,
-  // wrist, claw, compressor, autoBase);
+  // private final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
   SwerveAutoBuilder autoBuilder = autoBase.CustomSwerveAutoBuilder();
 
   // Positions
@@ -218,9 +222,9 @@ public class RobotContainer {
 
     // -------------------------------------
 
-    // wristSubsystem.setDefaultCommand(
-    // new WristManual(wristSubsystem,
-    // () -> OPERATOR.getRawAxis(leftYAxis2) * .5));
+    // wrist.setDefaultCommand(
+    //   new WristManual(wrist,
+    //     () -> OPERATOR.getRawAxis(leftYAxis2) * .5));
 
     /*************/
     /*** EXTENDER ***/
@@ -228,11 +232,12 @@ public class RobotContainer {
 
     // METHODS: extend, retract
     // extender.setDefaultCommand(
-    // new ExtenderManual(
-    // extender,
-    // () -> OPERATOR.getRawAxis(rightYAxis2)));
+    //   new ExtenderManual(extender,
+    //     () -> OPERATOR.getRawAxis(rightYAxis2)));
 
-    // -------------------------------------
+    // arm.setDefaultCommand(new ArmManual(arm, () -> OPERATOR.getRawAxis(leftXAxis2)));
+
+    // -----------------if robot works, dont work--------------------
 
     // Configure the trigger bindings, defaults, Autons
     configureDefaultCommands();
@@ -279,6 +284,7 @@ public class RobotContainer {
     dpadDownButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
     opperator_Y.onTrue(doubleSubstation);
+    opperator_Y.whileTrue(new InstantCommand(() -> claw.coneIntake()));
     opperator_Y.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
     opperator_A.onTrue(stowAway);
@@ -321,6 +327,13 @@ public class RobotContainer {
    */
 
   public void configureAutons() {
+    final WristSubsystem wristAuto = new WristSubsystem();
+    final ArmSubsystem armAuto = new ArmSubsystem();
+    final extenderSubsystem extenderAuto = new extenderSubsystem();
+    final ClawSubsystem clawAuto = new ClawSubsystem();
+
+    final AutoFactory pathPlannerBuilder = new AutoFactory(armAuto, extenderAuto, wristAuto, clawAuto, compressor, autoBase);
+
 
     SmartDashboard.putData("Autonomous: ", Autons);
 
@@ -354,6 +367,7 @@ public class RobotContainer {
      */
 
     // TIMED BASED AUTONS//
+    pathPlannerBuilder.createAuto("mark");
     Autons.addOption("[BLUE-LEFT] PLACE MID, DIP",
         new BLUE_LEFT_PLACE_MID_DIP(SwerveDrive, extender, arm, wrist, claw));
 

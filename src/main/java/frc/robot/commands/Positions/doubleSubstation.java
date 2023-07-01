@@ -24,15 +24,12 @@ public class doubleSubstation extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-
         // new InstantCommand(() -> wristSubsystem.setPosition(5)),
         new InstantCommand(() -> arm.setPosition(65)),
         new WaitCommand(.5),
         new ParallelCommandGroup(
-            new ResetExtender(extender, 0),
-            new InstantCommand(() -> wristSubsystem.setPosition(-30)),
-
-            new InstantCommand(() -> arm.setPosition(65)),
-            new InstantCommand(() -> claw.coneIntake())));
+          new ResetExtender(extender, 0),
+          new InstantCommand(() -> wristSubsystem.setPosition(-28))),
+        new InstantCommand(() -> arm.setPosition(65)));
   }
 }

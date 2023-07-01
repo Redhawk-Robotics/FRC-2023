@@ -6,6 +6,8 @@ package frc.robot.commands.Wrist;
 
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.WristSubsystem;
 
@@ -13,12 +15,13 @@ public class WristManual extends CommandBase {
   /** Creates a new Wrist. */
   private final WristSubsystem wristSubsystem;
   private final DoubleSupplier speed;
+  private final SparkMaxPIDController wristContoller;
 
   public WristManual(WristSubsystem wristSubsystem, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.wristSubsystem = wristSubsystem;
     this.speed = speed;
-
+    wristContoller = wristSubsystem.getWristMotor().getPIDController();
     addRequirements(wristSubsystem);
   }
 
@@ -33,7 +36,8 @@ public class WristManual extends CommandBase {
   @Override
   public void execute() {
     double motorSpeed = speed.getAsDouble();
-    wristSubsystem.setMotor(motorSpeed);
+    wristSubsystem.setMotor(Math.abs(speed.getAsDouble()) < .1 ? 0: -speed.getAsDouble());
+    // wristContoller.setReference(wristSubsystem.getCurrentPosition(), CANSparkMax.ControlType.kSmartMotion);
   }
 
   // Called once the command ends or is interrupted.

@@ -6,6 +6,9 @@ package frc.robot.commands.Arm;
 
 import java.util.function.DoubleSupplier;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.SparkMaxPIDController;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.ArmSubsystem;
 
@@ -13,13 +16,14 @@ public class ArmManual extends CommandBase {
   // public ArmSubsystem armSubsystem;
   private ArmSubsystem tester;
   private DoubleSupplier speed;
+  private final SparkMaxPIDController armAngleController;
 
   /** Creates a new Arm. */
   public ArmManual(ArmSubsystem tester, DoubleSupplier speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.tester = tester;
     this.speed = speed;
-
+    armAngleController = tester.getRightMotor().getPIDController();
     addRequirements(tester);
   }
 
@@ -32,7 +36,9 @@ public class ArmManual extends CommandBase {
   @Override
   public void execute() {
     // double speedrevert = speed.getAsDouble();
-    tester.setMotor(-speed.getAsDouble() * .5);
+    tester.setMotor(speed.getAsDouble());
+    // armAngleController.setReference(tester.getCurrentPosition(), CANSparkMax.ControlType.kPosition);
+
   }
 
   // Called once the command ends or is interrupted.

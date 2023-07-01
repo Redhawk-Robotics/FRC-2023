@@ -108,6 +108,10 @@ public class extenderSubsystem extends PIDInterface {
     return extenderEncoder.getPosition();
   }
 
+  public CANSparkMax getExtenderMotor() {
+    return extenderMotor;
+  }
+
   public void setMotor(double speed) {
     extenderMotor.set(speed);
   }

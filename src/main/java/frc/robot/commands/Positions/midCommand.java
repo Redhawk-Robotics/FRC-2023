@@ -7,6 +7,7 @@ package frc.robot.commands.Positions;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.extender.ResetExtender;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.WristSubsystem;
@@ -20,13 +21,13 @@ public class midCommand extends SequentialCommandGroup {
   public midCommand(extenderSubsystem extender, ArmSubsystem arm, WristSubsystem wristSubsystem) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
+    int pos = arm.getCurrentPosition() > 58 ? 0: -5;
     addCommands(
         new InstantCommand(() -> wristSubsystem.setPosition(5)),
-        new ParallelCommandGroup(
-            new ResetExtender(extender, 0)),
-        new InstantCommand(() -> wristSubsystem.setPosition(5)),
-
-        new InstantCommand(() -> arm.setPosition(55)));
+        new ResetExtender(extender, 0),
+        new InstantCommand(() -> arm.setPosition(55)),
+        new WaitCommand(.5),
+        new InstantCommand(() -> wristSubsystem.setPosition(pos)));
 
   }
 }

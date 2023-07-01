@@ -39,7 +39,7 @@ public class AutoFactory extends CommandBase {
     public AutoFactory(ArmSubsystem arm, extenderSubsystem extender,
             WristSubsystem wrist, ClawSubsystem claw,
             Compressor compressor, AutoBase autoBase) {
-        this.eventMap = new HashMap<>();
+        this.eventMap = new HashMap<String, Command>();
         eventMap();
         this.autoBuilder = autoBase.CustomSwerveAutoBuilder();
         this.compressor = compressor;

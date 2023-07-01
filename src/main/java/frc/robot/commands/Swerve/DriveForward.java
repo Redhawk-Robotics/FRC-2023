@@ -12,10 +12,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class DriveForward extends CommandBase {
   /** Creates a new Drive. */
   private SwerveSubsystem Swerve;
-  private double distance, veloicty;
+  private double veloicty;
   private Timer timer;
   private double time;
-  private double startTime;
 
   public DriveForward(
       // Use addRequirements() here to declare subsystem dependencies.
@@ -23,7 +22,6 @@ public class DriveForward extends CommandBase {
     this.Swerve = s_Swerve;
     addRequirements(s_Swerve);
 
-    this.distance = distance;
     this.veloicty = velocity;
     // time = Math.abs(this.distance / this.veloicty);
     this.time = time;
@@ -35,7 +33,6 @@ public class DriveForward extends CommandBase {
   public void initialize() {
     this.timer.reset();
     this.timer.start();
-    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

@@ -30,6 +30,7 @@ public class highCommand extends SequentialCommandGroup {
 
         new InstantCommand(() -> arm.setPosition(66)),
         new WaitCommand(1.5),
+        new InstantCommand(() -> wrist.setPosition(-5)),
         // new InstantCommand(() -> extender.setPosition(194)), // 194 when neo was 27:1
         // ratio
         new ResetExtender(extender, 36) // 194 when neo was 27:1
