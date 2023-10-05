@@ -95,6 +95,7 @@ public class extenderSubsystem extends PIDInterface {
 
   @Override
   public void setPosition(double targetPosition) {
+    PID();
     extenderController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }
 

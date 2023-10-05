@@ -102,6 +102,7 @@ public class ArmSubsystem extends PIDInterface {
 
   @Override
   public void setPosition(double targetPosition) {
+    pidUp();
     manageMotion(targetPosition);
     armAngleController.setReference(targetPosition, CANSparkMax.ControlType.kPosition);
   }

@@ -177,9 +177,9 @@ public interface Setting {
     public static final class armSetting {
         public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.1 * Math.PI;
 
-        public static final double armPup = 0.05;
+        public static final double armPup = 1;
         public static final double armIup = 0;
-        public static final double armDup = 0;
+        public static final double armDup = 1;
         public static final double armFFup = 0;
 
         public static final double armPdown = 0.05;
@@ -210,9 +210,9 @@ public interface Setting {
     public static final class extenderSetting {
         public static final double kEncoderTick2Meter = 1.0 / 4096.0 * 0.1 * Math.PI;
 
-        public static final double extenderP = 0.05;
+        public static final double extenderP = 1;
         public static final double extenderI = 0;
-        public static final double extenderD = 0;
+        public static final double extenderD = 1;
         public static final double extenderFF = 0;
         public static final double maxVoltage = 6;
         // public static final double extenderConversionFactor = 0;// FIXME need to find

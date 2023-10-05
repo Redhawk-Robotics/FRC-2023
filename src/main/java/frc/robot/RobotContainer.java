@@ -206,7 +206,8 @@ public class RobotContainer {
 
   public RobotContainer() {
     this.eventMap = new HashMap<>();
-    eventMap();
+    // eventMap();
+    final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
     /*************/
     /*** DRIVE ***/
     /*************/
@@ -243,6 +244,8 @@ public class RobotContainer {
     configureDefaultCommands();
     configureButtonBindings();
     configureAutons();
+    // final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
+
   }
 
   /****************/
@@ -327,12 +330,12 @@ public class RobotContainer {
    */
 
   public void configureAutons() {
-    final WristSubsystem wristAuto = new WristSubsystem();
-    final ArmSubsystem armAuto = new ArmSubsystem();
-    final extenderSubsystem extenderAuto = new extenderSubsystem();
-    final ClawSubsystem clawAuto = new ClawSubsystem();
+    // final WristSubsystem wristAuto = new WristSubsystem();
+    // final ArmSubsystem armAuto = new ArmSubsystem();
+    // final extenderSubsystem extenderAuto = new extenderSubsystem();
+    // final ClawSubsystem clawAuto = new ClawSubsystem();
 
-    final AutoFactory pathPlannerBuilder = new AutoFactory(armAuto, extenderAuto, wristAuto, clawAuto, compressor, autoBase);
+    // final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
 
 
     SmartDashboard.putData("Autonomous: ", Autons);
@@ -367,7 +370,7 @@ public class RobotContainer {
      */
 
     // TIMED BASED AUTONS//
-    pathPlannerBuilder.createAuto("mark");
+    // pathPlannerBuilder.createAuto("mark");
     Autons.addOption("[BLUE-LEFT] PLACE MID, DIP",
         new BLUE_LEFT_PLACE_MID_DIP(SwerveDrive, extender, arm, wrist, claw));
 

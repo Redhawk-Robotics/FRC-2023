@@ -40,13 +40,13 @@ public class AutoFactory extends CommandBase {
             WristSubsystem wrist, ClawSubsystem claw,
             Compressor compressor, AutoBase autoBase) {
         this.eventMap = new HashMap<String, Command>();
-        eventMap();
         this.autoBuilder = autoBase.CustomSwerveAutoBuilder();
         this.compressor = compressor;
         this.extender = extender;
         this.wrist = wrist;
         this.claw = claw;
         this.arm = arm;
+        eventMap();
         addRequirements(arm, extender, wrist, claw);
     }
 
