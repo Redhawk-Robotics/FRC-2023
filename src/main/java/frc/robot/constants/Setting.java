@@ -147,8 +147,8 @@ public interface Setting {
     }
 
     public static final class clawPneumatic {
-        public static final int clawForwardChan = 0;
-        public static final int clawReverseChan = 1;
+        public static final int clawForwardChan = 1;
+        public static final int clawReverseChan = 0;
     }
 
     public static final class clawSetting {

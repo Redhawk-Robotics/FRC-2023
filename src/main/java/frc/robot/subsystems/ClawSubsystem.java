@@ -37,12 +37,13 @@ public class ClawSubsystem extends SubsystemBase {
     leftNeo550 = new CANSparkMax(Ports.Claw.leftClaw, MotorType.kBrushless);
     rightNeo550 = new CANSparkMax(Ports.Claw.rightClaw, MotorType.kBrushless);
 
-    clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.REVPH, Setting.clawPneumatic.clawForwardChan,
+    clawSolenoid = new DoubleSolenoid(PneumaticsModuleType.CTREPCM, Setting.clawPneumatic.clawForwardChan,
         Setting.clawPneumatic.clawReverseChan);
 
     leftEncoder = leftNeo550.getEncoder();
 
     leftNeo550.follow(rightNeo550, false);
+    rightNeo550.setInverted(true);
 
     clawSpeedPIDController = leftNeo550.getPIDController();
 

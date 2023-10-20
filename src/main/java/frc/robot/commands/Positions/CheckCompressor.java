@@ -27,8 +27,12 @@ public class CheckCompressor extends CommandBase {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    compressor.enableAnalog(100, 120);
+    
+    compressor.enableDigital();
+    // compressor.enableAnalog(100, 120);
     SmartDashboard.putNumber("PRESSURE", compressor.getPressure());
+    System.out.println("IS COMP ON???????" + compressor.isEnabled());
+    System.out.println("COMP PRESSURE???????" + compressor.getPressure());
   }
 
   // Called once the command ends or is interrupted.

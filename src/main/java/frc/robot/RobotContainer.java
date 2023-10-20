@@ -22,7 +22,9 @@ import frc.robot.commands.Positions.doubleSubstation;
 import frc.robot.commands.Positions.groundConeCommand;
 import frc.robot.commands.Positions.groundCubeCommand;
 import frc.robot.commands.Positions.highCommand;
+import frc.robot.commands.Positions.keepCone;
 import frc.robot.commands.Positions.midCommand;
+import frc.robot.commands.Positions.releaseCone;
 import frc.robot.commands.Positions.shootCube;
 import frc.robot.commands.Positions.shootCone;
 import frc.robot.commands.Positions.singleSubstation;
@@ -87,7 +89,7 @@ public class RobotContainer {
   private final extenderSubsystem extender = new extenderSubsystem();
   private final ClawSubsystem claw = new ClawSubsystem();
 
-  private final Compressor compressor = new Compressor(PneumaticsModuleType.REVPH);
+  private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
   private final AutoBase autoBase = new AutoBase(SwerveDrive);
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -106,6 +108,8 @@ public class RobotContainer {
   private final midCommand midCommand = new midCommand(extender, arm, wrist);
 
   private final shootCone shootCone = new shootCone(extender, arm, wrist, claw);
+  private final releaseCone releaseCone = new releaseCone(claw);
+  private final keepCone keepCone = new keepCone(claw);
   private final shootCube shootCube = new shootCube(extender, arm, wrist, claw);
 
   private final singleSubstation singleSubstation = new singleSubstation(extender, arm, wrist, claw);
@@ -254,7 +258,9 @@ public class RobotContainer {
 
   private void configureDefaultCommands() {
     // Compressor code
-    compressor.enableAnalog(100, 120);
+    compressor.enableDigital();
+    System.out.println("IS COMP ON???????" + compressor.isEnabled());
+    // compressor.enableAnalog(100, 120);
 
     // compressor.disableCompressor();
 
@@ -294,10 +300,14 @@ public class RobotContainer {
     opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
     // ------------------------------------- ARM
-    opperator_leftBumper.whileTrue(shootCube);
+    // opperator_leftBumper.whileTrue(shootCube);
+    // opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+    opperator_leftBumper.whileTrue(keepCone);
     opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    opperator_RightBumper.whileTrue(shootCone);
+    // opperator_RightBumper.whileTrue(shootCone);
+    // opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+    opperator_RightBumper.whileTrue(releaseCone);
     opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
     // // ------------------------------------- CLAW
