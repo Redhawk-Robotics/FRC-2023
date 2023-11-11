@@ -78,7 +78,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-
+  private boolean demoControls = true;
   /* Subsystems */
   private final SwerveSubsystem SwerveDrive = new SwerveSubsystem();
   // private final Limelight Limelight = new Limelight();
@@ -155,9 +155,6 @@ public class RobotContainer {
   private final Trigger driver_BottomLeftRearButton = new JoystickButton(DRIVER,
       XboxController.Button.kBack.value);
 
-  private final Trigger driver_TopRightRearButton = new JoystickButton(DRIVER,
-      XboxController.Button.kRightStick.value);
-
   private final Trigger driver_START = new JoystickButton(DRIVER, XboxController.Button.kStart.value);
   private final Trigger driver_BACK = new JoystickButton(DRIVER, XboxController.Button.kBack.value);
 
@@ -188,17 +185,26 @@ public class RobotContainer {
 
   private final Trigger opperator_RightBumper = new JoystickButton(OPERATOR,
       XboxController.Button.kRightBumper.value);
+  
   private final Trigger opperator_leftBumper = new JoystickButton(OPERATOR,
       XboxController.Button.kLeftBumper.value);
 
   private final Trigger opperator_BottomRightRearButton = new JoystickButton(OPERATOR,
       XboxController.Button.kStart.value);
+      
   private final Trigger opperator_BottomLeftRearButton = new JoystickButton(OPERATOR,
       XboxController.Button.kBack.value);
 
   private final Trigger opperator_TopLeftRearButton = new JoystickButton(OPERATOR,
       XboxController.Button.kLeftStick.value);
+
+  private final Trigger driver_TopLeftRearButton = new JoystickButton(DRIVER,
+      XboxController.Button.kLeftStick.value);
+
   private final Trigger opperator_TopRightRearButton = new JoystickButton(OPERATOR,
+      XboxController.Button.kRightStick.value);
+  
+  private final Trigger driver_TopRightRearButton = new JoystickButton(DRIVER,
       XboxController.Button.kRightStick.value);
 
   // Create SmartDashboard chooser for autonomous routines
@@ -273,57 +279,109 @@ public class RobotContainer {
   /***************/
 
   private void configureButtonBindings() {
-    // Driver
-    driver_A_zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));
-    dpadRightButtonDrive.onTrue(new ResetExtender(extender, 36));
-    dpadLeftButtonDrive.onTrue(new ResetExtender(extender, 0));
-    // driver_B.onTrue(autoAligner);// may break code
+    if (demoControls) {
+      // Driver
+      driver_A_zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));
+      // dpadRightButtonDrive.onTrue(new ResetExtender(extender, 36));
+      // dpadLeftButtonDrive.onTrue(new ResetExtender(extender, 0));
+      // driver_B.onTrue(autoAligner);// may break code
 
-    // ------------------------------------- COMMANDS
-    opperator_B.onTrue(midCommand);
-    opperator_X.onTrue(highCommand);
+      // ------------------------------------- COMMANDS
+      driver_B.onTrue(midCommand);
+      driver_X_robotCentric.onTrue(highCommand);
 
-    dpadUpButtonOperator.onTrue(groundCone);
-    dpadUpButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      dpadUpButtonDrive.onTrue(groundCone);
+      dpadUpButtonDrive.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    // dpadLeftButtonOperator.onTrue(singleSubstation);
-    // dpadLeftButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      // dpadLeftButtonOperator.onTrue(singleSubstation);
+      // dpadLeftButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    dpadDownButtonOperator.onTrue(groundCube);
-    dpadDownButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      dpadDownButtonDrive.onTrue(groundCube);
+      dpadDownButtonDrive.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    opperator_Y.onTrue(doubleSubstation);
-    opperator_Y.whileTrue(new InstantCommand(() -> claw.coneIntake()));
-    opperator_Y.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      driver_Y.onTrue(doubleSubstation);
+      driver_Y.whileTrue(new InstantCommand(() -> claw.coneIntake()));
+      driver_Y.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    opperator_A.onTrue(stowAway);
-    opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      dpadRightButtonDrive.onTrue(stowAway);
+      dpadRightButtonDrive.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    // ------------------------------------- ARM
-    // opperator_leftBumper.whileTrue(shootCube);
-    // opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
-    opperator_leftBumper.whileTrue(keepCone);
-    opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      // ------------------------------------- ARM
+      // opperator_leftBumper.whileTrue(shootCube);
+      // opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      // opperator_leftBumper.whileTrue(keepCone);
+      // opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    // opperator_RightBumper.whileTrue(shootCone);
-    // opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
-    opperator_RightBumper.whileTrue(releaseCone);
-    opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      // opperator_RightBumper.whileTrue(shootCone);
+      // opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      driver_leftBumper.whileTrue(releaseCone);
+      driver_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    // // ------------------------------------- CLAW
-    opperator_TopLeftRearButton.onTrue(new InstantCommand(() -> claw.opperatorOpenClaw()));
-    opperator_TopLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
+      // // ------------------------------------- CLAW
+      driver_TopLeftRearButton.onTrue(new InstantCommand(() -> claw.opperatorOpenClaw()));
+      driver_TopLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    opperator_BottomLeftRearButton.onTrue(new InstantCommand(() -> claw.opperatorCloseClaw()));
-    opperator_BottomLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
+      driver_BottomLeftRearButton.onTrue(new InstantCommand(() -> claw.opperatorCloseClaw()));
+      driver_BottomLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
 
-    // // ------------------------------------- WRIST
-    opperator_TopRightRearButton.onTrue(new InstantCommand(() -> wrist.upGoWrist()));
-    opperator_TopRightRearButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
+      // // ------------------------------------- WRIST
+      driver_TopRightRearButton.onTrue(new InstantCommand(() -> wrist.upGoWrist()));
+      driver_TopRightRearButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
 
-    opperator_BottomRightRearButton.onTrue(new InstantCommand(() -> wrist.downGoWrist()));
-    opperator_BottomRightRearButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
+      driver_BottomRightRearButton.onTrue(new InstantCommand(() -> wrist.downGoWrist()));
+      driver_BottomRightRearButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
+    } else {
+      // Driver
+      driver_A_zeroGyro.onTrue(new InstantCommand(() -> SwerveDrive.zeroGyro()));
+      dpadRightButtonDrive.onTrue(new ResetExtender(extender, 36));
+      dpadLeftButtonDrive.onTrue(new ResetExtender(extender, 0));
+      // driver_B.onTrue(autoAligner);// may break code
 
+      // ------------------------------------- COMMANDS
+      opperator_B.onTrue(midCommand);
+      opperator_X.onTrue(highCommand);
+
+      dpadUpButtonOperator.onTrue(groundCone);
+      dpadUpButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      // dpadLeftButtonOperator.onTrue(singleSubstation);
+      // dpadLeftButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      dpadDownButtonOperator.onTrue(groundCube);
+      dpadDownButtonOperator.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      opperator_Y.onTrue(doubleSubstation);
+      opperator_Y.whileTrue(new InstantCommand(() -> claw.coneIntake()));
+      opperator_Y.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      opperator_A.onTrue(stowAway);
+      opperator_A.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      // ------------------------------------- ARM
+      // opperator_leftBumper.whileTrue(shootCube);
+      // opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      opperator_leftBumper.whileTrue(keepCone);
+      opperator_leftBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      // opperator_RightBumper.whileTrue(shootCone);
+      // opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+      opperator_RightBumper.whileTrue(releaseCone);
+      opperator_RightBumper.whileFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      // // ------------------------------------- CLAW
+      opperator_TopLeftRearButton.onTrue(new InstantCommand(() -> claw.opperatorOpenClaw()));
+      opperator_TopLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      opperator_BottomLeftRearButton.onTrue(new InstantCommand(() -> claw.opperatorCloseClaw()));
+      opperator_BottomLeftRearButton.onFalse(new InstantCommand(() -> claw.stopClaw()));
+
+      // // ------------------------------------- WRIST
+      opperator_TopRightRearButton.onTrue(new InstantCommand(() -> wrist.upGoWrist()));
+      opperator_TopRightRearButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
+
+      opperator_BottomRightRearButton.onTrue(new InstantCommand(() -> wrist.downGoWrist()));
+      opperator_BottomRightRearButton.onFalse(new InstantCommand(() -> wrist.stopWrist()));
+    }
     // // ------------------------------------- EXTENDER
   }
 
@@ -340,11 +398,6 @@ public class RobotContainer {
    */
 
   public void configureAutons() {
-    // final WristSubsystem wristAuto = new WristSubsystem();
-    // final ArmSubsystem armAuto = new ArmSubsystem();
-    // final extenderSubsystem extenderAuto = new extenderSubsystem();
-    // final ClawSubsystem clawAuto = new ClawSubsystem();
-
     // final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
 
 
@@ -381,6 +434,7 @@ public class RobotContainer {
 
     // TIMED BASED AUTONS//
     // pathPlannerBuilder.createAuto("mark");
+
     Autons.addOption("[BLUE-LEFT] PLACE MID, DIP",
         new BLUE_LEFT_PLACE_MID_DIP(SwerveDrive, extender, arm, wrist, claw));
 
