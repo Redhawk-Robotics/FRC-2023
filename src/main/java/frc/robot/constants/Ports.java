@@ -71,7 +71,7 @@ public interface Ports {
         public static final int frontLeftModuleDriveMotor = 55; // FIXME Set front left module drive motor ID
         public static final int frontLeftModuleSteerMotor = 56; // FIXME Set front left module steer motor ID
         public static final int frontLeftModuleSteerEncoder = 11; // FIXME Set front left steer encoder ID
-        public static final Rotation2d frontLeftModuleSteerOffSet = Rotation2d.fromDegrees(0); // FIXME
+        public static final Rotation2d frontLeftModuleSteerOffSet = Rotation2d.fromDegrees(210.673828125); // FIXME
         // Measure
         // and set
         // front left
@@ -88,7 +88,7 @@ public interface Ports {
         public static final int frontRightModuleSteerMotor = 4; // FIXME Set front right steer motor ID
         public static final int frontRightModuleSteerEncoder = 22; // FIXME Set front right steer encoder ID
         public static final Rotation2d frontRightModuleSteerOffSet = Rotation2d
-                .fromDegrees(-106.787109375); // FIXME
+                .fromDegrees(163.4765625); // FIXME
         // Measure
         // and set
         // front
@@ -106,7 +106,7 @@ public interface Ports {
         public static final int backLeftModuleSteerMotor = 6; // FIXME Set back left steer motor ID
         public static final int backleftModuleSteerEncoder = 33; // FIXME Set back left steer encoder ID
         public static final Rotation2d backLeftModuleSteerOffSet = Rotation2d
-                .fromDegrees(-312.539 + 180); // FIXME
+                .fromDegrees(318.779296875 + 180); // FIXME
         // Measure
         // and set back
         // left steer
@@ -122,7 +122,7 @@ public interface Ports {
         public static final int backRightModuleSteerMotor = 8; // FIXME Set back right steer motor ID
         public static final int backRightModuleSteerEncoder = 44; // FIXME Set back right steer encoder ID
         public static final Rotation2d backRightModuleSteerOffSet = Rotation2d
-                .fromDegrees(-142.47); // FIXME
+                .fromDegrees(306.73828125 + 180); // FIXME
         // Measure and
         // set back
         // right steer

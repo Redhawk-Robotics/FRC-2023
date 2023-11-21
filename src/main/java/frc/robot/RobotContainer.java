@@ -31,6 +31,7 @@ import frc.robot.commands.Positions.singleSubstation;
 import frc.robot.commands.Positions.stowAway;
 import frc.robot.commands.Positions.AutoPositions.PlaceHigh;
 import frc.robot.commands.Positions.AutoPositions.PlaceMid;
+import frc.robot.commands.Positions.AutoPositions.stowAwayAuto;
 import frc.robot.commands.Swerve.Drive;
 import frc.robot.commands.Swerve.DriveForward;
 import frc.robot.commands.Wrist.WristManual;
@@ -88,17 +89,16 @@ public class RobotContainer {
   private final ArmSubsystem arm = new ArmSubsystem();
   private final extenderSubsystem extender = new extenderSubsystem();
   private final ClawSubsystem claw = new ClawSubsystem();
-
   private final Compressor compressor = new Compressor(PneumaticsModuleType.CTREPCM);
-  private final AutoBase autoBase = new AutoBase(SwerveDrive);
 
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  private HashMap<String, Command> eventMap;
+  private HashMap<String, Command> eventMap = new HashMap<>();
   private String pathFileName;
   private Double[] pathConstraints = { 4.0, 3.0 }; // velo, accel
-
-  // private final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
-  SwerveAutoBuilder autoBuilder = autoBase.CustomSwerveAutoBuilder();
+  
+  private final AutoBase autoBase = new AutoBase(SwerveDrive);
+  SwerveAutoBuilder autoBuilder = autoBase.CustomSwerveAutoBuilder(getEventMap());
+  private final AutoFactory pathPlannerBuilder = new AutoFactory(autoBase, autoBuilder, getEventMap());
 
   // Positions
   private final groundConeCommand groundCone = new groundConeCommand(extender, arm, wrist, claw);
@@ -215,9 +215,8 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
-    this.eventMap = new HashMap<>();
     // eventMap();
-    final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
+    // final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
     /*************/
     /*** DRIVE ***/
     /*************/
@@ -263,6 +262,7 @@ public class RobotContainer {
   /****************/
 
   private void configureDefaultCommands() {
+    eventMap();
     // Compressor code
     compressor.enableDigital();
     System.out.println("IS COMP ON???????" + compressor.isEnabled());
@@ -434,6 +434,9 @@ public class RobotContainer {
 
     // TIMED BASED AUTONS//
     // pathPlannerBuilder.createAuto("mark");
+    Autons.addOption("Simple Cali", pathPlannerBuilder.createAuto("Simple Cali"));
+    Autons.addOption("BHB", pathPlannerBuilder.createAuto("Blue High BUMP"));
+
 
     Autons.addOption("[BLUE-LEFT] PLACE MID, DIP",
         new BLUE_LEFT_PLACE_MID_DIP(SwerveDrive, extender, arm, wrist, claw));
@@ -538,53 +541,50 @@ public class RobotContainer {
     return Autons.getSelected();
   }
 
-  private List<EventMarker> getPathMarkers() {
-    return PathPlanner.loadPath(pathFileName,
-        new PathConstraints(pathConstraints[0], pathConstraints[1])).getMarkers();
-  }
+  // private List<EventMarker> getPathMarkers() {
+  //   return PathPlanner.loadPath(pathFileName,
+  //       new PathConstraints(pathConstraints[0], pathConstraints[1])).getMarkers();
+  // }
 
-  private List<PathPlannerTrajectory> pathGroup() {
-    return PathPlanner.loadPathGroup(pathFileName,
-        new PathConstraints(pathConstraints[0], pathConstraints[1]));
-  }
+  // private List<PathPlannerTrajectory> pathGroup() {
+  //   return PathPlanner.loadPathGroup(pathFileName,
+  //       new PathConstraints(pathConstraints[0], pathConstraints[1]));
+  // }
 
-  private Command pathFollowingCommand() {
-    return autoBuilder.fullAuto(pathGroup());
-  }
+  // private Command pathFollowingCommand() {
+  //   return autoBuilder.fullAuto(pathGroup());
+  // }
 
-  private void setPath(String path) {
-    this.pathFileName = path;
-  }
+  // private void setPath(String path) {
+  //   this.pathFileName = path;
+  // }
 
+  private HashMap<String, Command> getEventMap() {
+    if (eventMap.isEmpty()) {
+      eventMap();
+    }
+    return eventMap;
+  }
+  
   private void eventMap() {
-    eventMap.put("Stow", new stowAway(extender, arm, wrist));
-    eventMap.put("Run Comp", new InstantCommand(() -> compressor.enableAnalog(100, 120)));
-    eventMap.put("Fix Wrist", new InstantCommand(() -> wrist.setPosition(5)));
-    // eventMap.put("Cone Start", new
-    // groundConeCommand(extender, arm, wrist,
-    // claw));
-    // eventMap.put("Cube Start", new groundCubeCommand(extender, arm, wrist,
-    // claw));
-    eventMap.put("High", new PlaceHigh(extender, arm, wrist, claw, compressor));
-    eventMap.put("Mid", new PlaceMid(extender, arm, wrist, claw, compressor));
-    eventMap.put("Throw Cone", new InstantCommand(() -> claw.outTakeCone()));
-    eventMap.put("Throw Cube", new InstantCommand(() -> claw.outTakeCube()));
-    eventMap.put("Cone Claw", new InstantCommand(() -> claw.coneIntake()));
-    eventMap.put("Cube Claw", new InstantCommand(() -> claw.cubeIntake()));
-    eventMap.put("Stop Claw", new InstantCommand(() -> claw.stopClaw()));
-    eventMap.put("dank memes", new SequentialCommandGroup(
-        new InstantCommand(() -> {
-          System.out.println("@@@@@@@@@@@@@@@@@@@@");
-        }),
-        new stowAway(extender, arm, wrist),
-        new WaitCommand(1),
-        new PlaceHigh(extender, arm, wrist, claw, compressor)));
+    // eventMap.put("Safe", new stowAwayAuto(extender, arm, wrist));
+    // eventMap.put("Run Comp", new InstantCommand(() -> compressor.enableAnalog(100, 120)));
+    // eventMap.put("Fix Wrist", new InstantCommand(() -> wrist.setPosition(5)));
+    // eventMap.put("Cone up", new groundConeCommand(extender, arm, wrist, claw));
+    // eventMap.put("Cube Pickup", new groundCubeCommand(extender, arm, wrist, claw));
+    // eventMap.put("High", new PlaceHigh(extender, arm, wrist, claw, compressor));
+    // eventMap.put("Mid", new PlaceMid(extender, arm, wrist, claw, compressor));
+    // eventMap.put("Throw Cone", new InstantCommand(() -> claw.outTakeCone()));
+    // eventMap.put("Throw Cube", new InstantCommand(() -> claw.outTakeCube()));
+    // eventMap.put("Cone Claw", new InstantCommand(() -> claw.coneIntake()));
+    // eventMap.put("Cube Claw", new InstantCommand(() -> claw.cubeIntake()));
+    // eventMap.put("Stop Claw", new InstantCommand(() -> claw.stopClaw()));
   }
 
-  public Command createAuto(String path) {
-    eventMap();
-    setPath(path);
-    return new FollowPathWithEvents(pathFollowingCommand(), getPathMarkers(), eventMap);
-  }
+  // public Command createAuto(String path) {
+  //   eventMap();
+  //   setPath(path);
+  //   return new FollowPathWithEvents(pathFollowingCommand(), getPathMarkers(), eventMap);
+  // }
 }
 // CODE GOBLIN STRIKES AGAIN
