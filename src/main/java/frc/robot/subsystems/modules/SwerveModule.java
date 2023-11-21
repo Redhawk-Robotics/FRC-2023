@@ -7,6 +7,7 @@ import com.revrobotics.SparkMaxPIDController;
 import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -14,6 +15,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Robot;
+import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
 import frc.robot.lib.SwerveModuleConstants;
 import frc.robot.lib.math.OnboardModuleState;
@@ -56,6 +58,8 @@ public class SwerveModule {
 
     private final SparkMaxPIDController driveController;
     private final SparkMaxPIDController angleController;
+    private final PIDController angleControllerAUTO;
+
 
     private double chassisAngularOffset = 0;
 
@@ -81,6 +85,7 @@ public class SwerveModule {
         integratedAngleEncoder = angleMotor.getEncoder();
         angleController = angleMotor.getPIDController();
         configAngleMotor();
+        angleControllerAUTO = new PIDController(Setting.angleKP, Setting.angleKI, Setting.angleKD);
 
         /* Drive Motor Config */
         driveMotor = new CANSparkMax(moduleConstants.driveMotorID, MotorType.kBrushless);
@@ -94,6 +99,33 @@ public class SwerveModule {
 
     public CANSparkMax getDriverMotor() {
         return driveMotor;
+    }
+
+    public void setSwerveModuleStates(SwerveModuleState inputState) {
+        Rotation2d rotation = new Rotation2d(Math.toRadians(getRotationAngle()));
+        SwerveModuleState swerveModuleState = SwerveModuleState.optimize(inputState, rotation);
+        // setDriveSpeed(swerveModuleState.speedMetersPerSecond);
+        // setRotationPosition(swerveModuleState.angle.getDegrees());
+
+        setDriveSpeed(swerveModuleState.speedMetersPerSecond);
+        setRotationPosition(swerveModuleState.angle.getDegrees());
+    }
+
+    public double getRotationAngle() {
+        return (angleEncoder.getAbsolutePosition()- Ports.swerveOffsets[moduleNumber] + 36000) % 360;
+    }
+
+    public void setDriveSpeed(double inputSpeed) {
+        // m_driveMotor.set(ControlMode.Velocity, inputSpeed * SENSOR_CYCLE_SECONDS_PER_100MS_METERS);        
+        // SmartDashboard.putNumber(m_name + " set speed ", inputSpeed);
+        driveMotor.set(inputSpeed / 3);
+    }
+
+    public void setRotationPosition(double angle) {
+        // SmartDashboard.putNumber(m_name + "encoder value", getRotationAngle());
+        // SmartDashboard.putNumber(m_name + " set angle ", angle);
+        angleMotor.set(angleControllerAUTO.calculate(getRotationAngle(), angle));
+        // m_rotationMotor.set(m_rotationPID.calculate(getRotationAngle(), 0 + 90));
     }
 
     /**

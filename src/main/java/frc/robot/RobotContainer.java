@@ -48,12 +48,8 @@ import frc.robot.subsystems.modules.AutoFactory;
 import java.util.HashMap;
 import java.util.List;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.PathPlannerTrajectory.EventMarker;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.FollowPathWithEvents;
+// import com.pathplanner.lib.*;
+// import com.pathplanner.lib.commands.FollowPathWithEvents;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -96,9 +92,8 @@ public class RobotContainer {
   private String pathFileName;
   private Double[] pathConstraints = { 4.0, 3.0 }; // velo, accel
   
-  private final AutoBase autoBase = new AutoBase(SwerveDrive);
-  SwerveAutoBuilder autoBuilder = autoBase.CustomSwerveAutoBuilder(getEventMap());
-  private final AutoFactory pathPlannerBuilder = new AutoFactory(autoBase, autoBuilder, getEventMap());
+  // private final AutoBase autoBase;
+  // private final AutoFactory pathPlannerBuilder = new AutoFactory(autoBase, autoBuilder, getEventMap());
 
   // Positions
   private final groundConeCommand groundCone = new groundConeCommand(extender, arm, wrist, claw);
@@ -215,8 +210,8 @@ public class RobotContainer {
    */
 
   public RobotContainer() {
-    // eventMap();
-    // final AutoFactory pathPlannerBuilder = new AutoFactory(arm, extender, wrist, claw, compressor, autoBase);
+    // autoBase = new AutoBase(SwerveDrive, getEventMap());
+    // autoBuilder = autoBase.CustomSwerveAutoBuilder();
     /*************/
     /*** DRIVE ***/
     /*************/
@@ -434,8 +429,8 @@ public class RobotContainer {
 
     // TIMED BASED AUTONS//
     // pathPlannerBuilder.createAuto("mark");
-    Autons.addOption("Simple Cali", pathPlannerBuilder.createAuto("Simple Cali"));
-    Autons.addOption("BHB", pathPlannerBuilder.createAuto("Blue High BUMP"));
+    // Autons.addOption("Simple Cali", pathPlannerBuilder.createAuto("Simple Cali"));
+    // Autons.addOption("BHB", pathPlannerBuilder.createAuto("Blue High BUMP"));
 
 
     Autons.addOption("[BLUE-LEFT] PLACE MID, DIP",

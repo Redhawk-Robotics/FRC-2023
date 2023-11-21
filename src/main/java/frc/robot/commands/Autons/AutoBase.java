@@ -4,15 +4,7 @@
 
 package frc.robot.commands.Autons;
 
-import java.util.HashMap;
-
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.PIDConstants;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
-
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.constants.Setting;
 import frc.robot.constants.Setting.AutoConstants;
@@ -32,28 +24,28 @@ public class AutoBase extends SequentialCommandGroup {
     addCommands();
   }
 
-  public SwerveAutoBuilder CustomSwerveAutoBuilder(HashMap<String, Command> eventMap) {
-    return new SwerveAutoBuilder(
-        swerve::getPose, // pose2d supplier
-        swerve::resetOdometry, // reset odometry at the beginning of auto
-        Setting.mKinematics, // swerve kinematics
-        new PIDConstants(75, 5, 1), // x y controller
-        new PIDConstants(11, 0, .001), // theta controller
-        swerve::setModuleStates,
-        eventMap,
-        false,
-        swerve);
-  }
+  // public SwerveAutoBuilder CustomSwerveAutoBuilder() {
+  //   return new SwerveAutoBuilder(
+  //       swerve::getPose, // pose2d supplier
+  //       swerve::resetOdometry, // reset odometry at the beginning of auto
+  //       Setting.mKinematics, // swerve kinematics
+  //       new PIDConstants(52, 0, 0), // x y controller
+  //       new PIDConstants(11, 0, .001), // theta controller
+  //       swerve::setModuleStates,
+  //       AutoConstants.EventMap,
+  //       true,
+  //       swerve);
+  // }
 
-  public PPSwerveControllerCommand CustomPathControllerCommand(PathPlannerTrajectory trajectory) {
-    return new PPSwerveControllerCommand(
-        trajectory,
-        swerve::getPose,
-        Setting.mKinematics,
-        new PIDController(AutoConstants.kPXController, 0, 0),
-        new PIDController(AutoConstants.kPYController, 0, 0),
-        new PIDController(AutoConstants.kPThetaController, 0, 0),
-        swerve::setModuleStates,
-        swerve);
-  }
+  // public PPSwerveControllerCommand CustomPathControllerCommand(PathPlannerTrajectory trajectory) {
+  //   return new PPSwerveControllerCommand(
+  //       trajectory,
+  //       swerve::getPose,
+  //       Setting.mKinematics,
+  //       new PIDController(AutoConstants.kPXController, 0, 0),
+  //       new PIDController(AutoConstants.kPYController, 0, 0),
+  //       new PIDController(AutoConstants.kPThetaController, 0, 0),
+  //       swerve::setModuleStates,
+  //       swerve);
+  // }
 }

@@ -4,13 +4,11 @@
 
 package frc.robot.subsystems;
 
-import com.pathplanner.lib.PathConstraints;
-import com.pathplanner.lib.PathPlanner;
-import com.pathplanner.lib.PathPlannerTrajectory;
-import com.pathplanner.lib.auto.SwerveAutoBuilder;
-import com.pathplanner.lib.commands.PPSwerveControllerCommand;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,9 +20,6 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.constants.Ports;
 import frc.robot.constants.Setting;
@@ -43,7 +38,20 @@ public class SwerveSubsystem extends SubsystemBase {
   private SwerveModule frontRightModule1;
   private SwerveModule backLeftModule2;
   private SwerveModule backRightModule3;
-
+  private final double ROBOT_LENGTH = .7239;
+  private final double ROBOT_WIDTH = .7239;
+  private final Translation2d m_frontLeftTranslation = new Translation2d(ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);
+  private final Translation2d m_frontRightTranslation = new Translation2d(ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2);
+  private final Translation2d m_backLeftTranslation = new Translation2d(-ROBOT_LENGTH / 2, ROBOT_WIDTH / 2);
+  private final Translation2d m_backRightTranslation = new Translation2d(-ROBOT_LENGTH / 2, -ROBOT_WIDTH / 2);
+  private final Translation2d[] m_swerveTranslation2d = {
+    m_frontLeftTranslation,
+    m_frontRightTranslation,
+    m_backLeftTranslation,
+    m_backRightTranslation
+  };  
+  private final SwerveDriveKinematics m_kinematics = new SwerveDriveKinematics(m_swerveTranslation2d);
+  
   public SwerveSubsystem() {
     // By default we use a Pigeon for our gyroscope. But if you use another
     // gyroscope, like a NavX, you can change this.
@@ -85,7 +93,45 @@ public class SwerveSubsystem extends SubsystemBase {
     // private SwerveAutoBuilder base = new SwerveAutoBuilder(new Translation2d(),
     // );
 
-  }
+    AutoBuilder.configureHolonomic(
+        this::getPose, // Robot pose supplier
+        this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        this::driveRobotRelative, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+            4.5, // Max module speed, in m/s
+            0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+            new ReplanningConfig() // Default path replanning config. See the API for the options here
+        ),
+        this // Reference to this subsystem to set requirements
+    );
+    }
+
+    public void driveRobotRelative(ChassisSpeeds speeds){
+      // this.drive(speeds.vxMetersPerSecond,speeds.vyMetersPerSecond,false,false);
+      SwerveModuleState[] states = m_kinematics.toSwerveModuleStates(speeds);
+
+      SwerveDriveKinematics.desaturateWheelSpeeds(states, 3.0);
+
+      // SwerveModuleState testState = new SwerveModuleState(0, new
+      // Rotation2d((Math.toRadians(45))));
+      // m_frontRight.setSwerveModuleStates(testState);
+
+      SwerveMods[0].setSwerveModuleStates(states[0]);
+      SwerveMods[1].setSwerveModuleStates(states[1]);
+      SwerveMods[2].setSwerveModuleStates(states[2]);
+      SwerveMods[3].setSwerveModuleStates(states[3]);
+
+    }
+    
+    public ChassisSpeeds getRobotRelativeSpeeds(){
+      return new SwerveDriveKinematics().toChassisSpeeds(SwerveMods[0].getState(),
+                                                             SwerveMods[1].getState(),
+                                                             SwerveMods[2].getState(),
+                                                             SwerveMods[3].getState());
+    }
 
   /*
    * Creating a method for the drive command of the SwerveDrive
@@ -244,25 +290,5 @@ public class SwerveSubsystem extends SubsystemBase {
       // "Mod " + mod.moduleNumber + " Velocity",
       // mod.getState().speedMetersPerSecond);
     }
-  }
-
-  public Command followTraj(PathPlannerTrajectory traj, boolean isFirstPath) {
-    return new SequentialCommandGroup(
-        new InstantCommand(
-            () -> {
-              if (isFirstPath) {
-                this.resetOdometry(traj.getInitialHolonomicPose());
-              }
-            }),
-        new PPSwerveControllerCommand(
-            traj,
-            this::getPose,
-            Setting.mKinematics,
-            new PIDController(Setting.AutoConstants.kPXController, 0, 0), // x
-            new PIDController(Setting.AutoConstants.kPYController, 0, 0), // y
-            new PIDController(Setting.AutoConstants.kPThetaController, 0, 0), // rotation
-            this::setModuleStates,
-            true,
-            this));
   }
 }

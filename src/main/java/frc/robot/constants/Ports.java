@@ -18,6 +18,7 @@ import frc.robot.lib.SwerveModuleConstants;
 public interface Ports {
 
     public static final double stickDeadband = 0.1;// may be 0.01
+    public static final double[] swerveOffsets = {frontLeftModule0.offSet, frontRightModule1.offSet, backLeftModule2.offSet, backRightModule3.offSet};
 
     public static final class Gamepad {
         public static final int DRIVER = 0;
@@ -71,7 +72,8 @@ public interface Ports {
         public static final int frontLeftModuleDriveMotor = 55; // FIXME Set front left module drive motor ID
         public static final int frontLeftModuleSteerMotor = 56; // FIXME Set front left module steer motor ID
         public static final int frontLeftModuleSteerEncoder = 11; // FIXME Set front left steer encoder ID
-        public static final Rotation2d frontLeftModuleSteerOffSet = Rotation2d.fromDegrees(210.673828125); // FIXME
+        public static final double offSet = 210.673828125;
+        public static final Rotation2d frontLeftModuleSteerOffSet = Rotation2d.fromDegrees(offSet); // FIXME
         // Measure
         // and set
         // front left
@@ -87,8 +89,9 @@ public interface Ports {
         public static final int frontRightModuleDriveMotor = 3; // FIXME Set front right drive motor ID
         public static final int frontRightModuleSteerMotor = 4; // FIXME Set front right steer motor ID
         public static final int frontRightModuleSteerEncoder = 22; // FIXME Set front right steer encoder ID
+        public static final double offSet = 163.4765625;
         public static final Rotation2d frontRightModuleSteerOffSet = Rotation2d
-                .fromDegrees(163.4765625); // FIXME
+                .fromDegrees(offSet); // FIXME
         // Measure
         // and set
         // front
@@ -105,8 +108,9 @@ public interface Ports {
         public static final int backLeftModuleDriveMotor = 5; // FIXME Set back left drive motor ID
         public static final int backLeftModuleSteerMotor = 6; // FIXME Set back left steer motor ID
         public static final int backleftModuleSteerEncoder = 33; // FIXME Set back left steer encoder ID
+        public static final double offSet = 318.779296875 + 180;
         public static final Rotation2d backLeftModuleSteerOffSet = Rotation2d
-                .fromDegrees(318.779296875 + 180); // FIXME
+                .fromDegrees(offSet); // FIXME
         // Measure
         // and set back
         // left steer
@@ -121,8 +125,9 @@ public interface Ports {
         public static final int backRightModuleDriveMotor = 7; // FIXME Set back right drive motor ID
         public static final int backRightModuleSteerMotor = 8; // FIXME Set back right steer motor ID
         public static final int backRightModuleSteerEncoder = 44; // FIXME Set back right steer encoder ID
+        public static final double offSet = 306.73828125 + 180;
         public static final Rotation2d backRightModuleSteerOffSet = Rotation2d
-                .fromDegrees(306.73828125 + 180); // FIXME
+                .fromDegrees(offSet); // FIXME
         // Measure and
         // set back
         // right steer
